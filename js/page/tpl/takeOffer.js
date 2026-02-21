@@ -8,6 +8,7 @@ class Page extends Parent {
     init() {
         this.ikariamPremiumToggle(['.premiumTransporters']);
         this.ikariamPremiumToggle(['.journeyPremiumTransporters']);
+        this.ikariamPremiumToggle(['#setPremiumJetPropulsion']);
 
         this.moveTransportBtn($('#mission .costsTotal'));
         this.addTransportButtons();

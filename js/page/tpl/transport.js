@@ -9,6 +9,7 @@ class Page extends Parent {
     async init() {
         this.ikariamPremiumToggle(['.premiumTransporters']);
         this.ikariamPremiumToggle(['.journeyPremiumTransporters']);
+        this.ikariamPremiumToggle(['#setPremiumJetPropulsion']);
 
         this.moveTransportBtn($('.minusPlusValueOuterContainer'));
         this.removeIkariamButtons();
