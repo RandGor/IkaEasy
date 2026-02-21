@@ -135,6 +135,8 @@ export default {
     "option.notification_recruiting_complete": "Creation of units (army / fleet)",
     "option.notification_advisor": "Advisors news",
     "option.quick_menu": "Remove animation from the left-side menu",
+    "option.anticaptcha_key": "Use anti-captcha.com key",
+    "option.anticaptcha_key_hint": "Not used when blank",
     "whatnews.title": "Changelog",
     "whatnews.new": "Added",
     "whatnews.fixed": "Fixed",

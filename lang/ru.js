@@ -135,6 +135,8 @@ export default {
     "option.notification_recruiting_complete": "Создание юнитов (армии/флота)",
     "option.notification_advisor": "Новости у советников",
     "option.quick_menu": "Убрать анимацию из меню слева",
+    "option.anticaptcha_key": "Использовать ключ anti-captcha.com",
+    "option.anticaptcha_key_hint": "Не используется, если пустое",
     "whatnews.title": "Changelog",
     "whatnews.new": "Добавлено",
     "whatnews.fixed": "Исправлено",

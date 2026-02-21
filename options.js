@@ -24,6 +24,8 @@ export default {
     "hide_happy_hour": false,
     "hide_friends_bar": false,
 
+    "anticaptcha_key": "",
+
     "notification_wait_no_interaction": true,
     "notification_building_complete": true,
     "notification_building_complete_prevent": false,

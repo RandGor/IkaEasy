@@ -33,6 +33,13 @@ class Page extends Parent {
             this.options.set(name, $input.prop('checked'));
         });
 
+        this.$page.find('input[type="text"]').on('change', (e) => {
+            let $input = $(e.currentTarget);
+            let name = $input.attr('name');
+
+            this.options.set(name, $input.val());
+        });
+
         execute_js('ikariam.templateView.mainbox.scrollbar.adjustSize();');
 
     }

@@ -22,10 +22,16 @@
                                     <%= LANGUAGE.getLocalizedString(`option.${option}`)%>
                                 </td>
                                 <td class="left">
-                                    <label class="ikaeasy-form">
-                                        <input type="checkbox" name="<%= option %>" value="1" <%= (data._listData[tabName][key].option) ? 'checked="checked"' : '' %> />
-                                        <i></i><span><%- LANGUAGE.getLocalizedString('option._activated') %></span>
-                                    </label>
+                                    <% if (option.endsWith('_key')) { %>
+                                        <label class="ikaeasy-form">
+                                            <input type="text" name="<%= option %>" value="<%= data._listData[tabName][key].option || '' %>" />
+                                        </label>
+                                    <% } else { %>
+                                        <label class="ikaeasy-form">
+                                            <input type="checkbox" name="<%= option %>" value="1" <%= (data._listData[tabName][key].option) ? 'checked="checked"' : '' %> />
+                                            <i></i><span><%- LANGUAGE.getLocalizedString('option._activated') %></span>
+                                        </label>
+                                    <% } %>
 
                                     <% if (data._listData[tabName][key].hasHint) { %>
                                         <div class="ikaeasy_option_hint"><%= LANGUAGE.getLocalizedString(`option.${option}_hint`) %></div>

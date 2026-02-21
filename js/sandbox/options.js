@@ -43,6 +43,7 @@ class Options {
                 'notes',
                 'city_hotkeys',
                 'quick_menu',
+                'anticaptcha_key',
             ],
 
             'option._ads': [
