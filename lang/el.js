@@ -40,5 +40,9 @@ export default {
     "diplomacy_agora": "Αγορά",
     "diplomacy_treaty": "Σύνθηκη",
     "diplomacy_alliance": "Φόρουμ",
-    "diplomacy_ally_members": "Συμμάχια"
+    "diplomacy_ally_members": "Συμμάχια",
+    "diplomacy_fast_message_accept": "(Γρήγορα)",
+    "diplomacy_fast_message_processing": "Εκτέλεση...",
+    "diplomacy_fast_message_error": "Σφάλμα",
+    "diplomacy_fast_message_success": "Επιτυχία!"
 };

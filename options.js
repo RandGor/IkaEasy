@@ -10,6 +10,7 @@ export default {
     "units_max": true,
     "diplomacy_links": true,
     "diplomacy_tab_members": true,
+    "diplomacy_fast_accept": true,
     "military_movements": true,
     "transport_buttons": true,
     "auto_accept_daily_bonus": true,

@@ -43,6 +43,7 @@ class Options {
                 'units_max',
                 'diplomacy_links',
                 'diplomacy_tab_members',
+                'diplomacy_fast_accept',
                 'military_movements',
                 'transport_buttons',
                 'auto_accept_daily_bonus',
