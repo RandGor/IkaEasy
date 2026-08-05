@@ -114,6 +114,7 @@ export default {
     "option.diplomacy_fast_accept": "Добавить быстрые кнопки ответа в сообщения",
     "option.military_movements": "Показывать состав флотов в окне перемещения войск",
     "option.transport_buttons": "Добавить кнопки погрузки ресурсов<br/>(±500, +1000, +2000, +5000)",
+    "option.barbarian_auto_select_cargo_ships": "Автоматически выбирать сухогрузы для добычи из деревни варваров",
     "option.hide_premium": "Скрывать Премиум функции",
     "option.auto_accept_daily_bonus": "Автоматически принимать ежедневный бонус",
     "option.hide_ads": "Скрыть рекламу",

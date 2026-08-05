@@ -46,6 +46,7 @@ class Options {
                 'diplomacy_fast_accept',
                 'military_movements',
                 'transport_buttons',
+                'barbarian_auto_select_cargo_ships',
                 'auto_accept_daily_bonus',
                 'prevent_accidental_colony_destruction',
                 'empire',

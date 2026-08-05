@@ -1,4 +1,9 @@
 import Parent from './dummy.js';
+import {
+    clearBarbarianLoot,
+    getTransportShipsRequired,
+    rememberBarbarianLoot
+} from '../../helper/transportShips.js';
 
 class Page extends Parent {
 
@@ -9,9 +14,17 @@ class Page extends Parent {
             sum += this.getGoods(v);
         });
 
-        let ships = Math.ceil(sum / 500);
+        const ships = getTransportShipsRequired(sum);
+        rememberBarbarianLoot(sum);
         const tpl = await this.render('barbarianVillage', {sum: sum, ships: ships});
         $('.barbarianCityKingSpeech').html(tpl);
+    }
+
+    destroy() {
+        // Keep the value only for the raid form opened directly from this view.
+        if (Front.tpl !== 'plunder') {
+            clearBarbarianLoot();
+        }
     }
 
     getGoods(id) {

@@ -6,6 +6,7 @@ import EntityCity from '../data/city.js';
 import EntityMovement from '../data/movement.js';
 import Info from '../data/info.js';
 import Research from '../data/research.js';
+import Upgrades from '../data/upgrades.js';
 import Premium from '../data/premium.js';
 import { Movements } from '../const.js';
 import { getServerDomain, getServerWorld } from '../utils.js';
@@ -29,6 +30,7 @@ class Manager extends Events {
         this.movements = [];
         this.info = Info;
         this.research = Research;
+        this.upgrades = Upgrades;
         this.options = {};
         this.premium = Premium;
         this.version = 0;
@@ -79,6 +81,7 @@ class Manager extends Events {
         });
 
         this.research.updateData(data.research);
+        this.upgrades.updateData(data.upgrades);
         this.premium.updateData(data.premiumFeatures);
 
         _.each(data.movements, (data) => {
@@ -102,6 +105,10 @@ class Manager extends Events {
 
     getResearch() {
         return this.research;
+    }
+
+    getUpgrades() {
+        return this.upgrades;
     }
 
     getCity(id) {
@@ -204,6 +211,7 @@ class Manager extends Events {
 
             cities: cities,
             research: this.research.toJSON(),
+            upgrades: this.upgrades.toJSON(),
             info: this.info._data,
             options: this.options || {},
             premiumFeatures: this.premium.toJSON(),

@@ -114,6 +114,7 @@ export default {
     "option.diplomacy_fast_accept": "Add quick reply buttons to messages",
     "option.military_movements": "Show the fleets composition in the troop movements window",
     "option.transport_buttons": "Add buttons for resources load to ships<br/>(±500, +1000, +2000, +5000)",
+    "option.barbarian_auto_select_cargo_ships": "Automatically select cargo ships for Barbarian Village loot",
     "option.hide_premium": "Hide Premium",
     "option.auto_accept_daily_bonus": "Automatically submit daily bonus form",
     "option.hide_ads": "Hide ads",

@@ -13,6 +13,7 @@ export default {
     "diplomacy_fast_accept": true,
     "military_movements": true,
     "transport_buttons": true,
+    "barbarian_auto_select_cargo_ships": true,
     "auto_accept_daily_bonus": true,
     "prevent_accidental_colony_destruction": true,
     "empire": true,

@@ -1,5 +1,10 @@
-﻿import Parent from './dummy.js';
+import Parent from './dummy.js';
 import { getInt } from '../../utils.js';
+import {
+    consumeBarbarianLoot,
+    getTransportShipCapacity,
+    getTransportShipsRequired
+} from '../../helper/transportShips.js';
 
 class Page extends Parent {
 
@@ -8,16 +13,43 @@ class Page extends Parent {
             return;
         }
 
+        this.prefillBarbarianCargoShips();
+
         let $el = $('<div class="ikaeasy_max_btn" id="ikaeasy_max_ships"></div>');
         $('#plusminus').append($el);
 
         $el.click(() => {
-            let cnt = parseInt($('#transporterCount').text());
-            $('#extraTransporter').val(this._data.ships - cnt);
-            $('#totalFreight').text(this._data.ships * 500);
+            const remainingShips = getInt($('#transporterCount').text());
+            this.setCargoShips($('#extraTransporter'), this._data.ships - remainingShips);
         });
 
         this.addButtons();
+    }
+
+    prefillBarbarianCargoShips() {
+        const loot = consumeBarbarianLoot();
+        if (!loot || !this.options.get('barbarian_auto_select_cargo_ships', true)) {
+            return;
+        }
+
+        const $input = $('#extraTransporter');
+        if (!$input.length) {
+            return;
+        }
+
+        const availableShips = getInt($('#transporterCount').text()) || this._data.ships || 0;
+        const capacity = getTransportShipCapacity();
+        const requiredShips = getTransportShipsRequired(loot);
+        const selectedShips = availableShips > 0 ? Math.min(requiredShips, availableShips) : requiredShips;
+
+        this.setCargoShips($input, selectedShips);
+        $('#totalFreight').text(selectedShips * capacity);
+    }
+
+    setCargoShips($input, count) {
+        count = Math.max(0, parseInt(count) || 0);
+        $input.val(count);
+        $('#totalFreight').text(count * getTransportShipCapacity());
     }
 
     addButtons() {
