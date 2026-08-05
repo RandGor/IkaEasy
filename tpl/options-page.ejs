@@ -3,7 +3,7 @@
 
 
     <div class="btn-line">
-        <%= include('patreon/block.ejs') %>
+        <% /* Donation block disabled: include('patreon/block.ejs') */ %>
     </div>
 
 
@@ -50,13 +50,9 @@
 
     <div class="ikaeasy-option-hint"><%- LANGUAGE.getLocalizedString('option._accept_hint') %></div>
 
-    <div style="text-align: center; margin-top: 20px;">
-        <a class="copy" href="https://cookieside.ru?l=<%= (currentLanguage === 'ru') ? 1 : 2 %>&utm_source=work&amp;utm_medium=ikaeasy" target="_blank">
-            <% if (currentLanguage === 'ru') { %>
-                <img src="https://cookieside.ru/buttons/work_brown.png" style="width: 132px;" />
-            <% } else { %>
-                <img src="https://cookieside.ru/buttons/work_brown_eng.png" style="width: 132px;" />
-            <% } %>
+    <div class="btn-line">
+        <a class="button" href="https://github.com/RandGor/IkaEasy" target="_blank" rel="noopener noreferrer">
+            <%- LANGUAGE.getLocalizedString('github.repository') %>
         </a>
     </div>
 </div>

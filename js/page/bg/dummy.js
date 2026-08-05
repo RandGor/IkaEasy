@@ -1,4 +1,3 @@
-import Support from '../../helper/support.js';
 import Parent from '../common.js';
 import { Resources, CityType } from '../../const.js';
 import {
@@ -16,6 +15,7 @@ import {
 } from '../../utils.js';
 
 const MAP_URL = 'https://ikalogs.ru/tools/map/';
+const ISSUE_URL = 'https://github.com/RandGor/IkaEasy/issues/new';
 class Dummy extends Parent {
     constructor() {
         super();
@@ -217,7 +217,7 @@ class Dummy extends Parent {
     async support() {
         let $li = await addToLeftMenu('image_support', LANGUAGE.getLocalizedString('support_text'), true, this.options.get('quick_menu'));
         $li.click(() => {
-            Support.show();
+            window.open(ISSUE_URL, '_blank');
         });
     }
 

@@ -37,6 +37,8 @@ If you cloned the repository with Git, select the repository root folder instead
 
 Extensions installed from source do not update automatically.
 
+IkaEasy checks the repository tags when the game loads and displays an in-game notification when a newer version is available. This check can be disabled in the IkaEasy options. Installing an update still requires the following manual steps:
+
 1. Download the latest repository version and replace the existing files without changing the installation folder, or run `git pull` in a cloned repository.
 2. Open the browser's extensions page.
 3. Select the reload button on the IkaEasy extension card.

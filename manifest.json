@@ -17,7 +17,7 @@
       "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
    },
    "default_locale": "en",
-   "host_permissions": [ "http://*.ikariam.gameforge.com/*", "https://*.ikariam.gameforge.com/*", "https://ikalogs.ru/*", "https://*.ikalogs.ru/*", "*://clip2net.com/*", "*://*.clip2net.com/*" ],
+   "host_permissions": [ "http://*.ikariam.gameforge.com/*", "https://*.ikariam.gameforge.com/*", "https://ikalogs.ru/*", "https://*.ikalogs.ru/*", "*://clip2net.com/*", "*://*.clip2net.com/*", "https://api.github.com/*" ],
    "icons": {
       "128": "icon/128.png",
       "16": "icon/16.png",
@@ -31,7 +31,7 @@
       "pages": [ "sandbox.html" ]
    },
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "3.1.0.26",
+   "version": "3.1.0.27",
    "web_accessible_resources": [ {
       "matches": [ "http://*.ikariam.gameforge.com/*", "https://*.ikariam.gameforge.com/*", "https://ikalogs.ru/*", "https://*.ikalogs.ru/*" ],
       "resources": [ "inner/ikaeasy.js", "images/*", "js/page/*", "js/helper/*", "js/libs/*", "js/data/*", "js/sandbox/*", "js/const.js", "js/utils.js", "js/langs.js", "js/sandbox.js", "js/templater.js", "js/navigation.js", "js/assignedLangs.js", "js/initModule.js", "lang/*", "css/*", "icon/*", "tpl/*", "whatnews.json", "options.js", "sandbox.html" ]

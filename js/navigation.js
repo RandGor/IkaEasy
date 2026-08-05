@@ -2,6 +2,7 @@ import { VERSION } from './const.js';
 import Event from './helper/event.js';
 import IkalogsRu from './helper/ikalogsRu.js';
 import Whatnews from './helper/whatnews.js';
+import UpdateChecker from './helper/updateChecker.js';
 import Win from './helper/win.js';
 import Manager from './data/Manager.js';
 import { Resources, TradeGoodOrdinals } from './const.js';
@@ -41,6 +42,7 @@ class Navigation extends Event {
                         chrome.runtime.sendMessage({ cmd: 'get-version' }, (version) => {
                             this.app_version = version;
                             Whatnews.init(this.app_version);
+                            UpdateChecker.init(this.app_version);
                         });
                     } else {
                         this._update(bg, tpl);

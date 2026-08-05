@@ -1,0 +1,10 @@
+<div class="contentBox01h">
+    <h3 class="header"><%- LANGUAGE.getLocalizedString('update.available_title') %></h3>
+    <div class="content" style="padding: 15px; text-align: center;">
+        <p><%- LANGUAGE.getLocalizedString('update.available_text', {VERSION: data.version}) %></p>
+        <a class="button" href="<%- data.url %>" target="_blank" rel="noopener noreferrer">
+            <%- LANGUAGE.getLocalizedString('update.open_tag') %>
+        </a>
+    </div>
+    <div class="footer"></div>
+</div>
