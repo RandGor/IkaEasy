@@ -69,7 +69,7 @@ class Common extends Controller{
      */
     upgradeBuilding(position, level, cityId = null) {
         cityId = cityId || this.getCityId();
-        execute_js(`ajaxHandlerCall('/index.php?action=CityScreen&function=upgradeBuilding&actionRequest=${this._data.actionRequest}&currentCityId=${cityId}&cityId=${cityId}&position=${position}&level=${level}&backgroundView=city');`);
+        execute_js(`ajaxHandlerCall('?action=UpgradeExistingBuilding&actionRequest=${this._data.actionRequest}&cityId=${cityId}&position=${position}&level=${level}');`);
     }
 }
 

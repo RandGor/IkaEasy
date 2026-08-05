@@ -1,4 +1,5 @@
 import Db from '../../helper/db.js';
+import BuildingUpgrade from '../../helper/buildingUpgrade.js';
 import Parent from './dummy.js';
 import { execute_js, setItem } from '../../utils.js';
 
@@ -95,6 +96,12 @@ class City extends Parent {
                 });
 
                 $parent.append($block);
+
+                if (this._city.isOwn) {
+                    $block.on('mouseenter.ikaeasy-upgrade-data', () => {
+                        this.updateBuildingUpgradeData($block, build);
+                    });
+                }
 
                 if (!this._city.isOwn) {
                     $(`#ikaeasy_watcher_${build.position}`).attr('class', 'ikaeasy_watcher build_gray');
@@ -241,7 +248,12 @@ class City extends Parent {
                         return;
                     }
 
-                    this.upgradeBuilding(build.position, build.level);
+                    const upgradeUrl = $block.data('ikaeasy-upgrade-url');
+                    if (upgradeUrl) {
+                        execute_js('ajaxHandlerCall(' + JSON.stringify(upgradeUrl) + ');');
+                    } else {
+                        this.upgradeBuilding(build.position, build.level);
+                    }
                 });
 
                 $('.ikaeasy_watcher_title', $block).off('click').click((e) => {
@@ -255,6 +267,48 @@ class City extends Parent {
         });
 
         this.__watcher_is_updating = false;
+    }
+
+    async updateBuildingUpgradeData($block, build) {
+        try {
+            const upgrade = await BuildingUpgrade.get(this.getCityId(), build);
+            if (!upgrade || !$block.closest('html').length) {
+                return;
+            }
+
+            if (upgrade.url) {
+                $block.data('ikaeasy-upgrade-url', upgrade.url);
+            }
+
+            const resources = this._city.resources;
+            const production = this._city.production;
+            let sourcesOk = true;
+            const tooltipData = Object.keys(upgrade.costs).map((resource) => {
+                const cost = upgrade.costs[resource];
+                const need = (resources[resource] || 0) - cost;
+                if (need < 0) {
+                    sourcesOk = false;
+                }
+
+                return {
+                    resource: resource,
+                    cost: cost,
+                    need: need,
+                    production: need >= 0 ? 0 : production[resource]
+                };
+            });
+
+            if (this.options.get('city_building_tooltip')) {
+                const tpl = await this.render('city-watcherTooltip', {
+                    list: tooltipData,
+                    ok: sourcesOk,
+                    build: build
+                });
+                $('.ikaeasy_watcher_tooltip', $block).empty().append($(tpl));
+            }
+        } catch (error) {
+            console.warn('IkaEasy building upgrade data request failed:', error);
+        }
     }
 
     _fillWatcherMinus() {

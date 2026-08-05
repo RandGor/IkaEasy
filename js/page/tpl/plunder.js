@@ -38,17 +38,38 @@ class Page extends Parent {
         }
 
         const availableShips = getInt($('#transporterCount').text()) || this._data.ships || 0;
-        const capacity = getTransportShipCapacity();
         const requiredShips = getTransportShipsRequired(loot);
         const selectedShips = availableShips > 0 ? Math.min(requiredShips, availableShips) : requiredShips;
 
         this.setCargoShips($input, selectedShips);
-        $('#totalFreight').text(selectedShips * capacity);
     }
 
     setCargoShips($input, count) {
         count = Math.max(0, parseInt(count) || 0);
-        $input.val(count);
+
+        const input = $input.get(0);
+        if (!input) {
+            return;
+        }
+
+        const view = input.ownerDocument.defaultView;
+        const valueSetter = Object.getOwnPropertyDescriptor(view.HTMLInputElement.prototype, 'value').set;
+        valueSetter.call(input, String(count));
+
+        input.dispatchEvent(new view.InputEvent('input', {
+            bubbles: true,
+            inputType: 'insertText',
+            data: String(count)
+        }));
+        input.dispatchEvent(new view.KeyboardEvent('keyup', {
+            bubbles: true,
+            key: 'Enter',
+            code: 'Enter',
+            keyCode: 13,
+            which: 13
+        }));
+        input.dispatchEvent(new view.Event('change', {bubbles: true}));
+
         $('#totalFreight').text(count * getTransportShipCapacity());
     }
 

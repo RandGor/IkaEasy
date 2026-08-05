@@ -22,8 +22,8 @@
                 <td><%= num(v.cost, 0, false) %></td>
                 <td>
                     <%= num(v.need, 0, false) %>
-                    <% if (data.production > 0) { %>
-                        <div><%= Utils.secondToTime((-data.need / data.production) * 3600) %></div>
+                    <% if (v.production > 0) { %>
+                        <div><%= Utils.secondToTime((-v.need / v.production) * 3600) %></div>
                     <% } %>
                 </td>
             </tr>
