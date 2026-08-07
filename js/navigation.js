@@ -3,6 +3,7 @@ import Event from './helper/event.js';
 import IkalogsRu from './helper/ikalogsRu.js';
 import Whatnews from './helper/whatnews.js';
 import UpdateChecker from './helper/updateChecker.js';
+import CinemaSession from './helper/cinemaSession.js';
 import Win from './helper/win.js';
 import Manager from './data/Manager.js';
 import { Resources, TradeGoodOrdinals } from './const.js';
@@ -51,10 +52,13 @@ class Navigation extends Event {
                     this.emit('form', [event.data.form]);
                 }else if(event.data.cmd === 'ajax'){
                     this.emit('ajax', [event.data.request]);
+                }else if(event.data.cmd === 'cinema-ajax'){
+                    CinemaSession.handleAjax(event.data.request);
                 }
             }
         }, false);
         this.httpListenerHandler();
+        CinemaSession.init(this);
 
         chrome.runtime.sendMessage({ cmd: 'get-version' }, (version) => {
             this.app_version = version;

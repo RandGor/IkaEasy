@@ -115,6 +115,7 @@ export default {
     "option.military_movements": "Показывать состав флотов в окне перемещения войск",
     "option.transport_buttons": "Добавить кнопки погрузки ресурсов<br/>(±500, +1000, +2000, +5000)",
     "option.barbarian_auto_select_cargo_ships": "Автоматически выбирать сухогрузы для добычи из деревни варваров",
+    "option.cinema_floating_player": "Открывать видео Кинотеатра в отдельном мини-плеере",
     "option.check_github_updates": "Проверять наличие новых версий IkaEasy на GitHub",
     "update.available_title": "Доступно обновление IkaEasy",
     "update.available_text": "Доступна версия %VERSION%.",

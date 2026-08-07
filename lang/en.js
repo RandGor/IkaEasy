@@ -115,6 +115,7 @@ export default {
     "option.military_movements": "Show the fleets composition in the troop movements window",
     "option.transport_buttons": "Add buttons for resources load to ships<br/>(±500, +1000, +2000, +5000)",
     "option.barbarian_auto_select_cargo_ships": "Automatically select cargo ships for Barbarian Village loot",
+    "option.cinema_floating_player": "Open Cinema videos in a separate mini player",
     "option.check_github_updates": "Check GitHub for new IkaEasy versions",
     "update.available_title": "IkaEasy update available",
     "update.available_text": "Version %VERSION% is available.",

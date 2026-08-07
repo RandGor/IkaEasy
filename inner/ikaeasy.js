@@ -36,6 +36,18 @@
 
                         resp = JSON.parse(resp);
                         resp.forEach((r) => {
+                            if (r[0] === 'updateTemplateData' && r[1] && r[1].load_js && r[1].load_js.params) {
+                                try {
+                                    const cinemaParams = JSON.parse(r[1].load_js.params);
+                                    localStorage.setItem('ikaeasy_cinema_template_data', JSON.stringify({
+                                        videoId: cinemaParams.videoID,
+                                        videos: cinemaParams.videos || []
+                                    }));
+                                } catch (error) {
+                                    console.warn('IkaEasy Cinema template data parsing failed:', error);
+                                }
+                            }
+
                             if (r[0] === 'changeView') {
                                 let viewName = r[1][0];
                                 self._viewData[viewName] = null;
@@ -161,6 +173,80 @@
 
         
         httpListener(){
+            const diagnosticsKey = 'ikaeasy_cinema_diagnostics';
+            const xhrPrototype = XMLHttpRequest.prototype;
+
+            const saveCinemaDiagnostic = function(entry) {
+                let entries = [];
+                try {
+                    entries = JSON.parse(localStorage.getItem(diagnosticsKey)) || [];
+                } catch (error) {
+                    entries = [];
+                }
+
+                entries.push(Object.assign({ timestamp: new Date().toISOString() }, entry));
+                localStorage.setItem(diagnosticsKey, JSON.stringify(entries.slice(-12)));
+            };
+
+            if (!xhrPrototype.ikaeasyCinemaDiagnostics) {
+                const originalOpen = xhrPrototype.open;
+                const originalSend = xhrPrototype.send;
+
+                xhrPrototype.open = function(method, url) {
+                    this.ikaeasyCinemaRequest = /AdVideoRewardAction/i.test(String(url || '')) ? {
+                        method: method,
+                        url: String(url)
+                    } : null;
+
+                    return originalOpen.apply(this, arguments);
+                };
+
+                xhrPrototype.send = function(data) {
+                    const cinemaRequest = this.ikaeasyCinemaRequest;
+                    if (cinemaRequest) {
+                        saveCinemaDiagnostic({
+                            phase: 'request',
+                            method: cinemaRequest.method,
+                            url: cinemaRequest.url,
+                            requestData: typeof data === 'string' ? data : null
+                        });
+
+                        this.addEventListener('loadend', function() {
+                            let response = '';
+                            try {
+                                response = this.responseText || '';
+                            } catch (error) {
+                                response = '[responseText unavailable]';
+                            }
+
+                            saveCinemaDiagnostic({
+                                phase: 'response',
+                                method: cinemaRequest.method,
+                                url: cinemaRequest.url,
+                                status: this.status,
+                                statusText: this.statusText || '',
+                                response: response.slice(0, 50000)
+                            });
+
+                            window.postMessage({
+                                type: 'FROM_IKAEASY_V3',
+                                cmd: 'cinema-ajax',
+                                request: {
+                                    type: cinemaRequest.method,
+                                    data: response,
+                                    url: cinemaRequest.url,
+                                    status: this.status
+                                }
+                            }, '*');
+                        }, { once: true });
+                    }
+
+                    return originalSend.apply(this, arguments);
+                };
+
+                xhrPrototype.ikaeasyCinemaDiagnostics = true;
+            }
+
             $(document).ajaxSuccess(function(event, request, options) {
                 window.postMessage({
                     type: 'FROM_IKAEASY_V3',

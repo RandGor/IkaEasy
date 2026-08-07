@@ -39,6 +39,7 @@ class Options {
                 'military_movements',
                 'transport_buttons',
                 'barbarian_auto_select_cargo_ships',
+                'cinema_floating_player',
                 'check_github_updates',
                 'auto_accept_daily_bonus',
                 'prevent_accidental_colony_destruction',

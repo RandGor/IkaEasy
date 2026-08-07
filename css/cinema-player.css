@@ -1,0 +1,62 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: #1d130b;
+    color: #f4d7a0;
+    font: 13px Arial, sans-serif;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    height: 34px;
+    padding-left: 12px;
+    background: linear-gradient(#6f4824, #3f2815);
+    font-weight: bold;
+}
+
+header span {
+    flex: 1;
+}
+
+header button {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    color: #f4d7a0;
+    background: transparent;
+    cursor: pointer;
+    font-size: 22px;
+}
+
+header button:hover {
+    background: rgba(255, 255, 255, .12);
+}
+
+main {
+    height: calc(100% - 34px);
+}
+
+iframe {
+    display: block;
+    width: 100%;
+    height: calc(100% - 28px);
+    border: 0;
+    background: #000;
+}
+
+#status {
+    height: 28px;
+    padding: 6px 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
