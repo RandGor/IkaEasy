@@ -4,24 +4,28 @@ class Military {
         this.units = {};
 
         this.training = [];
+        this.updatedAt = { units: 0, ships: 0 };
     }
 
     load(data) {
-        this.units    = data.units;
-        this.training = data.training;
+        this.units    = data.units || {};
+        this.training = data.training || [];
+        this.updatedAt = data.updatedAt || { units: 0, ships: 0 };
     }
 
     setCount(type, cnt) {
-        if ((cnt === 0) && (this.units[type])) {
-            delete this.units[type];
-        }
-
         if (cnt === 0) {
+            if (Object.prototype.hasOwnProperty.call(this.units, type)) {
+                delete this.units[type];
+                this.city.save();
+            }
             return;
         }
 
-        this.units[type] = cnt;
-        this.city.save();
+        if (this.units[type] !== cnt) {
+            this.units[type] = cnt;
+            this.city.save();
+        }
     }
 
     setTraining(type, list) {
@@ -33,10 +37,20 @@ class Military {
         this.city.save();
     }
 
+    markUpdated(type) {
+        if (!['units', 'ships'].includes(type)) {
+            return;
+        }
+
+        this.updatedAt[type] = Date.now();
+        this.city.save();
+    }
+
     toSave() {
         return {
             units: this.units,
-            training: this.training
+            training: this.training,
+            updatedAt: this.updatedAt
         };
     }
 }

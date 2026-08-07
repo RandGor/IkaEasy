@@ -1,0 +1,140 @@
+.empire-military {
+    padding: 10px 0 4px;
+}
+
+.empire-military-notice {
+    position: relative;
+    margin: 8px 18px 14px;
+    padding: 8px 12px;
+    border: 1px solid #d2ac61;
+    border-radius: 3px;
+    color: #6b4b26;
+    background: #fff6d9;
+    font-size: 12px;
+}
+
+.empire-military-section + .empire-military-section {
+    margin-top: 20px;
+}
+
+.empire-military-section h3 {
+    margin: 0;
+    padding: 7px 12px;
+    border-top: 1px solid #d2ac61;
+    border-bottom: 1px solid #d2ac61;
+    color: #542c0f;
+    background: #faeac6;
+    text-align: left;
+    font-size: 14px;
+}
+
+.empire-military-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.empire-military-table {
+    width: 100%;
+    min-width: max-content;
+    margin: 0 !important;
+    table-layout: auto;
+}
+
+.empire-military-table th,
+.empire-military-table td {
+    box-sizing: border-box;
+    height: 36px;
+    min-width: 58px;
+    padding: 3px 6px !important;
+    white-space: nowrap;
+}
+
+.empire-military-table .empire-military-city {
+    width: 1%;
+    min-width: 0;
+    max-width: none;
+    padding-left: 38px !important;
+    text-align: left !important;
+    white-space: nowrap;
+}
+
+.empire-military-table thead .empire-military-city,
+.empire-military-table tbody .empire-military-city,
+.empire-military-table tfoot .empire-military-city {
+    position: sticky;
+    left: 0;
+    z-index: 3;
+    background-color: #fff9e6 !important;
+}
+
+.empire-military-table thead .empire-military-city,
+.empire-military-table tfoot .empire-military-city {
+    z-index: 4;
+    padding-left: 10px !important;
+    background-color: #faeac6 !important;
+}
+
+.empire-military-table tbody tr.current_city .empire-military-city {
+    background-color: #fffae8 !important;
+}
+
+.empire-military-table tfoot .empire-military-city {
+    text-align: right !important;
+}
+
+.empire-military-table thead th {
+    height: 58px;
+    vertical-align: middle;
+}
+
+.empire-military-unit {
+    width: auto;
+    text-align: center;
+}
+
+.empire-military-table .empire-military-unit .army,
+.empire-military-table .empire-military-unit .fleet {
+    float: none;
+    margin: 0 auto;
+}
+
+.empire-military-table tbody tr.current_city td {
+    background-color: #fffae8 !important;
+}
+
+.empire-military-has-units {
+    color: #355c13;
+    font-weight: bold;
+}
+
+#empire_military_sync {
+    position: absolute;
+    top: 7px;
+    left: 9px;
+    display: block;
+    width: 18px;
+    height: 18px;
+    opacity: .5;
+    background: url(../images/icons/sync-solid.svg) no-repeat 50% 50%/12px;
+}
+
+#empire_military_sync:hover {
+    opacity: .9;
+}
+
+#empire_military_sync.rotate {
+    animation: spin 1.5s linear infinite;
+    opacity: .9;
+}
+
+.empire-military-table tfoot td {
+    border-top: 2px solid #d2ac61 !important;
+    background: #faeac6 !important;
+}
+
+.empire-military-empty {
+    padding: 28px;
+    color: #80623d;
+    text-align: center;
+}

@@ -1,6 +1,61 @@
-<div class="empire-coming-soon">
-    <%= LANGUAGE.getLocalizedString('empire.coming_soon') %>
-    <br/>
-    <br/>
-    <% /* Donation button disabled: include('patreon/button.ejs') */ %>
+<div class="empire-military">
+    <div class="ikaeasy-option-hint empire-military-notice">
+        <a id="empire_military_sync" href="#" title="<%= LANGUAGE.getLocalizedString('empire.military_refresh') %>"></a>
+        <%= LANGUAGE.getLocalizedString('empire.military_notice') %>
+    </div>
+
+    <% data.sections.forEach(function(section) { %>
+        <section class="empire-military-section">
+            <h3><%- section.title %></h3>
+
+            <% if (!section.units.length) { %>
+                <div class="empire-military-empty"><%= LANGUAGE.getLocalizedString('empire.military_no_data') %></div>
+            <% } else { %>
+                <div class="empire-military-scroll">
+                    <table class="table01 center militaryList fixed dotted empire-military-table">
+                        <thead>
+                            <tr class="title_img_row">
+                                <th class="empire-military-city">
+                                    <%= LANGUAGE.getLocalizedString('empire.city') %>
+                                </th>
+                                <% section.units.forEach(function(unit) { %>
+                                    <th class="empire-military-unit" title="<%- unit.label %>">
+                                        <div class="<%= section.iconClass %> s<%= unit.id %>">
+                                            <div class="tooltip"><%- unit.label %></div>
+                                        </div>
+                                    </th>
+                                <% }); %>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% data.rows.forEach(function(city) { %>
+                                <tr class="<%= city.id === data.selectedCityId ? 'current_city' : '' %>">
+                                    <td class="empire_city empire-military-city ikaeasy_tradegood ikaeasy_tradegood_<%= city.tradegood %>">
+                                        <span><%- city.coords %> <%- city.name %></span>
+                                    </td>
+                                    <% section.units.forEach(function(unit) { let count = parseInt(city.units[unit.type]) || 0; %>
+                                        <td class="center <%= count ? 'empire-military-has-units' : '' %>">
+                                            <% if (city.hasData[section.type]) { %>
+                                                <%= num(count, 0, false) %>
+                                            <% } else { %>
+                                                &mdash;
+                                            <% } %>
+                                        </td>
+                                    <% }); %>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="empire-military-city"><img src="<%= url('/images/sigma.png') %>" /></td>
+                                <% section.units.forEach(function(unit) { %>
+                                    <td class="center"><strong><%= num(unit.total, 0, false) %></strong></td>
+                                <% }); %>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            <% } %>
+        </section>
+    <% }); %>
 </div>

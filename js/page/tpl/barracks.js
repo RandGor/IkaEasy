@@ -72,6 +72,7 @@ class Page extends Parent {
             let unit = $li.attr('class').replace('unit', '').trim();
             update(unit, $li.find('.scroll_view').text());
         });
+        military.markUpdated('units');
     }
 
     prepare() {

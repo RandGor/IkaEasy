@@ -30,7 +30,10 @@ class Page extends Parent {
         update(Military.BALLOON_BOMBADIER, $tds.eq(13));
         update(Military.COOK,              $tds.eq(14));
         update(Military.DOCTOR,            $tds.eq(15));
-        //update(Military.SPARTAN,           $tds.eq(16));
+        update(Military.SPARTAN,           $tds.eq(16));
+        if ($tds.length) {
+            military.markUpdated('units');
+        }
 
         // === SHIPS ===
         $tds = $('#tabShips .militaryList .count td');
@@ -38,14 +41,17 @@ class Page extends Parent {
         update(Military.FLAME_THROWER,     $tds.eq(1));
         update(Military.STEAM_RAM,         $tds.eq(2));
         update(Military.RAM_SHIP,          $tds.eq(3));
-        update(Military.CATAPULT_SHIP,     $tds.eq(4));
-        update(Military.BALLISTA_SHIP,     $tds.eq(5));
+        update(Military.BALLISTA_SHIP,     $tds.eq(4));
+        update(Military.CATAPULT_SHIP,     $tds.eq(5));
         update(Military.MORTAR_SHIP,       $tds.eq(6));
         update(Military.ROCKET_SHIP,       $tds.eq(7));
         update(Military.SUBMARINE,         $tds.eq(8));
         update(Military.PADDLE_SPEED_SHIP, $tds.eq(10));
         update(Military.BALLOON_CARRIER,   $tds.eq(11));
         update(Military.TENDER,            $tds.eq(12));
+        if ($tds.length) {
+            military.markUpdated('ships');
+        }
     }
 
 }
