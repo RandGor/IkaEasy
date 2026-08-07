@@ -13,6 +13,30 @@
     font-size: 12px;
 }
 
+.empire-military-drag-hint {
+    margin-top: 4px;
+    font-style: italic;
+    opacity: .8;
+}
+
+.empire-military-city[draggable="true"] {
+    cursor: grab;
+}
+
+.empire-military-dragging {
+    opacity: .55;
+}
+
+.empire-military-switching-city {
+    cursor: wait;
+    pointer-events: none;
+}
+
+.empire-military-table tbody .empire-military-city.empire-military-drop-target {
+    background-color: #dceeb5 !important;
+    box-shadow: inset 0 0 0 2px #719332;
+}
+
 .empire-military-section + .empire-military-section {
     margin-top: 20px;
 }

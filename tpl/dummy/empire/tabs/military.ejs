@@ -2,6 +2,9 @@
     <div class="ikaeasy-option-hint empire-military-notice">
         <a id="empire_military_sync" href="#" title="<%= LANGUAGE.getLocalizedString('empire.military_refresh') %>"></a>
         <%= LANGUAGE.getLocalizedString('empire.military_notice') %>
+        <% if (data.dragDropEnabled) { %>
+            <div class="empire-military-drag-hint"><%= LANGUAGE.getLocalizedString('empire.military_drag_hint') %></div>
+        <% } %>
     </div>
 
     <% data.sections.forEach(function(section) { %>
@@ -29,8 +32,11 @@
                         </thead>
                         <tbody>
                             <% data.rows.forEach(function(city) { %>
-                                <tr class="<%= city.id === data.selectedCityId ? 'current_city' : '' %>">
-                                    <td class="empire_city empire-military-city ikaeasy_tradegood ikaeasy_tradegood_<%= city.tradegood %>">
+                                <tr data-id="<%= city.id %>" class="<%= city.id === data.selectedCityId ? 'current_city' : '' %>">
+                                    <td class="empire_city empire-military-city ikaeasy_tradegood ikaeasy_tradegood_<%= city.tradegood %>"
+                                        data-city-id="<%= city.id %>"
+                                        data-deployment-type="<%= section.type === 'ships' ? 'fleet' : 'army' %>"
+                                        <% if (data.dragDropEnabled && city.hasData[section.type]) { %>draggable="true"<% } %>>
                                         <span><%- city.coords %> <%- city.name %></span>
                                     </td>
                                     <% section.units.forEach(function(unit) { let count = parseInt(city.units[unit.type]) || 0; %>

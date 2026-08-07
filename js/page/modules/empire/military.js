@@ -4,7 +4,7 @@ import Parent from './dummy.js';
 import { Military, UnitIds } from '../../../const.js';
 import HttpClient from '../../../helper/httpClient.js';
 import Storage from '../../../helper/storage.js';
-import { getInt } from '../../../utils.js';
+import { execute_js, getInt } from '../../../utils.js';
 
 const UNIT_IDS = Object.fromEntries(
     Object.entries(UnitIds).map(([id, type]) => [type, id])
@@ -96,6 +96,179 @@ class Module extends Parent {
             event.preventDefault();
             this.syncAll(true);
         });
+
+        if (this.options.get('empire_military_drag_drop', true)) {
+            this.registerDeploymentDragDrop();
+        }
+    }
+
+    registerDeploymentDragDrop() {
+        this.$parent
+            .off('.empireMilitaryDragDrop')
+            .on('dragstart.empireMilitaryDragDrop', '.empire-military-city[draggable="true"]', (event) => {
+                const $source = $(event.currentTarget);
+                const payload = {
+                    sourceCityId: parseInt($source.data('city-id')),
+                    deploymentType: $source.data('deployment-type')
+                };
+
+                this.draggedDeployment = payload;
+                event.originalEvent.dataTransfer.effectAllowed = 'move';
+                event.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(payload));
+                $source.closest('tr').addClass('empire-military-dragging');
+            })
+            .on('dragend.empireMilitaryDragDrop', '.empire-military-city[draggable="true"]', () => {
+                this.clearDeploymentDragState();
+            })
+            .on('dragover.empireMilitaryDragDrop', '.empire-military-city[data-city-id]', (event) => {
+                const payload = this.draggedDeployment;
+                const $target = $(event.currentTarget);
+                const targetCityId = parseInt($target.data('city-id'));
+                if (!payload || payload.sourceCityId === targetCityId ||
+                    payload.deploymentType !== $target.data('deployment-type')) {
+                    return;
+                }
+
+                event.preventDefault();
+                event.originalEvent.dataTransfer.dropEffect = 'move';
+                $target.addClass('empire-military-drop-target');
+            })
+            .on('dragleave.empireMilitaryDragDrop', '.empire-military-city[data-city-id]', (event) => {
+                $(event.currentTarget).removeClass('empire-military-drop-target');
+            })
+            .on('drop.empireMilitaryDragDrop', '.empire-military-city[data-city-id]', (event) => {
+                event.preventDefault();
+                const $target = $(event.currentTarget);
+                const targetCityId = parseInt($target.data('city-id'));
+                const payload = this.readDeploymentDragPayload(event.originalEvent);
+                this.clearDeploymentDragState();
+
+                if (!payload || payload.sourceCityId === targetCityId ||
+                    payload.deploymentType !== $target.data('deployment-type')) {
+                    return;
+                }
+
+                this.openDeployment(payload.sourceCityId, targetCityId, payload.deploymentType);
+            });
+    }
+
+    readDeploymentDragPayload(event) {
+        if (this.draggedDeployment) {
+            return this.draggedDeployment;
+        }
+
+        try {
+            return JSON.parse(event.dataTransfer.getData('text/plain'));
+        } catch (error) {
+            return null;
+        }
+    }
+
+    clearDeploymentDragState() {
+        this.draggedDeployment = null;
+        this.$parent.find('.empire-military-dragging').removeClass('empire-military-dragging');
+        this.$parent.find('.empire-military-drop-target').removeClass('empire-military-drop-target');
+    }
+
+    async openDeployment(sourceCityId, targetCityId, deploymentType) {
+        if (this.deploymentOpening || !['army', 'fleet'].includes(deploymentType)) {
+            return;
+        }
+
+        this.deploymentOpening = true;
+        this.$parent.addClass('empire-military-switching-city');
+
+        try {
+            await this.silentChangeCity(sourceCityId);
+
+            this.parent.close();
+            const query = `/index.php?view=deployment&deploymentType=${deploymentType}` +
+                `&destinationCityId=${targetCityId}&currentCityId=${sourceCityId}` +
+                `&actionRequest=${encodeURIComponent(Front.data.actionRequest)}&ajax=1`;
+            this.openDeploymentResponse(query);
+        } catch (error) {
+            console.error('IkaEasy military deployment: could not switch source city', error);
+        } finally {
+            this.deploymentOpening = false;
+            this.$parent.removeClass('empire-military-switching-city');
+        }
+    }
+
+    openDeploymentResponse(query) {
+        execute_js(`
+            $.ajax({
+                url: ${JSON.stringify(query)},
+                method: 'GET',
+                dataType: 'text'
+            }).done(function(response) {
+                ajax.Responder.parseResponse(response);
+            }).fail(function(request, status, error) {
+                console.error('IkaEasy military deployment request failed', status, error);
+            });
+        `);
+    }
+
+    async silentChangeCity(cityId) {
+        const $form = $('#changeCityForm');
+        const $cityInput = $form.find('#js_cityIdOnChange');
+        if (!$form.length || !$cityInput.length || !$cityInput.attr('name')) {
+            throw new Error('IkaEasy military deployment: change city form was not found');
+        }
+
+        const data = {};
+        $form.serializeArray().forEach((field) => {
+            data[field.name] = field.value;
+        });
+        data[$cityInput.attr('name')] = cityId;
+        data.actionRequest = Front.data.actionRequest;
+        data.ajax = 1;
+
+        const response = await $.ajax({
+            url: $form.attr('action') || '/',
+            method: ($form.attr('method') || 'POST').toUpperCase(),
+            data: data,
+            dataType: 'json'
+        });
+
+        this.updateActionRequest(response);
+        this.updateClientActiveCity(cityId);
+    }
+
+    updateClientActiveCity(cityId) {
+        const selectedCity = `city_${cityId}`;
+        Front.data.cities.selectedCity = selectedCity;
+        Front.data.cities.selectedCityId = cityId;
+        $('#js_cityIdOnChange').val(cityId);
+
+        execute_js(`
+            if (ikariam.model.relatedCityData) {
+                ikariam.model.relatedCityData.selectedCity = ${JSON.stringify(selectedCity)};
+                ikariam.model.relatedCityData.selectedCityId = ${cityId};
+            }
+            if (ikariam.model.headerData && ikariam.model.headerData.cityDropdownMenu) {
+                ikariam.model.headerData.cityDropdownMenu.selectedCity = ${JSON.stringify(selectedCity)};
+                ikariam.model.headerData.cityDropdownMenu.selectedCityId = ${cityId};
+            }
+            var ikaeasyCityInput = document.getElementById('js_cityIdOnChange');
+            if (ikaeasyCityInput) {
+                ikaeasyCityInput.value = ${cityId};
+            }
+        `);
+    }
+
+    updateActionRequest(response) {
+        if (!Array.isArray(response)) {
+            return;
+        }
+
+        const globalData = response.find((command) =>
+            Array.isArray(command) && command[0] === 'updateGlobalData' && command[1]
+        );
+        const actionRequest = globalData && globalData[1].actionRequest;
+        if (actionRequest) {
+            Front.data.actionRequest = actionRequest;
+            execute_js(`ikariam.model.actionRequest=${JSON.stringify(actionRequest)};`);
+        }
     }
 
     async autoSync() {
@@ -254,12 +427,17 @@ class Module extends Parent {
         await callback({
             rows: rows,
             selectedCityId: this._data.cities.selectedCityId,
-            sections: [createSection('units', ARMY), createSection('ships', NAVY)]
+            sections: [createSection('units', ARMY), createSection('ships', NAVY)],
+            dragDropEnabled: this.options.get('empire_military_drag_drop', true)
         });
     }
 
     unitLabel(type) {
         return LANGUAGE.getLocalizedString(`empire.unit_${type}`);
+    }
+
+    onDestroy() {
+        this.$parent.off('.empireMilitaryDragDrop');
     }
 
 }
