@@ -30,19 +30,80 @@ class Dummy extends Parent {
     }
 
     async draw() {
+        if (this.drawing) {
+            return false;
+        }
+
+        this.drawing = true;
         return this.getRenderData(async (data, helpers) => {
-            const tpl = await this.render(this.tpl, data, helpers);
+            try {
+                const tpl = await this.render(this.tpl, data, helpers);
+                const $nextEl = $(tpl);
 
-            this.$el = $(tpl);
-            this.parent.updateContent();
+                if (this.$el && this.$el.length && $.contains(this.$parent[0], this.$el[0])) {
+                    this.patchNode(this.$el[0], $nextEl[0]);
+                } else {
+                    this.$el = $nextEl;
+                    this.parent.updateContent();
+                }
 
-            this.afterRender();
-            return true;
+                this.afterRender();
+                return true;
+            } finally {
+                this.drawing = false;
+            }
         });
     }
 
+    patchNode(current, next) {
+        if (!current || !next || current.nodeType !== next.nodeType || current.nodeName !== next.nodeName) {
+            current && current.replaceWith(next.cloneNode(true));
+            return;
+        }
+
+        if (current.nodeType === Node.TEXT_NODE) {
+            if (current.nodeValue !== next.nodeValue) {
+                current.nodeValue = next.nodeValue;
+            }
+            return;
+        }
+
+        const nextAttributes = new Map(Array.from(next.attributes).map((attribute) => [attribute.name, attribute.value]));
+        let dataChanged = false;
+        Array.from(current.attributes).forEach((attribute) => {
+            if (!nextAttributes.has(attribute.name)) {
+                current.removeAttribute(attribute.name);
+                dataChanged = dataChanged || attribute.name.startsWith('data-');
+            }
+        });
+        nextAttributes.forEach((value, name) => {
+            if (current.getAttribute(name) !== value) {
+                current.setAttribute(name, value);
+                dataChanged = dataChanged || name.startsWith('data-');
+            }
+        });
+
+        if (dataChanged) {
+            $(current).removeData();
+        }
+
+        const currentChildren = Array.from(current.childNodes);
+        const nextChildren = Array.from(next.childNodes);
+        const commonLength = Math.min(currentChildren.length, nextChildren.length);
+        for (let index = 0; index < commonLength; index++) {
+            this.patchNode(currentChildren[index], nextChildren[index]);
+        }
+        for (let index = currentChildren.length - 1; index >= nextChildren.length; index--) {
+            currentChildren[index].remove();
+        }
+        for (let index = currentChildren.length; index < nextChildren.length; index++) {
+            current.appendChild(nextChildren[index].cloneNode(true));
+        }
+    }
+
     startDrawTimer(){
-        this.drawTimer = setInterval(()=>{
+        this.stopDrawTimer();
+        this.drawTimer = setInterval(() => {
             this.draw();
         }, this.drawUpdateFreq);
     }
@@ -53,6 +114,7 @@ class Dummy extends Parent {
 
     stopDrawTimer(){
         clearInterval(this.drawTimer);
+        this.drawTimer = null;
     }
 
     onClick(el, callback){
@@ -108,10 +170,6 @@ class Dummy extends Parent {
     }
 
     afterRender() {
-        // child use
-    }
-
-    afterFirstRender(){
         // child use
     }
 

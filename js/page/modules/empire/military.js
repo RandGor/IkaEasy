@@ -82,11 +82,6 @@ class Module extends Parent {
         super(parent, 'military.ejs');
     }
 
-    // Military data is a stored snapshot. Do not redraw the whole table on a timer:
-    // it resets horizontal scrolling and makes the view difficult to inspect.
-    afterFirstRender() {
-    }
-
     afterRender() {
         this.autoSync();
     }

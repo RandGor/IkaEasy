@@ -80,9 +80,26 @@ function ajax(message, callback) {
     }
 
     fetch(url, options)
-        .then(response => response.json())
+        .then(async (response) => {
+            const text = await response.text();
+            if (!response.ok || !text.trim()) {
+                return null;
+            }
+
+            try {
+                return JSON.parse(text);
+            } catch (error) {
+                // IkaLogs occasionally returns an HTML error or redirect page.
+                // Treat it as an unavailable optional service instead of an
+                // extension failure.
+                if (/^\s*</.test(text)) {
+                    return null;
+                }
+
+                throw error;
+            }
+        })
         .then((json) => {
-            //console.log('ajax < ',json);
             callback(json);
         })
         .catch(error => {
