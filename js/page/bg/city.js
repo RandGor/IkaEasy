@@ -230,7 +230,8 @@ class City extends Parent {
                 // progress bar inspired by:
                 // @link https://css-tricks.com/building-progress-ring-quickly/
                 $(`#ikaeasy_watcher_${build.position}`).attr('class', `ikaeasy_watcher ${class_icon}`).show();
-                $('.watche_down', $block).off('click').click(async (e) => {
+                $block.off('click.ikaeasy-watcher');
+                $block.on('click.ikaeasy-watcher', '.watche_down', async (e) => {
                     if ($(e.currentTarget).css('cursor') === 'default') {
                         return;
                     }
@@ -243,7 +244,7 @@ class City extends Parent {
                     execute_js(code);
                 });
 
-                $('.watche_up', $block).off('click').click((e) => {
+                $block.on('click.ikaeasy-watcher', '.watche_up', (e) => {
                     if ($(e.currentTarget).css('cursor') === 'default') {
                         return;
                     }
@@ -256,7 +257,7 @@ class City extends Parent {
                     }
                 });
 
-                $('.ikaeasy_watcher_title', $block).off('click').click((e) => {
+                $block.on('click.ikaeasy-watcher', '.ikaeasy_watcher_title', () => {
                     this.openBuilding({
                         cityId: this.getCityId(),
                         building: build.building,
