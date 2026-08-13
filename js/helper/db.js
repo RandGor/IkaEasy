@@ -5751,6 +5751,10 @@ const POSITIONS = {
         {"x": 55, "y": 20},
         {"x": 55, "y": 20}
     ],
+    chronosForge: [
+        {"x": 55, "y": 20},
+        {"x": 55, "y": 20}
+    ],
 
     // construction spot
     "constructionSite": [
