@@ -1,59 +1,98 @@
 # IkaEasy
 
-IkaEasy is a browser extension for [Ikariam](https://ikariam.gameforge.com/) that improves the game interface and simplifies common actions.
+IkaEasy is a community-maintained browser extension that improves the interface of [Ikariam](https://ikariam.gameforge.com/) and makes common empire-management tasks faster.
 
-This repository is a community-maintained fork of the abandoned original extension. Ikariam interface changes may occasionally require compatibility updates.
+This repository is a fork of the abandoned original extension. It is maintained for current Chromium-based browsers and updated as the Ikariam interface changes.
 
-## Features
+## Highlights
 
-- building levels and upgrade information directly in the city view;
-- island mine levels and additional city and alliance information;
+### City management
+
+- building levels displayed directly in the city view;
+- quick building upgrade and downgrade controls;
+- accurate upgrade costs loaded from the current game interface;
+- high-resolution building icons and support for current Ikariam buildings;
+- resource production, consumption, capacity, and shortage estimates.
+
+### Empire overview
+
+- resources and building levels across all cities;
+- army and navy overview with game unit icons;
+- drag-and-drop army and fleet deployment between cities;
+- drag-and-drop resource transport between cities;
+- espionage overview with available and assigned spies, targets, and quick access to spy missions;
+- manual and automatic data synchronization with protection against overlapping refreshes.
+
+### Maps and navigation
+
+- island mine levels;
+- city and alliance highlighting;
 - world map island search by resource, wonder, and occupancy;
-- quick city switching and resource transportation;
-- additional army, fleet, and diplomacy controls;
-- city resource production and consumption information;
-- notifications for completed construction, recruitment, and transport stages;
-- Barbarian Village cargo ship calculation that accounts for Workshop cargo-capacity upgrades;
-- optional automatic cargo ship selection when opening a Barbarian Village raid.
+- sailing-time information;
+- quick city switching and transport shortcuts.
 
-## Install from GitHub
+### Convenience features
 
-IkaEasy is currently installed manually as an unpacked extension.
+- Barbarian Village cargo calculation using Workshop cargo-capacity upgrades;
+- optional automatic cargo ship selection for Barbarian Village raids;
+- floating, muted Cinema player that remains available while navigating the game;
+- alliance and diplomacy shortcuts;
+- construction, recruitment, and transport notifications;
+- in-game notification when a newer GitHub Release is available.
 
-1. On the GitHub repository page, select **Code → Download ZIP**.
-2. Extract the archive to a permanent folder. Do not delete or move this folder after installation.
-3. Open your browser's extensions page:
+Most features can be enabled or disabled in the IkaEasy settings.
+
+## Installation
+
+IkaEasy is currently distributed as an unpacked extension.
+
+### Install a release
+
+1. Open the [latest GitHub Release](https://github.com/RandGor/IkaEasy/releases/latest).
+2. Download `IkaEasy-<version>.zip` from **Assets**.
+3. Extract it to a permanent folder. Do not move or delete that folder after installation.
+4. Open your browser's extension manager:
    - Chrome: `chrome://extensions/`;
    - Edge: `edge://extensions/`;
-   - other Chromium-based browsers: open their equivalent extensions management page.
-4. Enable **Developer mode**.
-5. Select **Load unpacked** and choose the extracted folder that contains `manifest.json`.
-6. Open or reload Ikariam.
+   - Opera: `opera://extensions/`.
+5. Enable **Developer mode**.
+6. Select **Load unpacked** and choose the extracted folder containing `manifest.json`.
+7. Open or reload Ikariam.
 
-If you cloned the repository with Git, select the repository root folder instead of an extracted ZIP folder.
+### Install from source
 
+Clone the repository or use **Code → Download ZIP**, then load the repository root as an unpacked extension. The source version may contain changes that have not been included in a release yet.
 
-## Update
+## Updating
 
-Extensions installed from source do not update automatically.
+Extensions loaded from a folder cannot update themselves. IkaEasy checks GitHub Releases when the game loads and shows an in-game notification once for each newer version.
 
-IkaEasy checks the repository tags when the game loads and displays an in-game notification when a newer version is available. This check can be disabled in the IkaEasy options. Installing an update still requires the following manual steps:
+To update:
 
-1. Download the latest repository version and replace the existing files without changing the installation folder, or run `git pull` in a cloned repository.
-2. Open the browser's extensions page.
-3. Select the reload button on the IkaEasy extension card.
+1. Download and extract the latest release over the existing extension folder, or run `git pull` in a cloned repository.
+2. Open the browser's extension manager.
+3. Click **Reload** on the IkaEasy extension card.
 4. Reload the Ikariam tab.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for release notes and the list of unreleased changes.
+
+## Reporting bugs
+
+Use the [bug report form](https://github.com/RandGor/IkaEasy/issues/new?template=bug_report.yml). Include the affected Ikariam view, reproduction steps, browser version, screenshots, relevant console errors, and network responses when applicable.
 
 ## Development
 
-The project has no build step. JavaScript, CSS, language files, and templates are loaded directly from the repository. After changing files, reload IkaEasy on `chrome://extensions/` and then reload the Ikariam tab.
+The project has no build step. JavaScript, CSS, language files, and EJS templates are loaded directly from the repository.
 
-When reporting a bug, please create a GitHub Issue and include:
+After making a change:
 
-- the affected Ikariam view;
-- steps to reproduce the problem;
-- browser name and version;
-- screenshots and relevant developer-console errors, when available.
+1. reload IkaEasy in the browser's extension manager;
+2. reload the Ikariam tab;
+3. test both the changed view and any related city-switching workflow.
+
+A version tag matching `manifest.json` triggers the release workflow. It validates the version, creates a clean ZIP archive, calculates its SHA-256 checksum, and prepares a draft GitHub Release.
 
 ## Disclaimer
 

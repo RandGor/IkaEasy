@@ -1,0 +1,79 @@
+name: Bug report
+description: Report a reproducible problem with IkaEasy
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve IkaEasy. Please remove private account information from screenshots and logs.
+  - type: input
+    id: version
+    attributes:
+      label: IkaEasy version
+      placeholder: 3.1.0.30
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Chrome 131, Opera 116, Edge 131
+    validations:
+      required: true
+  - type: input
+    id: server
+    attributes:
+      label: Ikariam server and language
+      placeholder: s52-ru / Russian
+    validations:
+      required: true
+  - type: input
+    id: view
+    attributes:
+      label: Affected game view
+      placeholder: Empire overview → Espionage
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open ...
+        2. Click ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Console errors or network responses
+      description: Remove actionRequest tokens, email addresses, and other private data before posting.
+      render: shell
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Drag and drop screenshots here after removing private information.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I reloaded the extension and the Ikariam tab before reproducing the issue.
+          required: true
+        - label: I removed private information and actionRequest tokens from logs and screenshots.
+          required: true

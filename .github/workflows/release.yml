@@ -1,0 +1,62 @@
+name: Prepare release
+
+on:
+  push:
+    tags:
+      - '*.*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out tagged source
+        uses: actions/checkout@v4
+
+      - name: Validate manifest version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          MANIFEST_VERSION="$(node -p "require('./manifest.json').version")"
+          if [ "$MANIFEST_VERSION" != "$RELEASE_TAG" ]; then
+            echo "manifest.json version $MANIFEST_VERSION does not match tag $RELEASE_TAG"
+            exit 1
+          fi
+
+      - name: Build release archive
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          ARCHIVE="IkaEasy-${RELEASE_TAG}.zip"
+          zip -r "$ARCHIVE" \
+            _locales css icon images inner js lang tpl \
+            manifest.json options.js sandbox.html whatnews.json README.md CHANGELOG.md
+          sha256sum "$ARCHIVE" > "${ARCHIVE}.sha256"
+
+      - name: Prepare release notes
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          awk -v version="$RELEASE_TAG" '
+            $0 == "## [" version "]" || index($0, "## [" version "] - ") == 1 { found=1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > RELEASE_NOTES.md
+          if [ ! -s RELEASE_NOTES.md ]; then
+            echo "CHANGELOG.md has no section for $RELEASE_TAG"
+            exit 1
+          fi
+
+      - name: Create draft GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          ARCHIVE="IkaEasy-${RELEASE_TAG}.zip"
+          gh release create "$RELEASE_TAG" \
+            "$ARCHIVE" "${ARCHIVE}.sha256" \
+            --draft \
+            --notes-file RELEASE_NOTES.md \
+            --title "IkaEasy ${RELEASE_TAG}"
