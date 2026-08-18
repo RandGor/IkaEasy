@@ -47,6 +47,7 @@ class Options {
                 'military_movements',
                 'transport_buttons',
                 'barbarian_auto_select_cargo_ships',
+                'empire_resource_drag_drop',
                 'empire_military_drag_drop',
                 'cinema_floating_player',
                 'check_github_updates',

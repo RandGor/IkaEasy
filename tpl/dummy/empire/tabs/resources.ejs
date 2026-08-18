@@ -5,6 +5,12 @@
         </div>
     <% } %>
 
+    <% if (data.dragDropEnabled) { %>
+        <div class="ikaeasy-option-hint empire-resource-drag-hint">
+            <%= LANGUAGE.getLocalizedString('empire.resource_drag_hint') %>
+        </div>
+    <% } %>
+
     <div class="empire-tab-overlay" id="empire-sync-resource">
         <img src="<%= url('/images/loading.gif') %>" />
         <div><%= lget('empire.refreshing') %></div>
@@ -39,7 +45,9 @@
                 let resInfo = city._resInfo;
         %>
             <tr class="empire_city_row <%= (city.id === data.selectedCityId) ? 'current_city' : '' %>"  data-id="<%= city.id %>" >
-                <td class="empire_city ikaeasy_tradegood ikaeasy_tradegood_<%= city.tradegood %>">
+                <td class="empire_city empire-resource-city ikaeasy_tradegood ikaeasy_tradegood_<%= city.tradegood %>"
+                    data-city-id="<%= city.id %>"
+                    <% if (data.dragDropEnabled) { %>draggable="true"<% } %>>
                     <span><%- city.coords %> <%- city.name %></span>
                 </td>
                 <td class="empire_transport">

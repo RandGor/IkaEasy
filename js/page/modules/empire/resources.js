@@ -2,6 +2,7 @@ import Parent from './dummy.js';
 import Tooltip from '../../../helper/tooltip.js';
 import Storage from '../../../helper/storage.js';
 import SyncLock from '../../../helper/syncLock.js';
+import { execute_js } from '../../../utils.js';
 
 const RESOURCE_SYNC_STORAGE_KEY = 'empire';
 const RESOURCE_AUTO_SYNC_INTERVAL = 10 * 60 * 1000;
@@ -20,7 +21,8 @@ class Module extends Parent {
         const data = {
             cities: this._cities,
             selectedCityId: this._data.cities.selectedCityId,
-            manager: Front.ikaeasyData
+            manager: Front.ikaeasyData,
+            dragDropEnabled: this.options.get('empire_resource_drag_drop', true)
         };
 
         await callback(data);
@@ -140,10 +142,167 @@ class Module extends Parent {
             const tpl = await this.render('dummy/empire/tooltip/corruption', { });
             Tooltip.show(e, $td, $(tpl));
         });
+
+        if (this.options.get('empire_resource_drag_drop', true)) {
+            this.registerResourceDragDrop();
+        }
+    }
+
+    registerResourceDragDrop() {
+        this.$parent
+            .off('.empireResourceDragDrop')
+            .on('dragstart.empireResourceDragDrop', '.empire-resource-city[draggable="true"]', (event) => {
+                const sourceCityId = parseInt($(event.currentTarget).data('city-id'));
+                this.draggedResourceCityId = sourceCityId;
+                event.originalEvent.dataTransfer.effectAllowed = 'move';
+                event.originalEvent.dataTransfer.setData('text/plain', String(sourceCityId));
+                $(event.currentTarget).closest('tr').addClass('empire-resource-dragging');
+            })
+            .on('dragend.empireResourceDragDrop', '.empire-resource-city[draggable="true"]', () => {
+                this.clearResourceDragState();
+            })
+            .on('dragover.empireResourceDragDrop', '.empire-resource-city[data-city-id]', (event) => {
+                const targetCityId = parseInt($(event.currentTarget).data('city-id'));
+                if (!this.draggedResourceCityId || this.draggedResourceCityId === targetCityId) {
+                    return;
+                }
+
+                event.preventDefault();
+                event.originalEvent.dataTransfer.dropEffect = 'move';
+                $(event.currentTarget).addClass('empire-resource-drop-target');
+            })
+            .on('dragleave.empireResourceDragDrop', '.empire-resource-city[data-city-id]', (event) => {
+                $(event.currentTarget).removeClass('empire-resource-drop-target');
+            })
+            .on('drop.empireResourceDragDrop', '.empire-resource-city[data-city-id]', (event) => {
+                event.preventDefault();
+                const targetCityId = parseInt($(event.currentTarget).data('city-id'));
+                const sourceCityId = this.readResourceDragSource(event.originalEvent);
+                this.clearResourceDragState();
+
+                if (!sourceCityId || sourceCityId === targetCityId) {
+                    return;
+                }
+                this.openResourceTransport(sourceCityId, targetCityId);
+            });
+    }
+
+    readResourceDragSource(event) {
+        if (this.draggedResourceCityId) {
+            return this.draggedResourceCityId;
+        }
+        return parseInt(event.dataTransfer.getData('text/plain')) || null;
+    }
+
+    clearResourceDragState() {
+        this.draggedResourceCityId = null;
+        this.$parent.find('.empire-resource-dragging').removeClass('empire-resource-dragging');
+        this.$parent.find('.empire-resource-drop-target').removeClass('empire-resource-drop-target');
+    }
+
+    async openResourceTransport(sourceCityId, targetCityId) {
+        if (this.resourceTransportOpening) {
+            return;
+        }
+
+        this.resourceTransportOpening = true;
+        this.$parent.addClass('empire-resource-switching-city');
+
+        try {
+            await this.silentChangeCity(sourceCityId);
+            this.parent.close();
+
+            const query = `/index.php?view=transport&destinationCityId=${targetCityId}` +
+                `&currentCityId=${sourceCityId}&actionRequest=${encodeURIComponent(Front.data.actionRequest)}&ajax=1`;
+            this.openTransportResponse(query);
+        } catch (error) {
+            console.error('IkaEasy resource transport: could not switch source city', error);
+        } finally {
+            this.resourceTransportOpening = false;
+            this.$parent.removeClass('empire-resource-switching-city');
+        }
+    }
+
+    openTransportResponse(query) {
+        execute_js(`
+            $.ajax({
+                url: ${JSON.stringify(query)},
+                method: 'GET',
+                dataType: 'text'
+            }).done(function(response) {
+                ajax.Responder.parseResponse(response);
+            }).fail(function(request, status, error) {
+                console.error('IkaEasy resource transport request failed', status, error);
+            });
+        `);
+    }
+
+    async silentChangeCity(cityId) {
+        const $form = $('#changeCityForm');
+        const $cityInput = $form.find('#js_cityIdOnChange');
+        if (!$form.length || !$cityInput.length || !$cityInput.attr('name')) {
+            throw new Error('IkaEasy resource transport: change city form was not found');
+        }
+
+        const data = {};
+        $form.serializeArray().forEach((field) => {
+            data[field.name] = field.value;
+        });
+        data[$cityInput.attr('name')] = cityId;
+        data.actionRequest = Front.data.actionRequest;
+        data.ajax = 1;
+
+        const response = await $.ajax({
+            url: $form.attr('action') || '/',
+            method: ($form.attr('method') || 'POST').toUpperCase(),
+            data: data,
+            dataType: 'json'
+        });
+
+        this.updateActionRequest(response);
+        this.updateClientActiveCity(cityId);
+    }
+
+    updateClientActiveCity(cityId) {
+        const selectedCity = `city_${cityId}`;
+        Front.data.cities.selectedCity = selectedCity;
+        Front.data.cities.selectedCityId = cityId;
+        $('#js_cityIdOnChange').val(cityId);
+
+        execute_js(`
+            if (ikariam.model.relatedCityData) {
+                ikariam.model.relatedCityData.selectedCity = ${JSON.stringify(selectedCity)};
+                ikariam.model.relatedCityData.selectedCityId = ${cityId};
+            }
+            if (ikariam.model.headerData && ikariam.model.headerData.cityDropdownMenu) {
+                ikariam.model.headerData.cityDropdownMenu.selectedCity = ${JSON.stringify(selectedCity)};
+                ikariam.model.headerData.cityDropdownMenu.selectedCityId = ${cityId};
+            }
+            var ikaeasyCityInput = document.getElementById('js_cityIdOnChange');
+            if (ikaeasyCityInput) {
+                ikaeasyCityInput.value = ${cityId};
+            }
+        `);
+    }
+
+    updateActionRequest(response) {
+        if (!Array.isArray(response)) {
+            return;
+        }
+
+        const globalData = response.find((command) =>
+            Array.isArray(command) && command[0] === 'updateGlobalData' && command[1]
+        );
+        const actionRequest = globalData && globalData[1].actionRequest;
+        if (actionRequest) {
+            Front.data.actionRequest = actionRequest;
+            execute_js(`ikariam.model.actionRequest=${JSON.stringify(actionRequest)};`);
+        }
     }
 
     onDestroy() {
         Tooltip.hide();
+        this.$parent.off('.empireResourceDragDrop');
     }
 }
 

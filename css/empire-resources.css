@@ -1,0 +1,28 @@
+.empire-resource-drag-hint {
+    margin: 8px 18px 10px;
+    padding: 7px 12px;
+    border: 1px solid #d2ac61;
+    border-radius: 3px;
+    color: #6b4b26;
+    background: #fff6d9;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.empire-resource-city[draggable="true"] {
+    cursor: grab;
+}
+
+.empire-resource-dragging {
+    opacity: .55;
+}
+
+.empire-resource-switching-city {
+    cursor: wait;
+    pointer-events: none;
+}
+
+.empire-resource-table tbody .empire-resource-city.empire-resource-drop-target {
+    background-color: #dceeb5 !important;
+    box-shadow: inset 0 0 0 2px #719332;
+}
