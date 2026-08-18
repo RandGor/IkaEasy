@@ -1,17 +1,17 @@
 name: Bug report
-description: Report a reproducible problem with IkaEasy
+description: Report a reproducible problem with IkaEasy V4
 title: "[Bug]: "
 labels:
   - bug
 body:
   - type: markdown
     attributes:
-      value: Thanks for helping improve IkaEasy. Please remove private account information from screenshots and logs.
+      value: Thanks for helping improve IkaEasy V4 by RandGor. Please remove private account information from screenshots and logs.
   - type: input
     id: version
     attributes:
-      label: IkaEasy version
-      placeholder: 3.1.0.30
+      label: IkaEasy V4 version
+      placeholder: 4.0.0.0
     validations:
       required: true
   - type: input
@@ -25,7 +25,7 @@ body:
     id: server
     attributes:
       label: Ikariam server and language
-      placeholder: s52-ru / Russian
+      placeholder: Your game world and language, for example s1-en / English
     validations:
       required: true
   - type: input

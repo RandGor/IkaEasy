@@ -10,7 +10,7 @@ class Support {
         }
 
         let win = new Win({
-            title: 'IkaEasy',
+            title: 'IkaEasy V4',
             subtitle: LANGUAGE.getLocalizedString('support_text'),
         });
 

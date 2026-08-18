@@ -2,7 +2,7 @@
    "manifest_version": 3,
    "action": {
       "default_icon": "icon/128.png",
-      "default_title": "IkaEasy"
+      "default_title": "IkaEasy V4"
    },
    "background": {
       "service_worker": "js/bg/background.js",
@@ -24,14 +24,17 @@
       "32": "icon/32.png",
       "48": "icon/48.png"
    },
-   "name": "IkaEasy",
-   "description": "Quality-of-life improvements and empire management tools for Ikariam",
+   "name": "IkaEasy V4 by RandGor",
+   "short_name": "IkaEasy V4",
+   "author": "RandGor",
+   "homepage_url": "https://github.com/RandGor/IkaEasy",
+   "description": "Independently maintained IkaEasy fork by RandGor for modern Ikariam",
    "permissions": [ "tabs", "storage", "notifications", "alarms" ],
    "sandbox": {
       "pages": [ "sandbox.html" ]
    },
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "3.1.0.30",
+   "version": "4.0.0.0",
    "web_accessible_resources": [ {
       "matches": [ "http://*.ikariam.gameforge.com/*", "https://*.ikariam.gameforge.com/*", "https://ikalogs.ru/*", "https://*.ikalogs.ru/*" ],
       "resources": [ "js/cinema-player.js", "inner/ikaeasy.js", "images/*", "js/page/*", "js/helper/*", "js/libs/*", "js/data/*", "js/sandbox/*", "js/const.js", "js/utils.js", "js/langs.js", "js/sandbox.js", "js/templater.js", "js/navigation.js", "js/assignedLangs.js", "js/initModule.js", "lang/*", "css/*", "icon/*", "tpl/*", "whatnews.json", "options.js", "sandbox.html" ]

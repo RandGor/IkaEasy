@@ -5,7 +5,7 @@ Do not delete them after generating the sprite.
 
 Base URL:
 
-`https://s52-ru.ikariam.gameforge.com/cdn/all/both/img/city/`
+`https://<world>-<locale>.ikariam.gameforge.com/cdn/all/both/img/city/`
 
 The local filenames use IkaEasy's canonical building keys. The CDN filename is
 usually `<key>_l.png`, with these exceptions:

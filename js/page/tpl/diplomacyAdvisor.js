@@ -214,7 +214,7 @@ class Page extends Parent {
             templateView = 'sendIKMessage'
         } = options;
 
-        const url = 'https://s52-ru.ikariam.gameforge.com/index.php';
+        const url = new URL('/index.php', window.location.origin).toString();
         const params = new URLSearchParams();
         params.append('action', 'Messages');
         params.append('function', 'send');

@@ -82,7 +82,7 @@ class Page extends Parent {
             '<!doctype html><html><head>' +
                 '<meta charset="utf-8">' +
                 '<meta name="viewport" content="width=device-width,initial-scale=1">' +
-                '<title>IkaEasy Cinema</title>' +
+                '<title>IkaEasy V4 Cinema</title>' +
                 '<link rel="stylesheet" href="' + stylesheet + '">' +
             '</head><body' +
                 ' data-session-id="' + sessionId + '"' +

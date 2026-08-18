@@ -29,7 +29,7 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          ARCHIVE="IkaEasy-${RELEASE_TAG}.zip"
+          ARCHIVE="IkaEasy-V4-${RELEASE_TAG}.zip"
           zip -r "$ARCHIVE" \
             _locales css icon images inner js lang tpl \
             manifest.json options.js sandbox.html whatnews.json README.md CHANGELOG.md
@@ -54,9 +54,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          ARCHIVE="IkaEasy-${RELEASE_TAG}.zip"
+          ARCHIVE="IkaEasy-V4-${RELEASE_TAG}.zip"
           gh release create "$RELEASE_TAG" \
             "$ARCHIVE" "${ARCHIVE}.sha256" \
             --draft \
             --notes-file RELEASE_NOTES.md \
-            --title "IkaEasy ${RELEASE_TAG}"
+            --title "IkaEasy V4 ${RELEASE_TAG}"

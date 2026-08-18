@@ -1,32 +1,48 @@
 {
-    "version": "3.1.0.30",
+    "version": "4.0.0.0",
     "enabled": true,
     "text": {
-        "ru": "В этом обновлении расширены возможности управления империей и улучшена надёжность сохранённых данных.",
-        "en": "This update expands the Empire overview and improves synchronization reliability."
+        "ru": "IkaEasy V4 — крупное обновление поддерживаемого RandGor форка: современное ядро, новые инструменты управления империей и совместимость с актуальным Ikariam.",
+        "en": "IkaEasy V4 is a major release of RandGor's maintained fork, featuring a modernized core, new Empire tools, and compatibility with current Ikariam."
     },
     "new": {
         "ru": [
-            "Добавлена полноценная вкладка «Шпионаж» с быстрым переходом к заданиям.",
-            "Добавлена отправка ресурсов между городами перетаскиванием.",
-            "Добавлена поддержка новых зданий и качественные изображения зданий."
+            "Расширение переведено на современную архитектуру и Manifest V3.",
+            "Добавлены вкладки «Войска» и «Шпионаж» в управлении империей.",
+            "Добавлено перемещение армии, флота и ресурсов между городами перетаскиванием.",
+            "Добавлен компактный плавающий видеоплеер Кинотеатра с воспроизведением без звука.",
+            "Добавлен расчёт сухогрузов для набегов на варваров с учётом улучшений Мастерской.",
+            "Добавлено быстрое принятие дипломатических соглашений и опциональная поддержка Anti-Captcha для пиратской крепости.",
+            "Добавлены проверка обновлений через GitHub, внутриигровые уведомления и ссылки на официальный репозиторий RandGor."
         ],
         "en": [
-            "Added a complete Espionage overview with quick access to spy missions.",
-            "Added drag-and-drop resource transport between cities.",
-            "Added support for new buildings and high-resolution building artwork."
+            "Migrated the extension to a modern architecture and Manifest V3.",
+            "Added Military and Espionage tabs to the Empire overview.",
+            "Added drag-and-drop army, fleet, and resource transfers between cities.",
+            "Added a compact floating Cinema player with muted playback.",
+            "Added Barbarian raid cargo calculation using Workshop cargo-capacity upgrades.",
+            "Added quick diplomacy treaty handling and optional Anti-Captcha support for the Pirate Fortress.",
+            "Added GitHub update checks, in-game notifications, and links to RandGor's official repository."
         ]
     },
     "fixed": {
         "ru": [
-            "Исправлено быстрое улучшение зданий.",
-            "Исправлены ложные успешные и пересекающиеся обновления данных империи.",
-            "Исправлены ошибки при некорректных ответах IkaLogs."
+            "Восстановлены быстрое улучшение зданий и корректное отображение его стоимости.",
+            "Обновлены изображения зданий, добавлены новые здания и улучшено качество вкладки «Здания».",
+            "Исправлено применение автоматически рассчитанного числа транспортных кораблей.",
+            "Повышена надёжность фоновой синхронизации данных империи и устранены пересекающиеся обновления.",
+            "Таблицы управления империей теперь обновляются без полной перерисовки и потери выделения текста.",
+            "Исправлена обработка некорректных ответов IkaLogs и ряд проблем после изменений интерфейса Ikariam.",
+            "Исправлена отправка дипломатических запросов на текущий игровой сервер вместо жёстко заданного мира."
         ],
         "en": [
-            "Fixed quick building upgrades.",
-            "Fixed false successful and overlapping Empire data refreshes.",
-            "Fixed errors caused by malformed IkaLogs responses."
+            "Restored quick building upgrades and accurate upgrade costs.",
+            "Updated building artwork, added new buildings, and improved the Buildings overview quality.",
+            "Fixed application of automatically calculated transport ship counts.",
+            "Improved Empire data synchronization and prevented overlapping refreshes.",
+            "Empire tables now update without complete redraws or lost text selections.",
+            "Fixed malformed IkaLogs response handling and multiple issues caused by Ikariam interface changes.",
+            "Fixed diplomacy requests to use the current game server instead of a hard-coded world."
         ]
     },
     "hotfix": {

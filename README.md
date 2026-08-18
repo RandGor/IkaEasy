@@ -1,8 +1,14 @@
-# IkaEasy
+<p align="center">
+  <img src="icon/256.png" width="180" height="180" alt="IkaEasy V4 logo">
+</p>
 
-IkaEasy is a community-maintained browser extension that improves the interface of [Ikariam](https://ikariam.gameforge.com/) and makes common empire-management tasks faster.
+<h1 align="center">IkaEasy V4 by RandGor</h1>
 
-This repository is a fork of the abandoned original extension. It is maintained for current Chromium-based browsers and updated as the Ikariam interface changes.
+IkaEasy V4 is an independently maintained browser extension that improves the interface of [Ikariam](https://ikariam.gameforge.com/) and makes common empire-management tasks faster.
+
+This project is **RandGor's actively maintained fork** of the discontinued original IkaEasy extension. The V4 name distinguishes this repository and its releases from abandoned copies of the old project distributed elsewhere.
+
+The official source, issue tracker, and releases for IkaEasy V4 are hosted at [RandGor/IkaEasy](https://github.com/RandGor/IkaEasy).
 
 ## Highlights
 
@@ -40,16 +46,16 @@ This repository is a fork of the abandoned original extension. It is maintained 
 - construction, recruitment, and transport notifications;
 - in-game notification when a newer GitHub Release is available.
 
-Most features can be enabled or disabled in the IkaEasy settings.
+Most features can be enabled or disabled in the IkaEasy V4 settings.
 
 ## Installation
 
-IkaEasy is currently distributed as an unpacked extension.
+IkaEasy V4 is currently distributed as an unpacked extension.
 
 ### Install a release
 
 1. Open the [latest GitHub Release](https://github.com/RandGor/IkaEasy/releases/latest).
-2. Download `IkaEasy-<version>.zip` from **Assets**.
+2. Download `IkaEasy-V4-<version>.zip` from **Assets**.
 3. Extract it to a permanent folder. Do not move or delete that folder after installation.
 4. Open your browser's extension manager:
    - Chrome: `chrome://extensions/`;
@@ -65,13 +71,13 @@ Clone the repository or use **Code → Download ZIP**, then load the repository 
 
 ## Updating
 
-Extensions loaded from a folder cannot update themselves. IkaEasy checks GitHub Releases when the game loads and shows an in-game notification once for each newer version.
+Extensions loaded from a folder cannot update themselves. IkaEasy V4 checks GitHub Releases when the game loads and shows an in-game notification once for each newer version.
 
 To update:
 
 1. Download and extract the latest release over the existing extension folder, or run `git pull` in a cloned repository.
 2. Open the browser's extension manager.
-3. Click **Reload** on the IkaEasy extension card.
+3. Click **Reload** on the IkaEasy V4 extension card.
 4. Reload the Ikariam tab.
 
 ## Changelog
@@ -88,7 +94,7 @@ The project has no build step. JavaScript, CSS, language files, and EJS template
 
 After making a change:
 
-1. reload IkaEasy in the browser's extension manager;
+1. reload IkaEasy V4 in the browser's extension manager;
 2. reload the Ikariam tab;
 3. test both the changed view and any related city-switching workflow.
 
@@ -96,4 +102,4 @@ A version tag matching `manifest.json` triggers the release workflow. It validat
 
 ## Disclaimer
 
-IkaEasy is an unofficial community project and is not affiliated with Gameforge. It is intended only for Ikariam. Use it at your own risk and follow the rules of your game server.
+IkaEasy V4 is an unofficial community project maintained by RandGor and is not affiliated with Gameforge. It is intended only for Ikariam. Use it at your own risk and follow the rules of your game server.
