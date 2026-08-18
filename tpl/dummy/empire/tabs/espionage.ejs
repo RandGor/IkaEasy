@@ -1,7 +1,47 @@
-<div class="empire-coming-soon">
-    <%= LANGUAGE.getLocalizedString('empire.coming_soon') %>
+<div class="empire-espionage">
+    <div class="ikaeasy-option-hint empire-espionage-notice">
+        <a id="empire_espionage_sync" href="#" title="<%= LANGUAGE.getLocalizedString('empire.espionage_refresh') %>"></a>
+        <%= LANGUAGE.getLocalizedString('empire.espionage_notice') %>
+    </div>
 
-    <br/>
-    <br/>
-    <% /* Donation button disabled: include('patreon/button.ejs') */ %>
+    <table class="table01 dotted empire-espionage-table">
+        <thead><tr>
+            <th class="empire_city"><%= LANGUAGE.getLocalizedString('empire.city') %></th>
+            <th><%= LANGUAGE.getLocalizedString('empire.espionage_level') %></th>
+            <th><%= LANGUAGE.getLocalizedString('empire.espionage_defending') %></th>
+            <th><%= LANGUAGE.getLocalizedString('empire.espionage_assigned') %></th>
+            <th class="empire-espionage-targets"><%= LANGUAGE.getLocalizedString('empire.espionage_targets') %></th>
+        </tr></thead>
+        <tbody>
+        <% data.rows.forEach(function(city) { %>
+            <tr data-id="<%= city.id %>" class="<%= city.id === data.selectedCityId ? 'current_city' : '' %>">
+                <td class="empire_city ikaeasy_tradegood ikaeasy_tradegood_<%= city.tradegood %>">
+                    <span><%- city.coords %> <%- city.name %></span>
+                </td>
+                <td class="center"><%= city.hasSafehouse ? city.level : '&mdash;' %></td>
+                <% if (city.hasSafehouse === false) { %>
+                    <td class="center" colspan="3"><%= LANGUAGE.getLocalizedString('empire.espionage_no_safehouse') %></td>
+                <% } else if (!city.data) { %>
+                    <td class="center" colspan="3">&mdash;</td>
+                <% } else { %>
+                    <td class="center empire-espionage-available"><strong><%= num(city.data.defending, 0, false) %></strong> / <%= num(city.data.capacity, 0, false) %></td>
+                    <td class="center"><%= num(city.data.assigned, 0, false) %></td>
+                    <td class="empire-espionage-targets">
+                    <% if (!city.data.missions.length) { %>
+                        &mdash;
+                    <% } else { city.data.missions.forEach(function(mission) { %>
+                        <a class="empire-espionage-target" href="#"
+                           data-source-city-id="<%= city.id %>"
+                           data-target-city-id="<%= mission.targetCityId %>"
+                           data-position="<%= city.data.position %>"
+                           title="<%- mission.targetPlayer %>: <%- mission.status %>">
+                            <span><%- mission.targetCity %></span><strong><%= num(mission.spies, 0, false) %></strong>
+                        </a>
+                    <% }); } %>
+                    </td>
+                <% } %>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
 </div>

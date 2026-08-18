@@ -1,0 +1,15 @@
+.empire-espionage { padding: 10px 0 4px; }
+.empire-espionage-notice { position: relative; margin: 8px 18px 14px; padding: 8px 12px; border: 1px solid #d2ac61; border-radius: 3px; color: #6b4b26; background: #fff6d9; font-size: 12px; }
+#empire_espionage_sync { position: absolute; top: 7px; left: 9px; display: block; width: 18px; height: 18px; opacity: .5; background: url(../images/icons/sync-solid.svg) no-repeat 50% 50%/12px; }
+#empire_espionage_sync:hover { opacity: .9; }
+#empire_espionage_sync.rotate { animation: spin 1.5s linear infinite; opacity: .9; }
+.empire-espionage-table { width: 100%; margin: 0 !important; }
+.empire-espionage-table th, .empire-espionage-table td { height: 36px; padding: 4px 8px !important; box-sizing: border-box; }
+.empire-espionage-table .empire_city { width: 1%; padding-left: 38px !important; text-align: left !important; white-space: nowrap; }
+.empire-espionage-table tbody tr.current_city td { background-color: #fffae8 !important; }
+.empire-espionage-available { color: #355c13; }
+.empire-espionage-targets { min-width: 260px; text-align: left !important; }
+.empire-espionage-target { display: inline-flex; gap: 6px; margin: 2px 4px 2px 0; padding: 2px 6px; border: 1px solid #d2ac61; border-radius: 3px; color: #542c0f; background: #fff6d9; white-space: nowrap; text-decoration: none; cursor: pointer; }
+.empire-espionage-target:hover { background: #faeac6; border-color: #b88736; }
+.empire-espionage-target strong { color: #355c13; }
+.empire-espionage-switching-city { cursor: wait; pointer-events: none; }
