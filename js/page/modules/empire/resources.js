@@ -1,6 +1,10 @@
 import Parent from './dummy.js';
 import Tooltip from '../../../helper/tooltip.js';
 import Storage from '../../../helper/storage.js';
+import SyncLock from '../../../helper/syncLock.js';
+
+const RESOURCE_SYNC_STORAGE_KEY = 'empire';
+const RESOURCE_AUTO_SYNC_INTERVAL = 10 * 60 * 1000;
 
 class Module extends Parent {
     $loader;
@@ -40,30 +44,47 @@ class Module extends Parent {
     }
 
     async syncAll(force = false) {
-        const lastUpdateStorage = await Storage.get("empire");
+        if (this.syncing) {
+            return;
+        }
+
+        const lastUpdateStorage = await Storage.get(RESOURCE_SYNC_STORAGE_KEY);
         const nowTime = _.now();
+        const oneMinute = 1 * 60000;
+        let syncInterval = RESOURCE_AUTO_SYNC_INTERVAL;
         if(lastUpdateStorage && !force){
-            const lastUpdate = lastUpdateStorage.update_time;
-            const oneMinute = 1 * 60000;
-            const tenMinutes = oneMinute * 10;
+            const lastUpdate = parseInt(lastUpdateStorage.sync_completed_at || lastUpdateStorage.update_time) || 0;
             if(this.firstRender){
                 this.firstRender = false;
+                syncInterval = oneMinute;
                 if(lastUpdate + oneMinute > nowTime){ return; }
             }else{
-                if(lastUpdate + tenMinutes > nowTime){ return;}
+                if(lastUpdate + RESOURCE_AUTO_SYNC_INTERVAL > nowTime){ return;}
             }
         }
 
+        this.syncing = true;
         this.stopDrawTimer();
-        this.startLoader();//loader will stop after re-render
-        await Storage.set("empire", {
-            "update_time": nowTime
-        });
+        this.startLoader();
+        try {
+            const result = await SyncLock.run(RESOURCE_SYNC_STORAGE_KEY, {
+                force: force,
+                interval: syncInterval
+            }, async () => {
+                await Front.ikaeasyData.ajaxUpdateAllCities();
+                await Front.ikaeasyData.ajaxUpdatePalace();
+            });
 
-        await Front.ikaeasyData.ajaxUpdateAllCities();
-        await Front.ikaeasyData.ajaxUpdatePalace();
-        this.draw();
-        this.startDrawTimer();
+            if (result.status === 'completed') {
+                await this.draw();
+            }
+        } catch (error) {
+            console.error('IkaEasy empire resources refresh failed:', error);
+        } finally {
+            this.syncing = false;
+            this.$parent.find(this.loaderEl).removeClass('rotate');
+            this.startDrawTimer();
+        }
     }
 
     onRegisterClickHandlers($el){

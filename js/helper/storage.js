@@ -8,12 +8,11 @@ class Storage extends Events {
 
         chrome.storage.onChanged.addListener((changes, namespace) => {
             _.each(changes, (val, key) => {
-                if (val.oldValue) {
-                    val.oldValue = JSON.parse(val.oldValue);
-                }
+                val.oldValue = this.parse(val.oldValue, key);
+                val.newValue = this.parse(val.newValue, key);
 
-                if (val.newValue) {
-                    val.newValue = JSON.parse(val.newValue);
+                if (namespace === 'local') {
+                    this.cache[key] = val.newValue;
                 }
 
                 this.emit(key, [val, key, namespace]);
@@ -29,20 +28,35 @@ class Storage extends Events {
         return super.off(getThisKey(key));
     }
 
-    get(key) {
+    parse(value, key) {
+        if (typeof value !== 'string') {
+            return typeof value === 'undefined' ? null : value;
+        }
+
+        try {
+            return JSON.parse(value);
+        } catch (error) {
+            console.error(`IkaEasy storage: invalid JSON in ${key}`, error);
+            return null;
+        }
+    }
+
+    get(key, fresh = false) {
         return new Promise(resolve => {
             key = getThisKey(key);
-            if(key in this.cache){
+            if(!fresh && key in this.cache){
                 return resolve(this.cache[key]);
             }
 
             chrome.storage.local.get(key, (result) => {
-                let val = result[key] || null;
-                if (val) {
-                    val = JSON.parse(val);
+                if (chrome.runtime.lastError) {
+                    console.error('IkaEasy storage: read failed', chrome.runtime.lastError);
+                    return resolve(null);
                 }
+
+                const val = this.parse(result[key], key);
                 this.cache[key] = val;
-                resolve(val, null);
+                resolve(val);
             });
         })
     }
@@ -55,8 +69,13 @@ class Storage extends Events {
 
             try {
                 chrome.storage.local.set(data, () => {
-                    resolve(true);
+                    if (chrome.runtime.lastError) {
+                        console.error('IkaEasy storage: write failed', chrome.runtime.lastError);
+                        return resolve(false);
+                    }
+
                     this.cache[_key] = value;
+                    resolve(true);
                 });
             } catch (e) {
                 console.log(e, data);

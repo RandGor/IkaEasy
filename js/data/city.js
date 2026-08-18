@@ -50,13 +50,18 @@ class City {
     }
 
     async ajaxUpdate(){
-        await HttpClient.ikariam('/', {
+        const response = await HttpClient.ikariam('/', {
             view: 'townHall',
             cityId: this.cityId,
             position: 0,
             backgroundView: 'city',
             currentCityId: this.cityId
         });
+
+        if (!Array.isArray(response)) {
+            throw new Error(`Could not update city ${this.cityId}`);
+        }
+        return response;
     }
 
     load(data) {

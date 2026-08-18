@@ -261,11 +261,14 @@ class Manager extends Events {
     async ajaxUpdatePalace(){
         const capitalCity = this.getCapitalCity();
         if(capitalCity.buildings.palace && capitalCity.buildings.palace[0]){
-            await HttpClient.ikariam('/', {
+            const response = await HttpClient.ikariam('/', {
                 view: 'palace',
                 cityId: capitalCity.cityId,
                 position: capitalCity.buildings.palace[0].position,
             });
+            if (!Array.isArray(response)) {
+                throw new Error(`Could not update palace data for city ${capitalCity.cityId}`);
+            }
         }
     }
 

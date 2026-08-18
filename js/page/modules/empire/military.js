@@ -4,6 +4,7 @@ import Parent from './dummy.js';
 import { Military, UnitIds } from '../../../const.js';
 import HttpClient from '../../../helper/httpClient.js';
 import Storage from '../../../helper/storage.js';
+import SyncLock from '../../../helper/syncLock.js';
 import { execute_js, getInt } from '../../../utils.js';
 
 const UNIT_IDS = Object.fromEntries(
@@ -272,7 +273,7 @@ class Module extends Parent {
         }
 
         const state = await Storage.get(MILITARY_SYNC_STORAGE_KEY);
-        const lastUpdate = state && parseInt(state.update_time) || 0;
+        const lastUpdate = state && parseInt(state.sync_completed_at || state.update_time) || 0;
         if (lastUpdate + MILITARY_AUTO_SYNC_INTERVAL > Date.now()) {
             return;
         }
@@ -285,38 +286,30 @@ class Module extends Parent {
             return;
         }
 
-        if (!force) {
-            const state = await Storage.get(MILITARY_SYNC_STORAGE_KEY);
-            const lastUpdate = state && parseInt(state.update_time) || 0;
-            if (lastUpdate + MILITARY_AUTO_SYNC_INTERVAL > Date.now()) {
-                return;
-            }
-        }
-
         this.syncing = true;
         this.$parent.find('#empire_military_sync').addClass('rotate');
 
         try {
-            let updatedCities = 0;
-            for (const city of this._cities) {
-                const response = await HttpClient.ikariam('/', {
-                    view: 'cityMilitary',
-                    cityId: city.id,
-                    backgroundView: 'city',
-                    currentCityId: city.id
-                });
-                if (this.updateCityFromResponse(city.id, response)) {
-                    updatedCities++;
+            const result = await SyncLock.run(MILITARY_SYNC_STORAGE_KEY, {
+                force: force,
+                interval: MILITARY_AUTO_SYNC_INTERVAL
+            }, async () => {
+                for (const city of this._cities) {
+                    const response = await HttpClient.ikariam('/', {
+                        view: 'cityMilitary',
+                        cityId: city.id,
+                        backgroundView: 'city',
+                        currentCityId: city.id
+                    });
+                    if (!this.updateCityFromResponse(city.id, response)) {
+                        throw new Error(`Could not update military data for city ${city.id}`);
+                    }
                 }
-            }
+            });
 
-            if (updatedCities > 0) {
-                await Storage.set(MILITARY_SYNC_STORAGE_KEY, {
-                    update_time: Date.now()
-                });
+            if (result.status === 'completed') {
+                await this.draw();
             }
-
-            await this.draw();
         } catch (error) {
             console.error('IkaEasy military overview refresh failed:', error);
         } finally {
