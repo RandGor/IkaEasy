@@ -1,4 +1,4 @@
-import Parent from './dummy.js';import {execute_js} from '../../utils.js';
+import Parent from './dummy.js';import {executePageCommand} from '../../utils.js';
 
 class Page extends Parent {
 
@@ -22,7 +22,9 @@ class Page extends Parent {
         });
 
         if (palace) {
-            execute_js(`ikariam.TemplateView.destroyTemplateView(); BubbleTips.bindBubbleTip(1, 11, "${LANGUAGE.getLocalizedString('alert.destroy_non_mobile_colony_prompt')}");`);
+            executePageCommand('destroyTemplateAndShowTip', {
+                text: LANGUAGE.getLocalizedString('alert.destroy_non_mobile_colony_prompt')
+            });
         }
     }
 

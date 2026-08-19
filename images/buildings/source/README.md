@@ -20,3 +20,8 @@ usually `<key>_l.png`, with these exceptions:
 
 The source path list was cross-checked against the current TNT Collection
 building definitions and downloaded from the official Ikariam CDN.
+
+Run `python scripts/build-building-sprite.py` from the repository root to
+generate `images/buildingbutton_sprite.webp` at WebP quality 85. The PNG and
+JPG sprite files are retained as development references and excluded from
+release packages.

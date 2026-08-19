@@ -8,7 +8,8 @@ ROOT = Path(__file__).resolve().parents[1]
 IMAGES = ROOT / "images"
 SOURCES = IMAGES / "buildings" / "source"
 REFERENCE = IMAGES / "buildingbutton_sprite.jpg"
-OUTPUT = IMAGES / "buildingbutton_sprite.png"
+OUTPUT = IMAGES / "buildingbutton_sprite.webp"
+WEBP_QUALITY = 85
 
 SCALE = 4
 ROW_HEIGHT = 41
@@ -147,7 +148,7 @@ def main():
         for index, building in enumerate(BUILDINGS):
             cell = render_cell(reference, building, index, faded)
             sprite.paste(cell.convert("RGB"), (BOUNDS[index] * SCALE, row * ROW_HEIGHT * SCALE))
-    sprite.save(OUTPUT, optimize=True)
+    sprite.save(OUTPUT, format="WEBP", quality=WEBP_QUALITY, method=6)
 
 
 if __name__ == "__main__":

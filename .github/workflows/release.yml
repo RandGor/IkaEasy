@@ -32,7 +32,16 @@ jobs:
           ARCHIVE="IkaEasy-V4-${RELEASE_TAG}.zip"
           zip -r "$ARCHIVE" \
             _locales css icon images inner js lang tpl \
-            manifest.json options.js sandbox.html whatnews.json README.md CHANGELOG.md
+            manifest.json options.js sandbox.html whatnews.json README.md CHANGELOG.md \
+            -x 'images/buildings/source/*' \
+               'images/buildingbutton_sprite.jpg' \
+               'images/buildingbutton_sprite.png' \
+               'css/ikaeasy.css.map' \
+               'icon/ikaeasy-v4-concept.png' \
+               'icon/ikaeasy-v4-wordmark-concept.png' \
+               'icon/256.png' \
+               'icon/19.png' \
+               'icon/96-16.png'
           sha256sum "$ARCHIVE" > "${ARCHIVE}.sha256"
 
       - name: Prepare release notes

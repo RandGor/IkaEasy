@@ -1,10 +1,138 @@
 'use strict';
 
 (function() {
+    const MESSAGE_TYPE = 'FROM_IKAEASY_V4';
+
+    const isSafeGameUrl = (value) => {
+        if (typeof value !== 'string' || !value) {
+            return false;
+        }
+
+        try {
+            const url = new URL(value, window.location.origin);
+            return url.origin === window.location.origin;
+        } catch (error) {
+            return false;
+        }
+    };
+
+    const pageCommands = {
+        ajaxHandlerCall(payload) {
+            if (isSafeGameUrl(payload.url)) {
+                ajaxHandlerCall(payload.url);
+            }
+        },
+
+        submitForm(payload) {
+            const form = document.getElementById(payload.formId);
+            if (form && form.tagName === 'FORM') {
+                ajaxHandlerCallFromForm(form);
+            }
+        },
+
+        setActionRequest(payload) {
+            if (typeof payload.actionRequest === 'string') {
+                ikariam.model.actionRequest = payload.actionRequest;
+            }
+        },
+
+        showBubbleTip(payload) {
+            if (Number.isInteger(payload.type) && Number.isInteger(payload.id) && typeof payload.text === 'string') {
+                BubbleTips.bindBubbleTip(payload.type, payload.id, payload.text);
+            }
+        },
+
+        adjustMainboxScrollbar() {
+            const scrollbar = ikariam.templateView && ikariam.templateView.mainbox && ikariam.templateView.mainbox.scrollbar;
+            if (scrollbar && typeof scrollbar.adjustSize === 'function') {
+                scrollbar.adjustSize();
+            }
+        },
+
+        destroyTemplateAndShowTip(payload) {
+            if (typeof payload.text !== 'string') {
+                return;
+            }
+            ikariam.TemplateView.destroyTemplateView();
+            BubbleTips.bindBubbleTip(1, 11, payload.text);
+        },
+
+        updateActiveCity(payload) {
+            const cityId = Number(payload.cityId);
+            if (!Number.isInteger(cityId) || cityId <= 0) {
+                return;
+            }
+
+            const selectedCity = `city_${cityId}`;
+            if (ikariam.model.relatedCityData) {
+                ikariam.model.relatedCityData.selectedCity = selectedCity;
+                ikariam.model.relatedCityData.selectedCityId = cityId;
+            }
+            if (ikariam.model.headerData && ikariam.model.headerData.cityDropdownMenu) {
+                ikariam.model.headerData.cityDropdownMenu.selectedCity = selectedCity;
+                ikariam.model.headerData.cityDropdownMenu.selectedCityId = cityId;
+            }
+            const cityInput = document.getElementById('js_cityIdOnChange');
+            if (cityInput) {
+                cityInput.value = cityId;
+            }
+        },
+
+        openAjaxResponse(payload) {
+            if (!isSafeGameUrl(payload.url)) {
+                return;
+            }
+            $.ajax({
+                url: payload.url,
+                method: 'GET',
+                dataType: 'text'
+            }).done(function(response) {
+                ajax.Responder.parseResponse(response);
+            }).fail(function(request, status, error) {
+                console.error(payload.errorMessage || 'IkaEasy game request failed', status, error);
+            });
+        },
+
+        claimDailyBonus() {
+            const form = document.getElementById('dailybonus');
+            if (!form || form.tagName !== 'FORM') {
+                return;
+            }
+            ajaxHandlerCallFromForm(form);
+            $('body').trigger('click.dropDown');
+            ikariam.getMultiPopupController().closePopup();
+        },
+
+        confirmBuildingDemolition(payload) {
+            if (typeof payload.text !== 'string' || !isSafeGameUrl(payload.url)) {
+                return;
+            }
+
+            const action = `ajaxHandlerCall(${JSON.stringify(payload.url)});ikariam.closePopup();return false;`;
+            ikariam.createPopup(
+                'reportConfirmPopup',
+                payload.text,
+                [payload.text, [action], LocalizationStrings.yes, LocalizationStrings.abort],
+                1
+            );
+
+            const $tip = $('.bubble_tip');
+            const left = parseInt($tip.css('left'));
+            const top = parseInt($tip.css('top'));
+            $tip.css({'left': left - 70, top: top - 20});
+        }
+    };
+
     window.addEventListener('message', function (event) {
-        if ((event.data.type) && ((event.data.type === 'FROM_IKAEASY_V3'))) {
-            if (event.data.cmd === 'code_eval') {
-                eval(event.data.code);
+        if (event.source !== window || event.origin !== window.location.origin || !event.data || event.data.type !== MESSAGE_TYPE) {
+            return;
+        }
+
+        if (event.data.cmd === 'page_command' && Object.prototype.hasOwnProperty.call(pageCommands, event.data.action)) {
+            try {
+                pageCommands[event.data.action](event.data.payload || {});
+            } catch (error) {
+                console.error(`IkaEasy page command failed: ${event.data.action}`, error);
             }
         }
     });

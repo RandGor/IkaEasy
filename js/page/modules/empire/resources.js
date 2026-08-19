@@ -2,7 +2,7 @@ import Parent from './dummy.js';
 import Tooltip from '../../../helper/tooltip.js';
 import Storage from '../../../helper/storage.js';
 import SyncLock from '../../../helper/syncLock.js';
-import { execute_js } from '../../../utils.js';
+import { executePageCommand } from '../../../utils.js';
 
 const RESOURCE_SYNC_STORAGE_KEY = 'empire';
 const RESOURCE_AUTO_SYNC_INTERVAL = 10 * 60 * 1000;
@@ -224,17 +224,10 @@ class Module extends Parent {
     }
 
     openTransportResponse(query) {
-        execute_js(`
-            $.ajax({
-                url: ${JSON.stringify(query)},
-                method: 'GET',
-                dataType: 'text'
-            }).done(function(response) {
-                ajax.Responder.parseResponse(response);
-            }).fail(function(request, status, error) {
-                console.error('IkaEasy resource transport request failed', status, error);
-            });
-        `);
+        executePageCommand('openAjaxResponse', {
+            url: query,
+            errorMessage: 'IkaEasy resource transport request failed'
+        });
     }
 
     async silentChangeCity(cityId) {
@@ -269,20 +262,7 @@ class Module extends Parent {
         Front.data.cities.selectedCityId = cityId;
         $('#js_cityIdOnChange').val(cityId);
 
-        execute_js(`
-            if (ikariam.model.relatedCityData) {
-                ikariam.model.relatedCityData.selectedCity = ${JSON.stringify(selectedCity)};
-                ikariam.model.relatedCityData.selectedCityId = ${cityId};
-            }
-            if (ikariam.model.headerData && ikariam.model.headerData.cityDropdownMenu) {
-                ikariam.model.headerData.cityDropdownMenu.selectedCity = ${JSON.stringify(selectedCity)};
-                ikariam.model.headerData.cityDropdownMenu.selectedCityId = ${cityId};
-            }
-            var ikaeasyCityInput = document.getElementById('js_cityIdOnChange');
-            if (ikaeasyCityInput) {
-                ikaeasyCityInput.value = ${cityId};
-            }
-        `);
+        executePageCommand('updateActiveCity', { cityId });
     }
 
     updateActionRequest(response) {
@@ -296,7 +276,7 @@ class Module extends Parent {
         const actionRequest = globalData && globalData[1].actionRequest;
         if (actionRequest) {
             Front.data.actionRequest = actionRequest;
-            execute_js(`ikariam.model.actionRequest=${JSON.stringify(actionRequest)};`);
+            executePageCommand('setActionRequest', { actionRequest });
         }
     }
 

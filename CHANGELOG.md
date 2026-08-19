@@ -10,6 +10,19 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 - Nothing yet.
 
+## [4.0.0.1] - 2026-08-19
+
+### Security
+
+- Removed arbitrary JavaScript string execution from the game-page bridge.
+- Replaced the generic evaluation channel with an allowlisted structured command dispatcher, validated payloads, same-origin URL checks, and same-window message validation.
+
+### Changed
+
+- Converted transport and deployment template actions from executable strings to declarative action attributes.
+- Excluded building-sprite source artwork and logo concept files from packaged releases while keeping them in the repository for future development.
+- Replaced the packaged building sprite with a quality-85 WebP version and excluded development-only source maps and icon variants from releases.
+
 ## [4.0.0.0] - 2026-08-19
 
 IkaEasy V4 is the first major release under RandGor's independently maintained fork identity. It consolidates the modernization and feature work completed since November 9, 2023.
@@ -72,7 +85,8 @@ IkaEasy V4 is the first major release under RandGor's independently maintained f
 
 Earlier history is available on the [GitHub tags page](https://github.com/RandGor/IkaEasy/tags).
 
-[Unreleased]: https://github.com/RandGor/IkaEasy/compare/4.0.0.0...HEAD
+[Unreleased]: https://github.com/RandGor/IkaEasy/compare/4.0.0.1...HEAD
+[4.0.0.1]: https://github.com/RandGor/IkaEasy/compare/4.0.0.0...4.0.0.1
 [4.0.0.0]: https://github.com/RandGor/IkaEasy/compare/3.1.0.29...4.0.0.0
 [3.1.0.29]: https://github.com/RandGor/IkaEasy/compare/3.1.0.28...3.1.0.29
 [3.1.0.28]: https://github.com/RandGor/IkaEasy/compare/3.1.0.27...3.1.0.28

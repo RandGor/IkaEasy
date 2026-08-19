@@ -1,7 +1,7 @@
 import Db from '../../helper/db.js';
 import BuildingUpgrade from '../../helper/buildingUpgrade.js';
 import Parent from './dummy.js';
-import { execute_js, setItem } from '../../utils.js';
+import { executePageCommand, setItem } from '../../utils.js';
 
 class City extends Parent {
     init() {
@@ -231,17 +231,15 @@ class City extends Parent {
                 // @link https://css-tricks.com/building-progress-ring-quickly/
                 $(`#ikaeasy_watcher_${build.position}`).attr('class', `ikaeasy_watcher ${class_icon}`).show();
                 $block.off('click.ikaeasy-watcher');
-                $block.on('click.ikaeasy-watcher', '.watche_down', async (e) => {
+                $block.on('click.ikaeasy-watcher', '.watche_down', (e) => {
                     if ($(e.currentTarget).css('cursor') === 'default') {
                         return;
                     }
 
-                    const code = await this.render('js-confirmPopup', {
-                        txtAreYouSure: LANGUAGE.getLocalizedString('city_confirm_downgrade'),
-                        code: `ajaxHandlerCall('/index.php?action=CityScreen&function=demolishBuilding&actionRequest=${this._data.actionRequest}&currentCityId=${this.getCityId()}&cityId=${this.getCityId()}&position=${build.position}&level=${build.level}&backgroundView=city');`
+                    executePageCommand('confirmBuildingDemolition', {
+                        text: LANGUAGE.getLocalizedString('city_confirm_downgrade'),
+                        url: `/index.php?action=CityScreen&function=demolishBuilding&actionRequest=${this._data.actionRequest}&currentCityId=${this.getCityId()}&cityId=${this.getCityId()}&position=${build.position}&level=${build.level}&backgroundView=city`
                     });
-
-                    execute_js(code);
                 });
 
                 $block.on('click.ikaeasy-watcher', '.watche_up', (e) => {
@@ -251,7 +249,7 @@ class City extends Parent {
 
                     const upgradeUrl = $block.data('ikaeasy-upgrade-url');
                     if (upgradeUrl) {
-                        execute_js('ajaxHandlerCall(' + JSON.stringify(upgradeUrl) + ');');
+                        executePageCommand('ajaxHandlerCall', { url: upgradeUrl });
                     } else {
                         this.upgradeBuilding(build.position, build.level);
                     }

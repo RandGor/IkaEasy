@@ -5,7 +5,7 @@ import { Buildings } from '../../../const.js';
 import HttpClient from '../../../helper/httpClient.js';
 import Storage from '../../../helper/storage.js';
 import SyncLock from '../../../helper/syncLock.js';
-import { execute_js, getInt } from '../../../utils.js';
+import { executePageCommand, getInt } from '../../../utils.js';
 
 const ESPIONAGE_STORAGE_KEY = 'empire_espionage';
 const ESPIONAGE_AUTO_SYNC_INTERVAL = 10 * 60 * 1000;
@@ -194,17 +194,10 @@ class Module extends Parent {
             const query = `/index.php?view=spyMissions&targetCityId=${targetCityId}` +
                 `&position=${position}&currentCityId=${sourceCityId}` +
                 `&actionRequest=${encodeURIComponent(Front.data.actionRequest)}&ajax=1`;
-            execute_js(`
-                $.ajax({
-                    url: ${JSON.stringify(query)},
-                    method: 'GET',
-                    dataType: 'text'
-                }).done(function(response) {
-                    ajax.Responder.parseResponse(response);
-                }).fail(function(request, status, error) {
-                    console.error('IkaEasy spy mission request failed', status, error);
-                });
-            `);
+            executePageCommand('openAjaxResponse', {
+                url: query,
+                errorMessage: 'IkaEasy spy mission request failed'
+            });
         } catch (error) {
             console.error('IkaEasy espionage overview: could not switch source city', error);
         } finally {
@@ -245,20 +238,7 @@ class Module extends Parent {
         Front.data.cities.selectedCityId = cityId;
         $('#js_cityIdOnChange').val(cityId);
 
-        execute_js(`
-            if (ikariam.model.relatedCityData) {
-                ikariam.model.relatedCityData.selectedCity = ${JSON.stringify(selectedCity)};
-                ikariam.model.relatedCityData.selectedCityId = ${cityId};
-            }
-            if (ikariam.model.headerData && ikariam.model.headerData.cityDropdownMenu) {
-                ikariam.model.headerData.cityDropdownMenu.selectedCity = ${JSON.stringify(selectedCity)};
-                ikariam.model.headerData.cityDropdownMenu.selectedCityId = ${cityId};
-            }
-            var ikaeasyCityInput = document.getElementById('js_cityIdOnChange');
-            if (ikaeasyCityInput) {
-                ikaeasyCityInput.value = ${cityId};
-            }
-        `);
+        executePageCommand('updateActiveCity', { cityId });
     }
 
     updateActionRequest(response) {
@@ -272,7 +252,7 @@ class Module extends Parent {
         const actionRequest = globalData && globalData[1].actionRequest;
         if (actionRequest) {
             Front.data.actionRequest = actionRequest;
-            execute_js(`ikariam.model.actionRequest=${JSON.stringify(actionRequest)};`);
+            executePageCommand('setActionRequest', { actionRequest });
         }
     }
 }

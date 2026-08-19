@@ -1,5 +1,5 @@
 import Parent from './dummy.js';
-import { execute_js } from '../../utils.js';
+import { executePageCommand } from '../../utils.js';
 
 class Page extends Parent {
 
@@ -40,7 +40,7 @@ class Page extends Parent {
             this.options.set(name, $input.val());
         });
 
-        execute_js('ikariam.templateView.mainbox.scrollbar.adjustSize();');
+        executePageCommand('adjustMainboxScrollbar');
 
     }
 

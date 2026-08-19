@@ -1,6 +1,6 @@
 import Render from '../helper/templater.js';
 import Controller from './controller.js';
-import { execute_js, getItem, setItem, removeItem } from '../utils.js';
+import { executePageCommand, getItem, setItem, removeItem } from '../utils.js';
 
 class Common extends Controller{
     constructor() {
@@ -13,7 +13,7 @@ class Common extends Controller{
      */
     changeCity(city_id) {
         $('#js_cityIdOnChange').val(city_id);
-        execute_js('ajaxHandlerCallFromForm(document.getElementById("changeCityForm"));');
+        executePageCommand('submitForm', { formId: 'changeCityForm' });
     }
 
     /**
@@ -56,7 +56,9 @@ class Common extends Controller{
                 setItem('open_building_callback', b, 5);
             }
 
-            execute_js(`ajaxHandlerCall('?view=${b.building}&cityId=${b.cityId}&position=${b.position}&actionRequest=${this._data.actionRequest}');`);
+            executePageCommand('ajaxHandlerCall', {
+                url: `?view=${b.building}&cityId=${b.cityId}&position=${b.position}&actionRequest=${this._data.actionRequest}`
+            });
             removeItem('open_building');
         }
     }
@@ -69,7 +71,9 @@ class Common extends Controller{
      */
     upgradeBuilding(position, level, cityId = null) {
         cityId = cityId || this.getCityId();
-        execute_js(`ajaxHandlerCall('?action=UpgradeExistingBuilding&actionRequest=${this._data.actionRequest}&cityId=${cityId}&position=${position}&level=${level}');`);
+        executePageCommand('ajaxHandlerCall', {
+            url: `?action=UpgradeExistingBuilding&actionRequest=${this._data.actionRequest}&cityId=${cityId}&position=${position}&level=${level}`
+        });
     }
 }
 

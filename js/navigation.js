@@ -7,7 +7,7 @@ import CinemaSession from './helper/cinemaSession.js';
 import Win from './helper/win.js';
 import Manager from './data/Manager.js';
 import { Resources, TradeGoodOrdinals } from './const.js';
-import { execute_js } from './utils.js';
+import { executePageCommand } from './utils.js';
 import sandbox from './sandbox.js';
 
 class Navigation extends Event {
@@ -207,7 +207,7 @@ class Navigation extends Event {
     handle_updateGlobalData = (data) => {
         if (data.actionRequest) {
             this.data.actionRequest = data.actionRequest;
-            execute_js(`ikariam.model.actionRequest='${data.actionRequest}';`);
+            executePageCommand('setActionRequest', { actionRequest: data.actionRequest });
         }
 
         let bgData = data.backgroundData || {};

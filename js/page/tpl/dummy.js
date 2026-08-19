@@ -1,6 +1,6 @@
 import Parent from '../common.js';
 import Render from '../../helper/templater.js';
-import { getItem, setItem, removeItem, execute_js } from '../../utils.js';
+import { getItem, setItem, removeItem, executePageCommand } from '../../utils.js';
 
 class Dummy extends Parent {
     constructor() {
@@ -107,13 +107,13 @@ class Dummy extends Parent {
             $el.toggleClass('ikaeasy-hide-premium', !expand);
             $('#sidebar').toggleClass('ikaeasy-hide-premium', !expand);
 
-            execute_js('ikariam.templateView.mainbox.scrollbar.adjustSize();');
+            executePageCommand('adjustMainboxScrollbar');
             setTimeout(function() {
-                execute_js('ikariam.templateView.mainbox.scrollbar.adjustSize();');
+                executePageCommand('adjustMainboxScrollbar');
             }, 200);
         });
 
-        execute_js('ikariam.templateView.mainbox.scrollbar.adjustSize();');
+        executePageCommand('adjustMainboxScrollbar');
         $el.data('premium-updated', true);
     }
 

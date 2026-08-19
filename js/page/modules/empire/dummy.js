@@ -1,5 +1,5 @@
 import Parent from '../../common.js';
-import { execute_js } from '../../../utils.js';
+import { executePageCommand } from '../../../utils.js';
 import { CityType } from '../../../const.js';
 
 class Dummy extends Parent {
@@ -136,13 +136,17 @@ class Dummy extends Parent {
                 this.changeCity($tr.data('id'));
             }
         });
-        this.onClick('td.empire_transport [data-js]', (e) => {
+        this.onClick('td.empire_transport [data-page-view]', (e) => {
             const $tr = $(e.currentTarget).closest('tr');
             if (!$tr.hasClass('current_city')) {
                 this.parent.close();
-
-                const js = $(e.currentTarget).data('js');
-                execute_js(js);
+                const cityId = Number($tr.data('id'));
+                const view = $(e.currentTarget).data('page-view');
+                let url = `?view=transport&destinationCityId=${cityId}`;
+                if (view === 'fleet' || view === 'army') {
+                    url = `?view=deployment&deploymentType=${view}&destinationCityId=${cityId}`;
+                }
+                executePageCommand('ajaxHandlerCall', { url });
             }
         });
 

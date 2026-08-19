@@ -304,14 +304,13 @@ export function createDynamic(title, content) {
   return win;
 }
 
-export function execute_js(code) {
-  let msg = {
-    type: 'FROM_IKAEASY_V3',
-    cmd: 'code_eval',
-    code: code
-  };
-
-  window.postMessage(msg, '*');
+export function executePageCommand(action, payload = {}) {
+  window.postMessage({
+    type: 'FROM_IKAEASY_V4',
+    cmd: 'page_command',
+    action,
+    payload
+  }, window.location.origin);
 }
 
 export function _modifyLANGUAGES () {

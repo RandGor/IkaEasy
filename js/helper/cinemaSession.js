@@ -1,4 +1,4 @@
-import { execute_js } from '../utils.js';
+import { executePageCommand } from '../utils.js';
 
 const EVENT_KEY = 'ikaeasy_cinema_player_event';
 const SESSION_KEY = 'ikaeasy_cinema_session';
@@ -95,9 +95,9 @@ class CinemaSession {
         session.updatedAt = Date.now();
         this.saveSession(session);
 
-        execute_js(
-            `ajaxHandlerCall('index.php?view=noViewChange&action=AdVideoRewardAction&function=requestBonus&bonusId=${session.bonusId}&videoId=${session.videoId}');`
-        );
+        executePageCommand('ajaxHandlerCall', {
+            url: `index.php?view=noViewChange&action=AdVideoRewardAction&function=requestBonus&bonusId=${session.bonusId}&videoId=${session.videoId}`
+        });
     }
 
     watchVideo(session) {
@@ -109,9 +109,9 @@ class CinemaSession {
         session.updatedAt = Date.now();
         this.saveSession(session);
 
-        execute_js(
-            `ajaxHandlerCall('index.php?view=noViewChange&action=AdVideoRewardAction&function=watchVideo&videoId=${session.videoId}');`
-        );
+        executePageCommand('ajaxHandlerCall', {
+            url: `index.php?view=noViewChange&action=AdVideoRewardAction&function=watchVideo&videoId=${session.videoId}`
+        });
     }
 
     handleAjax(request) {

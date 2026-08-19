@@ -1,5 +1,5 @@
 import Parent from './dummy.js';
-import { execute_js, getInt, formatNumber } from '../../utils.js';
+import { executePageCommand, getInt, formatNumber } from '../../utils.js';
 import { Research } from '../../const.js';
 
 class Page extends Parent {
@@ -47,7 +47,7 @@ class Page extends Parent {
             }
         });
 
-        execute_js('ikariam.templateView.mainbox.scrollbar.adjustSize();');
+        executePageCommand('adjustMainboxScrollbar');
     }
 }
 

@@ -1,7 +1,7 @@
 import Win from '../../helper/win.js';
 import Parent from './dummy.js';
 import db from '../../libs/db.js';
-import { getThisKey, execute_js } from '../../utils.js';
+import { getThisKey, executePageCommand } from '../../utils.js';
 
 class Module extends Parent {
     async init() {
@@ -147,7 +147,11 @@ class Module extends Parent {
             e.preventDefault();
 
             if (note && note.system) {
-                execute_js(`BubbleTips.bindBubbleTip(5, 11, "${LANGUAGE.getLocalizedString('note.change_ikariam_note')}")`);
+                executePageCommand('showBubbleTip', {
+                    type: 5,
+                    id: 11,
+                    text: LANGUAGE.getLocalizedString('note.change_ikariam_note')
+                });
 
                 setTimeout(() =>{
                     let $tip = $('body > .bubble_tip');

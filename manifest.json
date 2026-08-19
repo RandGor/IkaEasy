@@ -34,7 +34,7 @@
       "pages": [ "sandbox.html" ]
    },
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "4.0.0.0",
+   "version": "4.0.0.1",
    "web_accessible_resources": [ {
       "matches": [ "http://*.ikariam.gameforge.com/*", "https://*.ikariam.gameforge.com/*", "https://ikalogs.ru/*", "https://*.ikalogs.ru/*" ],
       "resources": [ "js/cinema-player.js", "inner/ikaeasy.js", "images/*", "js/page/*", "js/helper/*", "js/libs/*", "js/data/*", "js/sandbox/*", "js/const.js", "js/utils.js", "js/langs.js", "js/sandbox.js", "js/templater.js", "js/navigation.js", "js/assignedLangs.js", "js/initModule.js", "lang/*", "css/*", "icon/*", "tpl/*", "whatnews.json", "options.js", "sandbox.html" ]

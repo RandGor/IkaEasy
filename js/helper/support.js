@@ -1,5 +1,5 @@
 import Win from './win.js';
-import {execute_js} from '../utils.js';
+import {executePageCommand} from '../utils.js';
 import Render from './templater.js';
 
 class Support {
@@ -86,7 +86,11 @@ class Support {
 
                 win.remove();
                 chrome.runtime.sendMessage({ cmd: 'ajax', url: 'default/index/ikaeasy', method: 'post', body: {title: title, desc: body, type: type} }, (data) => {
-                    execute_js(`BubbleTips.bindBubbleTip(1, 10, "${LANGUAGE.getLocalizedString('support_sent_success')}")`);
+                    executePageCommand('showBubbleTip', {
+                        type: 1,
+                        id: 10,
+                        text: LANGUAGE.getLocalizedString('support_sent_success')
+                    });
                 });
             });
         });

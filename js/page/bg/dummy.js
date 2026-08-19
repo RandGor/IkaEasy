@@ -9,7 +9,7 @@ import {
     getServerId,
     getServerWorld,
     draggable,
-    execute_js,
+    executePageCommand,
     createDynamicWin,
     addToLeftMenu
 } from '../../utils.js';
@@ -274,10 +274,16 @@ class Dummy extends Parent {
                 }
             });
 
-            $city.on('click', '[data-js]', (e) => {
+            $city.on('click', '[data-page-view]', (e) => {
                 if (!$city.hasClass('current_city')) {
-                    let js = $(e.currentTarget).data('js');
-                    execute_js(js);
+                    const view = $(e.currentTarget).data('page-view');
+                    let url = `?view=${view}&destinationCityId=${city.id}`;
+                    if (view === 'fleet' || view === 'army') {
+                        url = `?view=deployment&deploymentType=${view}&destinationCityId=${city.id}`;
+                    } else if (view === 'city') {
+                        url = `?view=city&cityId=${city.id}`;
+                    }
+                    executePageCommand('ajaxHandlerCall', { url });
                 }
             });
 
@@ -366,7 +372,7 @@ class Dummy extends Parent {
     smallTweaks() {
         if (this.options.get('auto_accept_daily_bonus', true)) {
             if ($("#dailybonus").length) {
-                execute_js('ajaxHandlerCallFromForm($("#dailybonus")[0]); $("body").trigger("click.dropDown"); ikariam.getMultiPopupController().closePopup();');
+                executePageCommand('claimDailyBonus');
             }
         }
 

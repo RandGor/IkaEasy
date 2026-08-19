@@ -1,53 +1,25 @@
 {
-    "version": "4.0.0.0",
+    "version": "4.0.0.1",
     "enabled": true,
     "text": {
-        "ru": "IkaEasy V4 — крупное обновление поддерживаемого RandGor форка: современное ядро, новые инструменты управления империей и совместимость с актуальным Ikariam.",
-        "en": "IkaEasy V4 is a major release of RandGor's maintained fork, featuring a modernized core, new Empire tools, and compatibility with current Ikariam."
+        "ru": "IkaEasy V4 4.0.0.1 — обновление безопасности механизма взаимодействия с игровой страницей.",
+        "en": "IkaEasy V4 4.0.0.1 improves the security of the game-page integration."
     },
     "new": {
-        "ru": [
-            "Расширение переведено на современную архитектуру и Manifest V3.",
-            "Добавлены вкладки «Войска» и «Шпионаж» в управлении империей.",
-            "Добавлено перемещение армии, флота и ресурсов между городами перетаскиванием.",
-            "Добавлен компактный плавающий видеоплеер Кинотеатра с воспроизведением без звука.",
-            "Добавлен расчёт сухогрузов для набегов на варваров с учётом улучшений Мастерской.",
-            "Добавлено быстрое принятие дипломатических соглашений и опциональная поддержка Anti-Captcha для пиратской крепости.",
-            "Добавлены проверка обновлений через GitHub, внутриигровые уведомления и ссылки на официальный репозиторий RandGor."
-        ],
-        "en": [
-            "Migrated the extension to a modern architecture and Manifest V3.",
-            "Added Military and Espionage tabs to the Empire overview.",
-            "Added drag-and-drop army, fleet, and resource transfers between cities.",
-            "Added a compact floating Cinema player with muted playback.",
-            "Added Barbarian raid cargo calculation using Workshop cargo-capacity upgrades.",
-            "Added quick diplomacy treaty handling and optional Anti-Captcha support for the Pirate Fortress.",
-            "Added GitHub update checks, in-game notifications, and links to RandGor's official repository."
-        ]
-    },
-    "fixed": {
-        "ru": [
-            "Восстановлены быстрое улучшение зданий и корректное отображение его стоимости.",
-            "Обновлены изображения зданий, добавлены новые здания и улучшено качество вкладки «Здания».",
-            "Исправлено применение автоматически рассчитанного числа транспортных кораблей.",
-            "Повышена надёжность фоновой синхронизации данных империи и устранены пересекающиеся обновления.",
-            "Таблицы управления империей теперь обновляются без полной перерисовки и потери выделения текста.",
-            "Исправлена обработка некорректных ответов IkaLogs и ряд проблем после изменений интерфейса Ikariam.",
-            "Исправлена отправка дипломатических запросов на текущий игровой сервер вместо жёстко заданного мира."
-        ],
-        "en": [
-            "Restored quick building upgrades and accurate upgrade costs.",
-            "Updated building artwork, added new buildings, and improved the Buildings overview quality.",
-            "Fixed application of automatically calculated transport ship counts.",
-            "Improved Empire data synchronization and prevented overlapping refreshes.",
-            "Empire tables now update without complete redraws or lost text selections.",
-            "Fixed malformed IkaLogs response handling and multiple issues caused by Ikariam interface changes.",
-            "Fixed diplomacy requests to use the current game server instead of a hard-coded world."
-        ]
-    },
-    "hotfix": {
         "ru": [],
         "en": []
+    },
+    "fixed": {
+        "ru": [],
+        "en": []
+    },
+    "hotfix": {
+        "ru": [
+            "Удалено выполнение произвольных строк JavaScript; взаимодействие с Ikariam переведено на проверенный список структурированных команд."
+        ],
+        "en": [
+            "Removed arbitrary JavaScript string execution and replaced the Ikariam page bridge with an allowlisted structured command dispatcher."
+        ]
     },
     "options": []
 }
