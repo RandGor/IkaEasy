@@ -10,6 +10,8 @@ This project is **RandGor's actively maintained fork** of the discontinued origi
 
 The official source, issue tracker, and releases for IkaEasy V4 are hosted at [RandGor/IkaEasy](https://github.com/RandGor/IkaEasy).
 
+Read the [IkaEasy V4 Privacy Policy](PRIVACY.md) for details about local game-data processing and optional third-party integrations.
+
 ## Highlights
 
 ### City management
