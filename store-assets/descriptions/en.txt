@@ -1,0 +1,60 @@
+SHORT DESCRIPTION
+
+Independently maintained IkaEasy fork by RandGor for modern Ikariam.
+
+
+DESCRIPTION
+
+IkaEasy V4 is an unofficial browser extension for Ikariam that improves the game interface and makes everyday empire management faster and more convenient.
+
+This is an independently maintained fork of the discontinued original IkaEasy extension. V4 is maintained by RandGor and adapted to current versions of Ikariam.
+
+FEATURES
+
+City management
+
+• building levels displayed directly in the city view;
+• quick building upgrade and downgrade controls;
+• current costs for the next building level;
+• high-quality icons and support for current Ikariam buildings;
+• resource production, consumption, capacity, and shortage information.
+
+Empire overview
+
+• resources and building levels across all cities on one screen;
+• army and navy overview with game unit icons;
+• drag-and-drop army and fleet deployment between cities;
+• drag-and-drop resource transport between cities;
+• espionage overview with available and assigned spies, targets, and quick access to spy missions;
+• manual and automatic data synchronization with protection against overlapping requests.
+
+Maps and navigation
+
+• island mine levels;
+• city and alliance highlighting;
+• island search by resource, wonder, and available building slots;
+• sailing-time information;
+• quick city switching and convenient transport actions.
+
+Additional conveniences
+
+• Barbarian Village cargo calculation that accounts for Workshop cargo-capacity upgrades;
+• optional automatic cargo ship selection for Barbarian Village raids;
+• compact, muted Cinema player that remains available while navigating the game;
+• quick access to alliance and diplomacy features;
+• notifications for completed construction, recruitment, and transport movements;
+• in-game notification when a newer version is available on GitHub.
+
+Most features can be enabled or disabled individually in the IkaEasy V4 settings.
+
+PRIVACY
+
+IkaEasy processes Ikariam game data primarily in the browser to provide its features. Separate integrations with IkaLogs, Anti-Captcha, GitHub, Clip2net, and YouTube are used only for the disclosed extension features. See the Privacy Policy for details:
+
+https://github.com/RandGor/IkaEasy/blob/swat/PRIVACY.md
+
+IkaEasy V4 is an independent community project and is not affiliated with Gameforge. It is intended only for Ikariam players. Use it at your own risk and follow the rules of your game server.
+
+Source code, release notes, and bug reports:
+
+https://github.com/RandGor/IkaEasy
