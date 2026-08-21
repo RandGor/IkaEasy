@@ -1,25 +1,31 @@
 {
-    "version": "4.0.0.1",
+    "version": "4.0.0.2",
     "enabled": true,
     "text": {
-        "ru": "IkaEasy V4 4.0.0.1 — обновление безопасности механизма взаимодействия с игровой страницей.",
-        "en": "IkaEasy V4 4.0.0.1 improves the security of the game-page integration."
+        "ru": "IkaEasy V4 4.0.0.2 исправляет иконки зданий и разделяет каналы обновления.",
+        "en": "IkaEasy V4 4.0.0.2 fixes building icons and separates update channels."
     },
     "new": {
-        "ru": [],
-        "en": []
-    },
-    "fixed": {
-        "ru": [],
-        "en": []
-    },
-    "hotfix": {
         "ru": [
-            "Удалено выполнение произвольных строк JavaScript; взаимодействие с Ikariam переведено на проверенный список структурированных команд."
+            "Описание расширения теперь локализовано для английского и русского языков.",
+            "Версия из Chrome Web Store использует автоматические обновления Chrome, а ручные установки уведомляются только об опубликованных GitHub Releases."
         ],
         "en": [
-            "Removed arbitrary JavaScript string execution and replaced the Ikariam page bridge with an allowlisted structured command dispatcher."
+            "The extension description is now localized in English and Russian.",
+            "Chrome Web Store installations use Chrome automatic updates, while manual installations are notified only about published GitHub Releases."
         ]
+    },
+    "fixed": {
+        "ru": [
+            "Исправлено отсутствие иконок зданий в релизной сборке."
+        ],
+        "en": [
+            "Fixed missing building icons in the packaged release."
+        ]
+    },
+    "hotfix": {
+        "ru": [],
+        "en": []
     },
     "options": []
 }

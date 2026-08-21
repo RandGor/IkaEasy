@@ -3,37 +3,40 @@ import Win from './win.js';
 import Render from './templater.js';
 
 const LATEST_RELEASE_URL = 'https://api.github.com/repos/RandGor/IkaEasy/releases/latest';
-const TAGS_URL = 'https://api.github.com/repos/RandGor/IkaEasy/tags?per_page=100';
-const TAG_PAGE_URL = 'https://github.com/RandGor/IkaEasy/tree/';
+const CHROME_WEB_STORE_ID = 'dkngcffbmbolplchpfbgjieihfdinnaf';
 const STORE_KEY_SHOWN_VERSION = 'github_update_shown_version';
 
 class UpdateChecker {
     async init(currentVersion) {
-        if (!currentVersion || !options.get('check_github_updates', true)) {
+        if (
+            chrome.runtime.id === CHROME_WEB_STORE_ID ||
+            !currentVersion ||
+            !options.get('check_github_updates', true)
+        ) {
             return;
         }
 
         try {
-            const latestTag = await this.getLatestVersion();
+            const latestRelease = await this.getLatestVersion();
             console.info('IkaEasy update check:', {
                 currentVersion: currentVersion,
-                latestTag: latestTag
+                latestRelease: latestRelease
             });
 
-            if (!latestTag || this.compareVersions(latestTag.version, currentVersion) <= 0) {
+            if (!latestRelease || this.compareVersions(latestRelease.version, currentVersion) <= 0) {
                 return;
             }
 
             const stored = await chrome.storage.local.get(STORE_KEY_SHOWN_VERSION);
-            if (stored[STORE_KEY_SHOWN_VERSION] === latestTag.version) {
+            if (stored[STORE_KEY_SHOWN_VERSION] === latestRelease.version) {
                 return;
             }
 
             await chrome.storage.local.set({
-                [STORE_KEY_SHOWN_VERSION]: latestTag.version
+                [STORE_KEY_SHOWN_VERSION]: latestRelease.version
             });
 
-            this.show(latestTag);
+            this.show(latestRelease);
         } catch (error) {
             console.error('IkaEasy update check failed:', error);
         }
@@ -45,12 +48,11 @@ class UpdateChecker {
             const release = await releaseResponse.json();
             const parsed = this.parseVersion(release.tag_name);
             if (parsed) {
-                return { ...parsed, url: release.html_url || TAG_PAGE_URL + encodeURIComponent(parsed.name) };
+                return { ...parsed, url: release.html_url };
             }
         }
 
-        const tagsResponse = await this.githubRequest(TAGS_URL);
-        return this.getLatestTag(await tagsResponse.json());
+        return null;
     }
 
     async githubRequest(url, allowNotFound = false) {
@@ -75,7 +77,7 @@ class UpdateChecker {
             try {
                 const html = await Render('update-notification', {
                     version: tag.version,
-                    url: tag.url || TAG_PAGE_URL + encodeURIComponent(tag.name)
+                    url: tag.url
                 });
 
                 win.getContent().html(html);
@@ -86,15 +88,6 @@ class UpdateChecker {
                 win.remove();
             }
         });
-    }
-
-    getLatestTag(tags) {
-        return (Array.isArray(tags) ? tags : [])
-            .map((tag) => tag && tag.name)
-            .map((name) => this.parseVersion(name))
-            .filter(Boolean)
-            .sort((a, b) => this.compareVersions(a.version, b.version))
-            .pop() || null;
     }
 
     parseVersion(name) {

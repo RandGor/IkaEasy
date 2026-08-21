@@ -10,6 +10,17 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 - Nothing yet.
 
+## [4.0.0.2] - 2026-08-22
+
+### Changed
+
+- Localized the extension description shown by Chromium in English and Russian.
+- Limited GitHub update notifications to manually installed builds and published GitHub Releases; Chrome Web Store installations now rely exclusively on Chrome's automatic update channel.
+
+### Fixed
+
+- Fixed missing building icons in packaged releases by using the included WebP sprite through one canonical Empire Buildings style.
+
 ## [4.0.0.1] - 2026-08-19
 
 ### Security
@@ -85,7 +96,8 @@ IkaEasy V4 is the first major release under RandGor's independently maintained f
 
 Earlier history is available on the [GitHub tags page](https://github.com/RandGor/IkaEasy/tags).
 
-[Unreleased]: https://github.com/RandGor/IkaEasy/compare/4.0.0.1...HEAD
+[Unreleased]: https://github.com/RandGor/IkaEasy/compare/4.0.0.2...HEAD
+[4.0.0.2]: https://github.com/RandGor/IkaEasy/compare/4.0.0.1...4.0.0.2
 [4.0.0.1]: https://github.com/RandGor/IkaEasy/compare/4.0.0.0...4.0.0.1
 [4.0.0.0]: https://github.com/RandGor/IkaEasy/compare/3.1.0.29...4.0.0.0
 [3.1.0.29]: https://github.com/RandGor/IkaEasy/compare/3.1.0.28...3.1.0.29

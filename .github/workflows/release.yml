@@ -39,6 +39,7 @@ jobs:
                'css/ikaeasy.css.map' \
                'icon/ikaeasy-v4-concept.png' \
                'icon/ikaeasy-v4-wordmark-concept.png' \
+               'icon/ikaeasy-v4-donation-banner.png' \
                'icon/256.png' \
                'icon/19.png' \
                'icon/96-16.png'

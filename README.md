@@ -46,15 +46,19 @@ Read the [IkaEasy V4 Privacy Policy](PRIVACY.md) for details about local game-da
 - floating, muted Cinema player that remains available while navigating the game;
 - alliance and diplomacy shortcuts;
 - construction, recruitment, and transport notifications;
-- in-game notification when a newer GitHub Release is available.
+- in-game notification for manually installed builds when a newer GitHub Release is available.
 
 Most features can be enabled or disabled in the IkaEasy V4 settings.
 
 ## Installation
 
-IkaEasy V4 is currently distributed as an unpacked extension.
+IkaEasy V4 is available from the Chrome Web Store and as a manual GitHub release.
 
-### Install a release
+### Install from the Chrome Web Store
+
+Open the [IkaEasy V4 Chrome Web Store page](https://chromewebstore.google.com/detail/ikaeasy-v4-by-randgor/dkngcffbmbolplchpfbgjieihfdinnaf) and select **Add to Chrome**. Store installations are updated automatically by Chrome.
+
+### Install a release manually
 
 1. Open the [latest GitHub Release](https://github.com/RandGor/IkaEasy/releases/latest).
 2. Download `IkaEasy-V4-<version>.zip` from **Assets**.
@@ -73,7 +77,7 @@ Clone the repository or use **Code → Download ZIP**, then load the repository 
 
 ## Updating
 
-Extensions loaded from a folder cannot update themselves. IkaEasy V4 checks GitHub Releases when the game loads and shows an in-game notification once for each newer version.
+Chrome Web Store installations update automatically. Extensions loaded manually from a folder cannot update themselves, so those builds check published GitHub Releases when the game loads and show an in-game notification once for each newer version.
 
 To update:
 

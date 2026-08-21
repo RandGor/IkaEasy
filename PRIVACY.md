@@ -1,6 +1,6 @@
 # Privacy Policy for IkaEasy V4
 
-Last updated: August 19, 2026
+Last updated: August 22, 2026
 
 IkaEasy V4 is an independently maintained browser extension that enhances the
 interface of the Ikariam browser game. This policy explains what information
@@ -78,9 +78,11 @@ a configured key.
 
 ### GitHub
 
-The extension contacts `api.github.com` to check the official RandGor/IkaEasy
-repository for newer releases. IkaEasy V4 does not intentionally include
-Ikariam account or game data in these requests.
+Manually installed builds contact `api.github.com` to check the official
+RandGor/IkaEasy repository for newer published releases. Chrome Web Store
+installations use Chrome's automatic update channel and skip this check.
+IkaEasy V4 does not intentionally include Ikariam account or game data in
+GitHub requests.
 
 ### Clip2net
 
