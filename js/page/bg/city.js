@@ -277,6 +277,8 @@ class City extends Parent {
 
             if (upgrade.url) {
                 $block.data('ikaeasy-upgrade-url', upgrade.url);
+            } else {
+                $block.removeData('ikaeasy-upgrade-url');
             }
 
             const resources = this._city.resources;
@@ -305,6 +307,23 @@ class City extends Parent {
                 });
                 $('.ikaeasy_watcher_tooltip', $block).empty().append($(tpl));
             }
+
+            let classIcon = 'build_gray';
+            if (!build.completed && upgrade.url) {
+                if (!sourcesOk) {
+                    classIcon = 'build_red';
+                } else {
+                    classIcon = ($('#locations .constructionSite').length > 0)
+                        ? 'build_blue'
+                        : 'build_green';
+                }
+            }
+
+            if (build.completed) {
+                classIcon += ' ikaeasy_watcher_construction';
+            }
+
+            $block.attr('class', `ikaeasy_watcher ${classIcon}`).show();
         } catch (error) {
             console.warn('IkaEasy building upgrade data request failed:', error);
         }
