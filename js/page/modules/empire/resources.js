@@ -46,10 +46,25 @@ class Module extends Parent {
     }
 
     async syncAll(force = false) {
-        if (this.syncing) {
-            return;
+        if (this.resourceTransportOpening) {
+            return null;
+        }
+        if (this.syncPromise) {
+            return this.syncPromise;
         }
 
+        const syncPromise = this.runSync(force);
+        this.syncPromise = syncPromise;
+        try {
+            return await syncPromise;
+        } finally {
+            if (this.syncPromise === syncPromise) {
+                this.syncPromise = null;
+            }
+        }
+    }
+
+    async runSync(force = false) {
         const lastUpdateStorage = await Storage.get(RESOURCE_SYNC_STORAGE_KEY);
         const nowTime = _.now();
         const oneMinute = 1 * 60000;
@@ -59,9 +74,9 @@ class Module extends Parent {
             if(this.firstRender){
                 this.firstRender = false;
                 syncInterval = oneMinute;
-                if(lastUpdate + oneMinute > nowTime){ return; }
+                if(lastUpdate + oneMinute > nowTime){ return null; }
             }else{
-                if(lastUpdate + RESOURCE_AUTO_SYNC_INTERVAL > nowTime){ return;}
+                if(lastUpdate + RESOURCE_AUTO_SYNC_INTERVAL > nowTime){ return null;}
             }
         }
 
@@ -80,8 +95,10 @@ class Module extends Parent {
             if (result.status === 'completed') {
                 await this.draw();
             }
+            return result;
         } catch (error) {
             console.error('IkaEasy empire resources refresh failed:', error);
+            return null;
         } finally {
             this.syncing = false;
             this.$parent.find(this.loaderEl).removeClass('rotate');
@@ -209,6 +226,9 @@ class Module extends Parent {
         this.$parent.addClass('empire-resource-switching-city');
 
         try {
+            if (this.syncPromise) {
+                await this.syncPromise;
+            }
             await this.silentChangeCity(sourceCityId);
             this.parent.close();
 
@@ -230,7 +250,7 @@ class Module extends Parent {
         });
     }
 
-    async silentChangeCity(cityId) {
+    async silentChangeCity(cityId, attempt = 1) {
         const $form = $('#changeCityForm');
         const $cityInput = $form.find('#js_cityIdOnChange');
         if (!$form.length || !$cityInput.length || !$cityInput.attr('name')) {
@@ -253,7 +273,37 @@ class Module extends Parent {
         });
 
         this.updateActionRequest(response);
+        const switchState = this.getCitySwitchState(response);
+        const confirmed = switchState.selectedCityId === cityId;
+        if (!confirmed) {
+            if (attempt < 3) {
+                return this.silentChangeCity(cityId, attempt + 1);
+            }
+            throw new Error(`IkaEasy resource transport: server did not switch to city ${cityId}`);
+        }
         this.updateClientActiveCity(cityId);
+    }
+
+    getCitySwitchState(response) {
+        if (!Array.isArray(response)) {
+            return {};
+        }
+
+        const globalData = response.find((command) =>
+            Array.isArray(command) && command[0] === 'updateGlobalData' && command[1]
+        );
+        if (!globalData) {
+            return {};
+        }
+
+        const data = globalData[1];
+        const backgroundCityId = Number(data.backgroundData && data.backgroundData.id);
+        const dropdown = data.headerData && data.headerData.cityDropdownMenu;
+        const selectedCity = dropdown && dropdown.selectedCity;
+        const selectedCityId = Number(dropdown && dropdown.selectedCityId) ||
+            (typeof selectedCity === 'string' ? Number(selectedCity.replace('city_', '')) : 0);
+
+        return { backgroundCityId, selectedCityId };
     }
 
     updateClientActiveCity(cityId) {

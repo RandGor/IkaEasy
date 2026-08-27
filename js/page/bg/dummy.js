@@ -58,6 +58,17 @@ class Dummy extends Parent {
 
     _updateData() {
         super._updateData();
+
+        const backgroundCityId = Number(this._data.city && this._data.city.id) || null;
+        const selectedCityId = Number(this._data.cities && this._data.cities.selectedCityId) || null;
+        if (backgroundCityId && selectedCityId && backgroundCityId !== selectedCityId) {
+            // The game can temporarily expose resources for the selected city
+            // while the background still belongs to another city (notably after
+            // a silent empire transport switch). Updating in this state would
+            // save the selected city's resources under the background city.
+            return;
+        }
+
         this._city.update();
     }
 

@@ -10,6 +10,15 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 - Nothing yet.
 
+## [4.0.0.3] - 2026-08-27
+
+### Fixed
+
+- Fixed resources from a silently selected city being stored under a different background city, which could make multiple cities display identical values in the Empire Resources overview.
+- Serialized Empire resource synchronization so refreshes no longer overlap with each other or with drag-and-drop transport navigation.
+- Improved repeated drag-and-drop transports by confirming the selected source city and retrying failed silent city switches.
+- Applied successful Ikariam AJAX responses before resolving internal requests and stopped treating malformed or failed responses as successful updates.
+
 ## [4.0.0.2] - 2026-08-22
 
 ### Changed
@@ -96,7 +105,8 @@ IkaEasy V4 is the first major release under RandGor's independently maintained f
 
 Earlier history is available on the [GitHub tags page](https://github.com/RandGor/IkaEasy/tags).
 
-[Unreleased]: https://github.com/RandGor/IkaEasy/compare/4.0.0.2...HEAD
+[Unreleased]: https://github.com/RandGor/IkaEasy/compare/4.0.0.3...HEAD
+[4.0.0.3]: https://github.com/RandGor/IkaEasy/compare/4.0.0.2...4.0.0.3
 [4.0.0.2]: https://github.com/RandGor/IkaEasy/compare/4.0.0.1...4.0.0.2
 [4.0.0.1]: https://github.com/RandGor/IkaEasy/compare/4.0.0.0...4.0.0.1
 [4.0.0.0]: https://github.com/RandGor/IkaEasy/compare/3.1.0.29...4.0.0.0
