@@ -8,7 +8,7 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 ### Added
 
-- Nothing yet.
+- Added a striped full-capacity indicator for warehouses in the Empire Resources overview.
 
 ## [4.0.0.3] - 2026-08-27
 

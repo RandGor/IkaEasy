@@ -26,3 +26,17 @@
     background-color: #dceeb5 !important;
     box-shadow: inset 0 0 0 2px #719332;
 }
+
+.empire-resource-table tbody .empire-resource-full .empire-resource-amount > div:first-child {
+    font-weight: bold;
+}
+
+.empire-resource-table tbody .empire-resource-full .ikaeasy-progressbar > span:not(.ikaeasy-progressbar--separator) {
+    background: repeating-linear-gradient(
+        135deg,
+        #c92a1d 0,
+        #c92a1d 4px,
+        #ef8f24 4px,
+        #ef8f24 8px
+    ) !important;
+}
