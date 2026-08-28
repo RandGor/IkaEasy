@@ -8,7 +8,17 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 ### Added
 
+- Nothing yet.
+
+## [4.0.0.4] - 2026-08-28
+
+### Added
+
 - Added a striped full-capacity indicator for warehouses in the Empire Resources overview.
+
+### Fixed
+
+- Fixed quick building upgrade buttons retaining stale links and visual states after city data updates.
 
 ## [4.0.0.3] - 2026-08-27
 
@@ -105,7 +115,8 @@ IkaEasy V4 is the first major release under RandGor's independently maintained f
 
 Earlier history is available on the [GitHub tags page](https://github.com/RandGor/IkaEasy/tags).
 
-[Unreleased]: https://github.com/RandGor/IkaEasy/compare/4.0.0.3...HEAD
+[Unreleased]: https://github.com/RandGor/IkaEasy/compare/4.0.0.4...HEAD
+[4.0.0.4]: https://github.com/RandGor/IkaEasy/compare/4.0.0.3...4.0.0.4
 [4.0.0.3]: https://github.com/RandGor/IkaEasy/compare/4.0.0.2...4.0.0.3
 [4.0.0.2]: https://github.com/RandGor/IkaEasy/compare/4.0.0.1...4.0.0.2
 [4.0.0.1]: https://github.com/RandGor/IkaEasy/compare/4.0.0.0...4.0.0.1

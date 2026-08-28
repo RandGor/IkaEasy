@@ -1,26 +1,24 @@
 {
-    "version": "4.0.0.3",
+    "version": "4.0.0.4",
     "enabled": true,
     "text": {
-        "ru": "IkaEasy V4 4.0.0.3 повышает надёжность управления ресурсами и перевозок между городами.",
-        "en": "IkaEasy V4 4.0.0.3 improves the reliability of Empire resource management and transport between cities."
+        "ru": "IkaEasy V4 4.0.0.4 делает заполненные склады заметнее и исправляет быстрые улучшения зданий.",
+        "en": "IkaEasy V4 4.0.0.4 makes full warehouses easier to spot and fixes quick building upgrades."
     },
     "new": {
-        "ru": [],
-        "en": []
+        "ru": [
+            "Заполненные склады во вкладке ресурсов теперь выделяются жирным количеством и полосатой шкалой."
+        ],
+        "en": [
+            "Full warehouses in the Resources tab now use a bold amount and striped capacity bar."
+        ]
     },
     "fixed": {
         "ru": [
-            "Исправлено появление одинаковых ресурсов у разных городов в разделе управления империей.",
-            "Обновления ресурсов больше не пересекаются между собой и с открытием формы перевозки.",
-            "Повторные перевозки перетаскиванием надёжнее выбирают правильный город-источник.",
-            "Неудачные запросы Ikariam больше не считаются успешным обновлением данных."
+            "Кнопки быстрого улучшения зданий больше не сохраняют устаревшие ссылки и состояния после обновления данных города."
         ],
         "en": [
-            "Fixed different cities displaying the same resources in the Empire overview.",
-            "Resource refreshes no longer overlap with each other or with opening the transport form.",
-            "Repeated drag-and-drop transports now select the correct source city more reliably.",
-            "Failed Ikariam requests are no longer treated as successful data refreshes."
+            "Quick building upgrade buttons no longer retain stale links and states after city data updates."
         ]
     },
     "hotfix": {
