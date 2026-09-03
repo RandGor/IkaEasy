@@ -104,6 +104,17 @@ After making a change:
 2. reload the Ikariam tab;
 3. test both the changed view and any related city-switching workflow.
 
+### Refreshing building costs
+
+The building cost database can be regenerated from the current in-game Help tables:
+
+1. sign in to Ikariam and open the browser developer tools on the game tab;
+2. run [`scripts/scrape-building-costs.js`](scripts/scrape-building-costs.js) in the console or as a DevTools snippet;
+3. wait for all building tables to be logged and for `buildings.js` to download;
+4. replace `js/helper/db/buildings.js` with the downloaded file and review the diff.
+
+The scraper validates level order and resource column counts before downloading a file. If Ikariam changes the Help markup or a building's resource types, it stops with an error instead of producing a partial database. Ikariam Help only exposes a 50-level range for buildings with higher caps, so preserve or regenerate the remaining levels when updating the database.
+
 A version tag matching `manifest.json` triggers the release workflow. It validates the version, creates a clean ZIP archive, calculates its SHA-256 checksum, and prepares a draft GitHub Release.
 
 ## Disclaimer

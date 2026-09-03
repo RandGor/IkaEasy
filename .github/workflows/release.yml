@@ -43,6 +43,10 @@ jobs:
                'icon/256.png' \
                'icon/19.png' \
                'icon/96-16.png'
+          if unzip -Z1 "$ARCHIVE" | grep -q '^scripts/'; then
+            echo "Release archive must not contain developer scripts"
+            exit 1
+          fi
           sha256sum "$ARCHIVE" > "${ARCHIVE}.sha256"
 
       - name: Prepare release notes

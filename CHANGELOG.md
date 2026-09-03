@@ -8,7 +8,11 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 ### Added
 
-- Nothing yet.
+- Added a developer scraper that exports building costs from Ikariam's current in-game Help tables.
+
+### Fixed
+
+- Updated building costs and preserved the real building level caps so the Empire Buildings overview calculates upgrade requirements correctly, including levels above Ikariam Help's 50-level display range.
 
 ## [4.0.0.4] - 2026-08-28
 
