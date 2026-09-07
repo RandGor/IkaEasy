@@ -6,6 +6,15 @@ const DEFAULT_LEASE_TIME = 5 * 60 * 1000;
 class SyncLock {
     running = {};
 
+    async exclusive(storageKey, callback) {
+        const lockName = `ikaeasy-sync:${getThisKey(storageKey)}`;
+        if (navigator.locks && navigator.locks.request) {
+            return navigator.locks.request(lockName, callback);
+        }
+
+        return callback();
+    }
+
     run(storageKey, options, callback) {
         if (this.running[storageKey]) {
             return this.running[storageKey];

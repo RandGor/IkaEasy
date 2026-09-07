@@ -313,6 +313,47 @@ export function executePageCommand(action, payload = {}) {
   }, window.location.origin);
 }
 
+export function executePageCommandAsync(action, payload = {}, timeout = 30000) {
+  const requestId = `ikaeasy-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+  return new Promise((resolve, reject) => {
+    let timeoutId;
+    const cleanup = () => {
+      window.removeEventListener('message', handleResult);
+      clearTimeout(timeoutId);
+    };
+    const handleResult = (event) => {
+      const data = event.data;
+      if (event.source !== window || event.origin !== window.location.origin ||
+          !data || data.type !== 'FROM_IKAEASY_V4' ||
+          data.cmd !== 'page_command_result' || data.requestId !== requestId) {
+        return;
+      }
+
+      cleanup();
+      if (data.error) {
+        reject(new Error(data.error));
+      } else {
+        resolve(data.result);
+      }
+    };
+
+    window.addEventListener('message', handleResult);
+    timeoutId = setTimeout(() => {
+      cleanup();
+      reject(new Error(`IkaEasy page command timed out: ${action}`));
+    }, timeout);
+
+    window.postMessage({
+      type: 'FROM_IKAEASY_V4',
+      cmd: 'page_command',
+      action,
+      payload,
+      requestId
+    }, window.location.origin);
+  });
+}
+
 export function _modifyLANGUAGES () {
   if (typeof LANGUAGE.getLocalizedString !== 'function') {
     LANGUAGE.getLocalizedString = function(key, params) {

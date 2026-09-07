@@ -13,6 +13,7 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 ### Fixed
 
 - Updated building costs and preserved the real building level caps so the Empire Buildings overview calculates upgrade requirements correctly, including levels above Ikariam Help's 50-level display range.
+- Fixed an intermittent race between Empire resource synchronization, silent city switching, and opening drag-and-drop resource transports, including when multiple game tabs are open.
 
 ## [4.0.0.4] - 2026-08-28
 

@@ -80,16 +80,23 @@
 
         openAjaxResponse(payload) {
             if (!isSafeGameUrl(payload.url)) {
-                return;
+                throw new Error('IkaEasy rejected an unsafe game URL');
             }
-            $.ajax({
-                url: payload.url,
-                method: 'GET',
-                dataType: 'text'
-            }).done(function(response) {
-                ajax.Responder.parseResponse(response);
-            }).fail(function(request, status, error) {
-                console.error(payload.errorMessage || 'IkaEasy game request failed', status, error);
+            return new Promise(function(resolve, reject) {
+                $.ajax({
+                    url: payload.url,
+                    method: 'GET',
+                    dataType: 'text'
+                }).done(function(response) {
+                    try {
+                        ajax.Responder.parseResponse(response);
+                        resolve(true);
+                    } catch (error) {
+                        reject(error);
+                    }
+                }).fail(function(request, status, error) {
+                    reject(new Error(`${payload.errorMessage || 'IkaEasy game request failed'} (${status}): ${error || request.statusText || 'unknown error'}`));
+                });
             });
         },
 
@@ -129,11 +136,30 @@
         }
 
         if (event.data.cmd === 'page_command' && Object.prototype.hasOwnProperty.call(pageCommands, event.data.action)) {
-            try {
-                pageCommands[event.data.action](event.data.payload || {});
-            } catch (error) {
-                console.error(`IkaEasy page command failed: ${event.data.action}`, error);
-            }
+            const requestId = event.data.requestId;
+            Promise.resolve()
+                .then(() => pageCommands[event.data.action](event.data.payload || {}))
+                .then((result) => {
+                    if (requestId) {
+                        window.postMessage({
+                            type: MESSAGE_TYPE,
+                            cmd: 'page_command_result',
+                            requestId,
+                            result
+                        }, window.location.origin);
+                    }
+                })
+                .catch((error) => {
+                    console.error(`IkaEasy page command failed: ${event.data.action}`, error);
+                    if (requestId) {
+                        window.postMessage({
+                            type: MESSAGE_TYPE,
+                            cmd: 'page_command_result',
+                            requestId,
+                            error: error && error.message ? error.message : String(error)
+                        }, window.location.origin);
+                    }
+                });
         }
     });
 

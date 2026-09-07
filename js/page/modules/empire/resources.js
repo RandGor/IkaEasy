@@ -2,7 +2,7 @@ import Parent from './dummy.js';
 import Tooltip from '../../../helper/tooltip.js';
 import Storage from '../../../helper/storage.js';
 import SyncLock from '../../../helper/syncLock.js';
-import { executePageCommand } from '../../../utils.js';
+import { executePageCommand, executePageCommandAsync } from '../../../utils.js';
 
 const RESOURCE_SYNC_STORAGE_KEY = 'empire';
 const RESOURCE_AUTO_SYNC_INTERVAL = 10 * 60 * 1000;
@@ -229,14 +229,16 @@ class Module extends Parent {
             if (this.syncPromise) {
                 await this.syncPromise;
             }
-            await this.silentChangeCity(sourceCityId);
-            this.parent.close();
+            await SyncLock.exclusive(RESOURCE_SYNC_STORAGE_KEY, async () => {
+                await this.silentChangeCity(sourceCityId);
+                this.parent.close();
 
-            const query = `/index.php?view=transport&destinationCityId=${targetCityId}` +
-                `&currentCityId=${sourceCityId}&actionRequest=${encodeURIComponent(Front.data.actionRequest)}&ajax=1`;
-            this.openTransportResponse(query);
+                const query = `/index.php?view=transport&destinationCityId=${targetCityId}` +
+                    `&currentCityId=${sourceCityId}&actionRequest=${encodeURIComponent(Front.data.actionRequest)}&ajax=1`;
+                await this.openTransportResponse(query);
+            });
         } catch (error) {
-            console.error('IkaEasy resource transport: could not switch source city', error);
+            console.error(`IkaEasy resource transport ${sourceCityId} -> ${targetCityId} could not be opened`, error);
         } finally {
             this.resourceTransportOpening = false;
             this.$parent.removeClass('empire-resource-switching-city');
@@ -244,7 +246,7 @@ class Module extends Parent {
     }
 
     openTransportResponse(query) {
-        executePageCommand('openAjaxResponse', {
+        return executePageCommandAsync('openAjaxResponse', {
             url: query,
             errorMessage: 'IkaEasy resource transport request failed'
         });
