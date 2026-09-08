@@ -2,6 +2,7 @@
  * Run this file in the DevTools console of an authenticated Ikariam tab.
  * It reads every building table from the in-game Help section and downloads
  * a generated buildings.js file suitable for js/helper/db/buildings.js.
+ * It also prints MAX_SCIENTISTS values to merge into js/const.js.
  */
 (async () => {
     const buildings = [
@@ -84,6 +85,7 @@
         }
 
         const levels = [];
+        const maxScientists = building.name === 'academy' ? [0] : null;
         table.querySelectorAll('tr').forEach((row) => {
             const levelCell = row.querySelector('td.level');
             if (!levelCell) {
@@ -103,6 +105,22 @@
                 throw new Error(`${building.name}: expected level ${levels.length + 1}, found ${level}`);
             }
 
+            if (maxScientists) {
+                const cells = row.querySelectorAll('td.allow');
+                if (cells.length !== 1) {
+                    throw new Error(`academy level ${level}: expected one scientist capacity column, found ${cells.length}`);
+                }
+                const value = (cells[0].querySelector('.tooltip') || cells[0]).textContent.trim();
+                if (!/^\d+(?:[.,\s]\d{3})*$/.test(value)) {
+                    throw new Error(`academy level ${level}: invalid scientist capacity "${value}"`);
+                }
+                const capacity = Number(value.replace(/[.,\s]/g, ''));
+                if (!Number.isSafeInteger(capacity) || capacity <= maxScientists[level - 1]) {
+                    throw new Error(`academy level ${level}: scientist capacity must increase, found ${value}`);
+                }
+                maxScientists.push(capacity);
+            }
+
             const costs = {};
             building.resources.forEach((resource, index) => {
                 costs[resource] = parseNumber(costCells[index], building.name, level);
@@ -114,7 +132,12 @@
             throw new Error(`${building.name}: Help table contains no levels`);
         }
 
-        return levels;
+        // Require the complete baseline range; preserve higher levels when merging the export.
+        if (maxScientists && levels.length < 50) {
+            throw new Error(`academy: expected at least 50 levels, found ${levels.length}`);
+        }
+
+        return { costs: levels, maxScientists };
     }
 
     async function loadBuilding(building) {
@@ -168,7 +191,12 @@
 
     const result = {};
     for (const building of buildings) {
-        result[building.name] = await loadBuilding(building);
+        const data = await loadBuilding(building);
+        result[building.name] = data.costs;
+        if (data.maxScientists) {
+            console.info('[IkaEasy] Merge these MAX_SCIENTISTS values into js/const.js; preserve existing levels beyond the exported range:');
+            console.log(`export const MAX_SCIENTISTS = [${data.maxScientists.join(', ')}];`);
+        }
         console.info(`[IkaEasy] ${building.name}: ${result[building.name].length} levels`);
     }
 

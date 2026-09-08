@@ -12,6 +12,7 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 ### Fixed
 
+- Corrected Academy scientist capacities from the in-game Help table and added levels 33–71, fixing full academies appearing partially staffed in the Empire Resources overview. The building cost scraper now also exports the scientist capacity declaration.
 - Updated building costs and preserved the real building level caps so the Empire Buildings overview calculates upgrade requirements correctly, including levels above Ikariam Help's 50-level display range.
 - Fixed an intermittent race between Empire resource synchronization, silent city switching, and opening drag-and-drop resource transports, including when multiple game tabs are open.
 

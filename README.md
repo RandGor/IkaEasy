@@ -113,6 +113,8 @@ The building cost database can be regenerated from the current in-game Help tabl
 3. wait for all building tables to be logged and for `buildings.js` to download;
 4. replace `js/helper/db/buildings.js` with the downloaded file and review the diff.
 
+The same script reads the Academy's **Scientists** column and prints a `MAX_SCIENTISTS` declaration. Merge its values into `js/const.js` to update scientist capacity in the Empire Resources overview, preserving existing higher levels when Help returns a shorter range. The current table covers levels 1–71. Index `0` means no Academy; the remaining entries are the exact Help values for each level. The scraper checks that capacities increase and that at least levels 1–50 are present before printing the declaration.
+
 The scraper validates level order and resource column counts before downloading a file. If Ikariam changes the Help markup or a building's resource types, it stops with an error instead of producing a partial database. Ikariam Help only exposes a 50-level range for buildings with higher caps, so preserve or regenerate the remaining levels when updating the database.
 
 A version tag matching `manifest.json` triggers the release workflow. It validates the version, creates a clean ZIP archive, calculates its SHA-256 checksum, and prepares a draft GitHub Release.
