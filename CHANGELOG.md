@@ -6,6 +6,8 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 ## [Unreleased]
 
+## [4.0.0.5] - 2026-09-09
+
 ### Added
 
 - Added a developer scraper that exports building costs from Ikariam's current in-game Help tables.
