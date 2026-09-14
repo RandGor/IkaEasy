@@ -6,6 +6,14 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 ## [Unreleased]
 
+### Added
+
+- Added an Academy payback panel with a research comparison chart, per-city discounts, editable scientist output and experiment exchange rates. The current upgrade uses the live crystal price when available; other comparisons use verified cost and scientist tables.
+
+### Fixed
+
+- Capped each construction cost-reduction building's discount at 50%, preserving additional research discounts and preventing underestimated costs above building level 50.
+
 ## [4.0.0.5] - 2026-09-09
 
 ### Added

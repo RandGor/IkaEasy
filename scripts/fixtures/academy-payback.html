@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>IkaEasy Academy development fixture</title>
+    <link rel="stylesheet" href="/css/academy-payback.css">
+    <style>
+        body { margin: 0; padding: 10px; font: 12px Arial, sans-serif; color: #542c0f; background: #fff8df; }
+        #academy { max-width: 720px; margin: auto; }
+        /* Stand-ins for the game's native skin; production inherits its real textures. */
+        #academy .contentBox01h { margin: 10px 0; border: 3px double #e4bc7d; }
+        #academy .contentBox01h .header { margin: 0; padding: 6px 10px; font-size: 12px; font-weight: bold; text-align: center; background: #ffe6b3; }
+        #academy .contentBox01h .footer { height: 3px; }
+        #academy .textfield { border: 1px solid #c9a278; background: #fffdee; color: #542c0f; }
+        #fixture-game .content { padding: 12px 18px; }
+        #fixture-game .resources { list-style: none; padding: 0; }
+    </style>
+</head>
+<body>
+    <div id="academy"><div class="mainContent">
+        <div id="fixture-game" class="contentBox01h">
+            <h3 class="header">Назначить рабочих</h3>
+            <div class="content">
+            <div>Учёных: <span id="js_academy_research_tooltip_basic_production">271</span></div>
+            <div id="buildingUpgrade"><ul class="resources"><li class="glass" title="286,607">286,607</li></ul></div>
+            </div>
+            <div class="footer"></div>
+        </div>
+    </div></div>
+    <script src="/js/libs/jquery.js"></script>
+    <script src="/js/libs/lodash.js"></script>
+    <script type="module" src="/scripts/fixtures/academy-payback.js"></script>
+</body>
+</html>

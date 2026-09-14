@@ -14,6 +14,7 @@ export default {
     "military_movements": true,
     "transport_buttons": true,
     "barbarian_auto_select_cargo_ships": true,
+    "academy_payback": true,
     "empire_resource_drag_drop": true,
     "empire_military_drag_drop": true,
     "cinema_floating_player": true,

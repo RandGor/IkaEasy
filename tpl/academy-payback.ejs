@@ -1,0 +1,36 @@
+<div class="contentBox01h ikaeasy-academy-payback" role="region" aria-label="<%= LANGUAGE.getLocalizedString('academy_payback.title') %>">
+    <h3 class="header"><%= LANGUAGE.getLocalizedString('academy_payback.title') %></h3>
+    <div class="content">
+        <div class="ikaeasy-academy-payback-body">
+            <div class="ikaeasy-academy-payback-controls">
+                <label><%= LANGUAGE.getLocalizedString('academy_payback.upgrade') %>
+                    <select class="textfield" data-payback-level></select>
+                </label>
+                <label><%= LANGUAGE.getLocalizedString('academy_payback.rate') %>
+                    <input class="textfield" data-payback-rate type="number" min="0" step="any" inputmode="decimal">
+                </label>
+                <label><%= LANGUAGE.getLocalizedString('academy_payback.exchange_rate') %>
+                    <input class="textfield" data-payback-exchange type="number" min="0.001" step="any" inputmode="decimal">
+                </label>
+            </div>
+            <p class="ikaeasy-academy-payback-hint"><%= LANGUAGE.getLocalizedString('academy_payback.rate_hint') %></p>
+            <p data-payback-error role="alert" hidden></p>
+            <div data-payback-results>
+                <div class="ikaeasy-academy-payback-stats" aria-live="polite">
+                    <div><span><%= LANGUAGE.getLocalizedString('academy_payback.crystal') %></span><strong data-payback-crystal></strong><small data-payback-price-source></small></div>
+                    <div><span><%= LANGUAGE.getLocalizedString('academy_payback.scientists') %></span><strong data-payback-scientists></strong><small data-payback-daily></small></div>
+                    <div><span><%= LANGUAGE.getLocalizedString('academy_payback.payback') %></span><strong data-payback-time></strong><small><%= LANGUAGE.getLocalizedString('academy_payback.after_building') %></small></div>
+                </div>
+                <div class="ikaeasy-academy-payback-legend">
+                    <span class="ikaeasy-academy-payback-research"><%= LANGUAGE.getLocalizedString('academy_payback.research_line') %></span>
+                    <span class="ikaeasy-academy-payback-experiment"><%= LANGUAGE.getLocalizedString('academy_payback.exchange_line') %></span>
+                </div>
+                <svg data-payback-chart role="img" aria-label="<%= LANGUAGE.getLocalizedString('academy_payback.chart') %>"></svg>
+                <p data-payback-experiment class="ikaeasy-academy-payback-hint"></p>
+            </div>
+            <p class="ikaeasy-academy-payback-assumptions"><%= LANGUAGE.getLocalizedString('academy_payback.assumptions') %></p>
+            <div class="ikaeasy-academy-payback-brand">IkaEasy</div>
+        </div>
+    </div>
+    <div class="footer"></div>
+</div>

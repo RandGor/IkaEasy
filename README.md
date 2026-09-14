@@ -21,6 +21,7 @@ Read the [IkaEasy V4 Privacy Policy](PRIVACY.md) for details about local game-da
 - accurate upgrade costs loaded from the current game interface;
 - high-resolution building icons and support for current Ikariam buildings;
 - resource production, consumption, capacity, and shortage estimates.
+- Academy upgrade payback chart with city discounts, additional scientist capacity, and adjustable research and crystal exchange rates.
 
 ### Empire overview
 
@@ -49,6 +50,8 @@ Read the [IkaEasy V4 Privacy Policy](PRIVACY.md) for details about local game-da
 - in-game notification for manually installed builds when a newer GitHub Release is available.
 
 Most features can be enabled or disabled in the IkaEasy V4 settings.
+
+The Academy payback panel opens on the current city's next upgrade and compares the added scientists' research with the crystal spent at the selected experiment exchange rate. Its initial rates use the research, government, corruption, and Optician bonuses known to the extension; world bonuses and temporary boosts can be entered manually. Payback assumes the additional places remain fully staffed and excludes wood, gold upkeep, and construction time. Scientist capacities always come from the verified table, including when the game supplies a live price above the saved cost range.
 
 ## Installation
 
@@ -103,6 +106,15 @@ After making a change:
 1. reload IkaEasy V4 in the browser's extension manager;
 2. reload the Ikariam tab;
 3. test both the changed view and any related city-switching workflow.
+
+Academy and discount regression checks:
+
+```sh
+node --experimental-default-type=module scripts/test-academy-payback.mjs
+node scripts/test-academy-browser.cjs
+```
+
+The browser checks require Playwright and use a local fixture with the real page controller, templates, and calculation code. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to an installed Chromium browser when Playwright has no bundled browser. `IKAEASY_TEST_OUTPUT` optionally selects the screenshot output directory. The extension's template message transport is stubbed; live game verification is still recommended after an Ikariam markup change.
 
 ### Refreshing building costs
 

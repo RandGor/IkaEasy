@@ -479,7 +479,8 @@ class City {
 
         _.each(building, (v, k) => {
             let b = this.getBuildingByType(v);
-            discount[k] = (b) ? b.level : 0;
+            // Cost-reduction buildings stop granting discounts after level 50.
+            discount[k] = b ? Math.min(b.level, 50) : 0;
         });
 
         let r = this._manager.research;
