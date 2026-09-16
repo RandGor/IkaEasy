@@ -248,6 +248,7 @@ class Module extends Parent {
     openTransportResponse(query) {
         return executePageCommandAsync('openAjaxResponse', {
             url: query,
+            protectView: 'transport',
             errorMessage: 'IkaEasy resource transport request failed'
         });
     }

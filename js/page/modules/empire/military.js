@@ -193,6 +193,7 @@ class Module extends Parent {
     openDeploymentResponse(query) {
         executePageCommand('openAjaxResponse', {
             url: query,
+            protectView: 'deployment',
             errorMessage: 'IkaEasy military deployment request failed'
         });
     }

@@ -12,6 +12,7 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 ### Fixed
 
+- Prevented pending construction-queue responses from replacing newly opened drag-and-drop resource transports and military deployments.
 - Capped each construction cost-reduction building's discount at 50%, preserving additional research discounts and preventing underestimated costs above building level 50.
 
 ## [4.0.0.5] - 2026-09-09

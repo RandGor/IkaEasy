@@ -2,6 +2,13 @@
 
 (function() {
     const MESSAGE_TYPE = 'FROM_IKAEASY_V4';
+    const STALE_CONSTRUCTION_VIEW = 'buildingConstructionList';
+    let protectedQuickActionView = null;
+    const SAFE_BACKGROUND_COMMANDS = new Set([
+        'updateGlobalData',
+        'removeIngameCounterData',
+        'ingameCounterData'
+    ]);
 
     const isSafeGameUrl = (value) => {
         if (typeof value !== 'string' || !value) {
@@ -89,6 +96,13 @@
                     dataType: 'text'
                 }).done(function(response) {
                     try {
+                        if (typeof payload.protectView === 'string') {
+                            const currentView = ikariam.templateView && ikariam.templateView.id;
+                            protectedQuickActionView = currentView === STALE_CONSTRUCTION_VIEW ? {
+                                id: payload.protectView,
+                                until: Date.now() + 10 * 60 * 1000
+                            } : null;
+                        }
                         ajax.Responder.parseResponse(response);
                         resolve(true);
                     } catch (error) {
@@ -163,6 +177,24 @@
         }
     });
 
+    document.addEventListener('submit', () => {
+        if (protectedQuickActionView && ikariam.templateView &&
+            ikariam.templateView.id === protectedQuickActionView.id) {
+            protectedQuickActionView = null;
+        }
+    }, true);
+
+    document.addEventListener('click', (event) => {
+        if (!protectedQuickActionView || !event.target.closest('a, button, input[type="button"], input[type="submit"]')) {
+            return;
+        }
+
+        const protectedView = document.getElementById(protectedQuickActionView.id);
+        if (protectedView && !protectedView.contains(event.target)) {
+            protectedQuickActionView = null;
+        }
+    }, true);
+
     const CONSOLE_ENABLED = true;
 
     if (CONSOLE_ENABLED) {
@@ -189,6 +221,22 @@
                     return function(resp) {
 
                         resp = JSON.parse(resp);
+                        let filtered = false;
+                        if (protectedQuickActionView && protectedQuickActionView.until > Date.now() &&
+                            ikariam.templateView && ikariam.templateView.id === protectedQuickActionView.id) {
+                            const changeView = resp.find((command) =>
+                                Array.isArray(command) && command[0] === 'changeView' &&
+                                Array.isArray(command[1])
+                            );
+                            const targetView = changeView && changeView[1][0];
+                            if (targetView === STALE_CONSTRUCTION_VIEW) {
+                                console.warn(`IkaEasy ignored a stale ${targetView} response while ${protectedQuickActionView.id} is open`);
+                                resp = resp.filter((command) =>
+                                    Array.isArray(command) && SAFE_BACKGROUND_COMMANDS.has(command[0])
+                                );
+                                filtered = true;
+                            }
+                        }
                         resp.forEach((r) => {
                             if (r[0] === 'updateTemplateData' && r[1] && r[1].load_js && r[1].load_js.params) {
                                 try {
@@ -221,7 +269,7 @@
                         });
 
                         window.postMessage({ type: 'FROM_IKAEASY_V3', cmd: 'form', form: resp }, '*');
-                        return f.apply(this, arguments);
+                        return filtered ? f.call(this, JSON.stringify(resp)) : f.apply(this, arguments);
                     };
                 }(window.ajax.Responder.parseResponse);
             }
