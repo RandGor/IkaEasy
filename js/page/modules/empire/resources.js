@@ -284,6 +284,9 @@ class Module extends Parent {
             }
             throw new Error(`IkaEasy resource transport: server did not switch to city ${cityId}`);
         }
+        await executePageCommandAsync('applyGlobalData', {
+            data: switchState.globalData
+        });
         this.updateClientActiveCity(cityId);
     }
 
@@ -306,7 +309,7 @@ class Module extends Parent {
         const selectedCityId = Number(dropdown && dropdown.selectedCityId) ||
             (typeof selectedCity === 'string' ? Number(selectedCity.replace('city_', '')) : 0);
 
-        return { backgroundCityId, selectedCityId };
+        return { backgroundCityId, selectedCityId, globalData: data };
     }
 
     updateClientActiveCity(cityId) {

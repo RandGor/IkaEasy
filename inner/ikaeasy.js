@@ -4,11 +4,6 @@
     const MESSAGE_TYPE = 'FROM_IKAEASY_V4';
     const STALE_CONSTRUCTION_VIEW = 'buildingConstructionList';
     let protectedQuickActionView = null;
-    const SAFE_BACKGROUND_COMMANDS = new Set([
-        'updateGlobalData',
-        'removeIngameCounterData',
-        'ingameCounterData'
-    ]);
 
     const isSafeGameUrl = (value) => {
         if (typeof value !== 'string' || !value) {
@@ -112,6 +107,17 @@
                     reject(new Error(`${payload.errorMessage || 'IkaEasy game request failed'} (${status}): ${error || request.statusText || 'unknown error'}`));
                 });
             });
+        },
+
+        applyGlobalData(payload) {
+            if (!payload.data || typeof payload.data !== 'object' || Array.isArray(payload.data)) {
+                throw new Error('IkaEasy received invalid global city data');
+            }
+
+            ajax.Responder.parseResponse(JSON.stringify([
+                ['updateGlobalData', payload.data]
+            ]));
+            return true;
         },
 
         claimDailyBonus() {
@@ -231,9 +237,12 @@
                             const targetView = changeView && changeView[1][0];
                             if (targetView === STALE_CONSTRUCTION_VIEW) {
                                 console.warn(`IkaEasy ignored a stale ${targetView} response while ${protectedQuickActionView.id} is open`);
-                                resp = resp.filter((command) =>
-                                    Array.isArray(command) && SAFE_BACKGROUND_COMMANDS.has(command[0])
-                                );
+                                // updateGlobalData from this stale response still
+                                // belongs to the city that was visible before the
+                                // quick action. Applying it would make the form
+                                // display the selected source city while the game
+                                // submits from the old background city.
+                                resp = [];
                                 filtered = true;
                             }
                         }

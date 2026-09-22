@@ -5,7 +5,7 @@ import { Military, UnitIds } from '../../../const.js';
 import HttpClient from '../../../helper/httpClient.js';
 import Storage from '../../../helper/storage.js';
 import SyncLock from '../../../helper/syncLock.js';
-import { executePageCommand, getInt } from '../../../utils.js';
+import { executePageCommand, executePageCommandAsync, getInt } from '../../../utils.js';
 
 const UNIT_IDS = Object.fromEntries(
     Object.entries(UnitIds).map(([id, type]) => [type, id])
@@ -221,6 +221,14 @@ class Module extends Parent {
         });
 
         this.updateActionRequest(response);
+        const globalDataCommand = Array.isArray(response) && response.find((command) =>
+            Array.isArray(command) && command[0] === 'updateGlobalData' && command[1]
+        );
+        if (globalDataCommand) {
+            await executePageCommandAsync('applyGlobalData', {
+                data: globalDataCommand[1]
+            });
+        }
         this.updateClientActiveCity(cityId);
     }
 
