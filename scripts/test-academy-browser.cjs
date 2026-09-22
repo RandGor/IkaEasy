@@ -14,18 +14,13 @@ const server = http.createServer((request, response) => {
     const file = path.resolve(root, '.' + pathname);
     if (!file.startsWith(root + path.sep)) { response.writeHead(403).end(); return; }
     if (pathname === '/js/helper/templater.js') {
-        // Exercise the real EJS template while replacing only extension iframe transport.
+        // Exercise the real EJS template with a minimal fixture renderer.
         response.setHeader('Content-Type', 'text/javascript');
         response.end(`export default async function(name) {
             if (window.fixtureRenderDelay) await new Promise(resolve => setTimeout(resolve, window.fixtureRenderDelay));
             const html = await (await fetch('/tpl/' + name + '.ejs')).text();
             return _.template(html)({data: {}});
         }`);
-        return;
-    }
-    if (pathname === '/js/sandbox.js') {
-        response.setHeader('Content-Type', 'text/javascript');
-        response.end('export default { on() {}, send() {} };');
         return;
     }
     fs.readFile(file, (error, data) => {

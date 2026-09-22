@@ -8,7 +8,6 @@ import Win from './helper/win.js';
 import Manager from './data/Manager.js';
 import { Resources, TradeGoodOrdinals } from './const.js';
 import { executePageCommand } from './utils.js';
-import sandbox from './sandbox.js';
 
 class Navigation extends Event {
     constructor() {
@@ -116,7 +115,6 @@ class Navigation extends Event {
                 this.page_tpl.updated();
             }
 
-            sandbox.send('set_params', {Front: {data: this.data, ikaeasyDataJson: this.ikaeasyData.getJson()}});
         }
 
         if ((bg !== this.bg) || (!this.page_bg_initialized)) {

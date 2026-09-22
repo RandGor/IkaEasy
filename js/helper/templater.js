@@ -1,13 +1,4 @@
-import sandbox from '../sandbox.js';
-
-const callbacks = {};
-
-sandbox.on('message', (event) => {
-  if (event.data.subType === 'tpl_ready' && callbacks[event.data.form.key]) {
-    callbacks[event.data.form.key](event.data.form.result);
-    delete callbacks[event.data.form.key];
-  }
-});
+import renderLocal from './local-templater.js';
 
 export default async function render(path, data = {}, helpers = {}) {
   // if path ends with .ejs, remove it
@@ -24,14 +15,5 @@ export default async function render(path, data = {}, helpers = {}) {
     console.error(error);
   }
 
-  return new Promise((resolve) => {
-    const key = `${path}:${Date.now()}:${Math.random()}`;
-    callbacks[key] = resolve;
-
-    sandbox.send('tpl_render', {
-      key,
-      path,
-      params: data
-    }, '*');
-  });
+  return renderLocal(path, data);
 }

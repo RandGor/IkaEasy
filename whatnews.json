@@ -2,22 +2,28 @@
     "version": "4.0.0.5",
     "enabled": true,
     "text": {
-        "ru": "IkaEasy V4 4.0.0.5 исправляет стоимость улучшения зданий, отправку ресурсов между городами и отображение учёных.",
-        "en": "IkaEasy V4 4.0.0.5 fixes building upgrade costs, resource transfers between cities, and scientist capacity display."
+        "ru": "IkaEasy V4 4.0.0.5 переходит на новую архитектуру интерфейса и исправляет ряд небольших ошибок.",
+        "en": "IkaEasy V4 4.0.0.5 introduces a new interface architecture and fixes several minor issues."
     },
     "new": {
-        "ru": [],
-        "en": []
+        "ru": [
+            "Расширение перешло на новую архитектуру интерфейса, благодаря которой окна IkaEasy открываются быстрее и работают стабильнее."
+        ],
+        "en": [
+            "The extension now uses a new interface architecture, making IkaEasy windows faster and more reliable."
+        ]
     },
     "fixed": {
         "ru": [
             "Обновлена стоимость улучшения зданий во вкладке империи, включая высокие уровни.",
             "Исправлена ошибка, которая иногда мешала открытию отправки ресурсов между городами при синхронизации, в том числе при нескольких открытых вкладках игры.",
+            "Исправлен ряд небольших ошибок в быстрых действиях с ресурсами и войсками.",
             "Исправлен максимум учёных для академий и добавлены значения до 71-го уровня. Полностью заполненные академии теперь отображаются корректно."
         ],
         "en": [
             "Updated building upgrade costs in the Empire overview, including high building levels.",
             "Fixed intermittent failures when opening resource transfers between cities during synchronization, including with multiple game tabs open.",
+            "Fixed several minor issues in quick resource and military actions.",
             "Corrected Academy scientist capacities and added values through level 71. Fully staffed academies now display correctly."
         ]
     },

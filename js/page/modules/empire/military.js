@@ -181,7 +181,7 @@ class Module extends Parent {
             const query = `/index.php?view=deployment&deploymentType=${deploymentType}` +
                 `&destinationCityId=${targetCityId}&currentCityId=${sourceCityId}` +
                 `&actionRequest=${encodeURIComponent(Front.data.actionRequest)}&ajax=1`;
-            this.openDeploymentResponse(query);
+            this.openDeploymentResponse(query, sourceCityId);
         } catch (error) {
             console.error('IkaEasy military deployment: could not switch source city', error);
         } finally {
@@ -190,10 +190,11 @@ class Module extends Parent {
         }
     }
 
-    openDeploymentResponse(query) {
+    openDeploymentResponse(query, sourceCityId) {
         executePageCommand('openAjaxResponse', {
             url: query,
             protectView: 'deployment',
+            currentCityId: sourceCityId,
             errorMessage: 'IkaEasy military deployment request failed'
         });
     }

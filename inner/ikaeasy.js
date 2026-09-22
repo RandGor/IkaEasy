@@ -5,6 +5,30 @@
     const STALE_CONSTRUCTION_VIEW = 'buildingConstructionList';
     let protectedQuickActionView = null;
 
+    const pinQuickActionCity = (viewId, cityId) => {
+        cityId = Number(cityId);
+        if (!viewId || !Number.isInteger(cityId) || cityId <= 0) {
+            return;
+        }
+
+        const view = document.getElementById(viewId);
+        if (!view) {
+            return;
+        }
+
+        const form = view.tagName === 'FORM' ? view : view.querySelector('form');
+        const inputs = view.querySelectorAll('[name="currentCityId"]');
+        if (inputs.length) {
+            inputs.forEach((input) => { input.value = cityId; });
+        } else if (form) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'currentCityId';
+            input.value = cityId;
+            form.appendChild(input);
+        }
+    };
+
     const isSafeGameUrl = (value) => {
         if (typeof value !== 'string' || !value) {
             return false;
@@ -93,12 +117,15 @@
                     try {
                         if (typeof payload.protectView === 'string') {
                             const currentView = ikariam.templateView && ikariam.templateView.id;
-                            protectedQuickActionView = currentView === STALE_CONSTRUCTION_VIEW ? {
+                            protectedQuickActionView = {
                                 id: payload.protectView,
+                                cityId: Number(payload.currentCityId),
+                                staleConstructionView: currentView === STALE_CONSTRUCTION_VIEW,
                                 until: Date.now() + 10 * 60 * 1000
-                            } : null;
+                            };
                         }
                         ajax.Responder.parseResponse(response);
+                        pinQuickActionCity(payload.protectView, payload.currentCityId);
                         resolve(true);
                     } catch (error) {
                         reject(error);
@@ -186,6 +213,7 @@
     document.addEventListener('submit', () => {
         if (protectedQuickActionView && ikariam.templateView &&
             ikariam.templateView.id === protectedQuickActionView.id) {
+            pinQuickActionCity(protectedQuickActionView.id, protectedQuickActionView.cityId);
             protectedQuickActionView = null;
         }
     }, true);
@@ -228,7 +256,8 @@
 
                         resp = JSON.parse(resp);
                         let filtered = false;
-                        if (protectedQuickActionView && protectedQuickActionView.until > Date.now() &&
+                        if (protectedQuickActionView && protectedQuickActionView.staleConstructionView &&
+                            protectedQuickActionView.until > Date.now() &&
                             ikariam.templateView && ikariam.templateView.id === protectedQuickActionView.id) {
                             const changeView = resp.find((command) =>
                                 Array.isArray(command) && command[0] === 'changeView' &&

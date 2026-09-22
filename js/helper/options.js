@@ -1,5 +1,4 @@
 import DEF_OPTIONS from '../../options.js';
-import sandbox from '../sandbox.js';
 
 class Options {
     constructor() {
@@ -26,7 +25,6 @@ class Options {
     set(name, value) {
         Front.ikaeasyData.options[name] = value;
         Front.ikaeasyData.save();
-        sandbox.send('set_params', { ikaeasyDataOptions: Front.ikaeasyData.options });
     }
 
     getList() {

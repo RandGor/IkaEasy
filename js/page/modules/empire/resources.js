@@ -235,7 +235,7 @@ class Module extends Parent {
 
                 const query = `/index.php?view=transport&destinationCityId=${targetCityId}` +
                     `&currentCityId=${sourceCityId}&actionRequest=${encodeURIComponent(Front.data.actionRequest)}&ajax=1`;
-                await this.openTransportResponse(query);
+                await this.openTransportResponse(query, sourceCityId);
             });
         } catch (error) {
             console.error(`IkaEasy resource transport ${sourceCityId} -> ${targetCityId} could not be opened`, error);
@@ -245,10 +245,11 @@ class Module extends Parent {
         }
     }
 
-    openTransportResponse(query) {
+    openTransportResponse(query, sourceCityId) {
         return executePageCommandAsync('openAjaxResponse', {
             url: query,
             protectView: 'transport',
+            currentCityId: sourceCityId,
             errorMessage: 'IkaEasy resource transport request failed'
         });
     }

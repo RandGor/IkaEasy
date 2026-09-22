@@ -477,10 +477,6 @@ class Dummy extends Parent {
         }
     }
 
-    destroy() {
-        super.destroy();
-    }
-
     selfDestroy() {
         this.destroy();
     }
