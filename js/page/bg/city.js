@@ -97,12 +97,6 @@ class City extends Parent {
 
                 $parent.append($block);
 
-                if (this._city.isOwn) {
-                    $block.on('mouseenter.ikaeasy-upgrade-data', () => {
-                        this.updateBuildingUpgradeData($block, build);
-                    });
-                }
-
                 if (!this._city.isOwn) {
                     $(`#ikaeasy_watcher_${build.position}`).attr('class', 'ikaeasy_watcher build_gray');
                     $(`#ikaeasy_watcher_${build.position} .ikaeasy_watcher_buttons`).remove();
@@ -242,16 +236,29 @@ class City extends Parent {
                     });
                 });
 
-                $block.on('click.ikaeasy-watcher', '.watche_up', (e) => {
+                $block.on('click.ikaeasy-watcher', '.watche_up', async (e) => {
                     if ($(e.currentTarget).css('cursor') === 'default') {
                         return;
                     }
 
-                    const upgradeUrl = $block.data('ikaeasy-upgrade-url');
-                    if (upgradeUrl) {
+                    const cityId = this.getCityId();
+
+                    try {
+                        let upgradeUrl = $block.data('ikaeasy-upgrade-url');
+                        if (!upgradeUrl) {
+                            const upgrade = await BuildingUpgrade.get(cityId, build);
+                            if (!upgrade || !upgrade.url || !$block.closest('html').length ||
+                                this.getCityId() !== cityId) {
+                                return;
+                            }
+
+                            upgradeUrl = upgrade.url;
+                            $block.data('ikaeasy-upgrade-url', upgradeUrl);
+                        }
+
                         executePageCommand('ajaxHandlerCall', { url: upgradeUrl });
-                    } else {
-                        this.upgradeBuilding(build.position, build.level);
+                    } catch (error) {
+                        console.warn('IkaEasy building upgrade request failed:', error);
                     }
                 });
 
