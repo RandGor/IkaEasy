@@ -36,6 +36,7 @@ class Options {
                 'world_search_island',
                 'city_details',
                 'city_building_tooltip',
+                'one_click_free_building_speedup',
                 'dummy_resource_prod',
                 'dummy_transporter',
                 'units_max',

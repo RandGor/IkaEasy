@@ -166,6 +166,8 @@ export default {
     "option.city_hotkeys": "Hotkeys for cities change",
     "option.city_hotkeys_hint": "You can change city using the keys: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, -, =",
     "option.city_building_tooltip": "Show tooltip for quick start of building construction",
+    "option.one_click_free_building_speedup": "Complete free building speedups with one click",
+    "option.one_click_free_building_speedup_hint": "Works from the city map, the building window, and the construction queue. Paid speedups always keep the normal confirmation.",
     "option.notification_wait_no_interaction": "Automatically hide notifications",
     "option.notification_building_complete": "Building upgrade complete",
     "option.notification_building_complete_prevent": "Building upgrade will be completed soon",

@@ -12,6 +12,92 @@ class City extends Parent {
         this.premium();
         this.updateBuilds();
         this.watcher();
+        this.freeBuildingSpeedup();
+    }
+
+    freeBuildingSpeedup() {
+        if (!this.options.get('one_click_free_building_speedup') || this._freeSpeedupObserver) {
+            return;
+        }
+
+        this._freeSpeedup = null;
+        this._freeSpeedupClickHandler = (event) => {
+            const button = event.target.closest('.buildingSpeedupButton.free');
+            if (!button || this._freeSpeedup) {
+                return;
+            }
+
+            const cityButtonMatch = /^js_CityPosition(\d+)SpeedupButton$/.exec(button.id);
+            const action = [
+                button.getAttribute('onclick'),
+                button.getAttribute('href'),
+                button.closest('a')?.getAttribute('href')
+            ].filter(Boolean).join('&');
+            const actionPosition = /[?&]position=(\d+)/.exec(action);
+            const position = Number(actionPosition?.[1] || cityButtonMatch?.[1]);
+            const buildingLink = Number.isInteger(position) &&
+                document.getElementById(`js_CityPosition${position}Link`);
+            const linkCity = buildingLink && /[?&]cityId=(\d+)/.exec(buildingLink.getAttribute('href') || '');
+            const actionCity = /[?&]cityId=(\d+)/.exec(action);
+            const cityId = Number(actionCity?.[1] || linkCity?.[1]);
+            if (!Number.isInteger(position) || cityId !== this.getCityId()) {
+                return;
+            }
+
+            this._freeSpeedup = {
+                cityId,
+                position,
+                remaining: 2,
+                confirming: false
+            };
+        };
+        document.addEventListener('click', this._freeSpeedupClickHandler, true);
+
+        this._freeSpeedupObserver = new MutationObserver(() => this.confirmFreeBuildingSpeedup());
+        this._freeSpeedupObserver.observe(document.documentElement, { childList: true, subtree: true });
+    }
+
+    confirmFreeBuildingSpeedup() {
+        const speedup = this._freeSpeedup;
+        const activate = document.getElementById('js_buildingSpeedupActivateBtn');
+        if (!speedup || speedup.confirming || !activate) {
+            return;
+        }
+
+        const cost = activate.querySelector('.ambrosiaIcon')?.textContent.trim();
+        const href = activate.getAttribute('href');
+        const url = href && new URL(href, window.location.origin);
+        const isFreeBuildingSpeedup = cost === '0' && url.origin === window.location.origin &&
+            url.searchParams.get('action') === 'Premium' &&
+            url.searchParams.get('function') === 'buildingSpeedup' &&
+            Number(url.searchParams.get('cityId')) === speedup.cityId &&
+            Number(url.searchParams.get('position')) === speedup.position;
+
+        if (!isFreeBuildingSpeedup || speedup.remaining <= 0) {
+            this._freeSpeedup = null;
+            return;
+        }
+
+        speedup.remaining -= 1;
+        speedup.confirming = true;
+        executePageCommand('ajaxHandlerCall', { url: href });
+
+        setTimeout(() => {
+            if (this._freeSpeedup !== speedup) {
+                return;
+            }
+
+            const button = document.querySelector(
+                `.buildingSpeedupButton.free[id="js_CityPosition${speedup.position}SpeedupButton"], ` +
+                `.buildingSpeedupButton.free[onclick*="position=${speedup.position}"]`
+            );
+            speedup.confirming = false;
+            if (button?.classList.contains('free') && speedup.remaining > 0) {
+                button.click();
+            } else {
+                this._freeSpeedup = null;
+            }
+        }, 2500);
     }
 
     async premium() {
@@ -338,6 +424,14 @@ class City extends Parent {
 
     _fillWatcherMinus() {
         this.__watcher_minus = this._city.getBuildingsCostDiscount();
+    }
+
+    destroy() {
+        document.removeEventListener('click', this._freeSpeedupClickHandler, true);
+        this._freeSpeedupClickHandler = null;
+        this._freeSpeedupObserver?.disconnect();
+        this._freeSpeedupObserver = null;
+        this._freeSpeedup = null;
     }
 }
 

@@ -166,6 +166,8 @@ export default {
     "option.city_hotkeys": "Горячие клавиши для смены города",
     "option.city_hotkeys_hint": "Для смены города используйте клавиши: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, -, =",
     "option.city_building_tooltip": "Показывать окно быстрого строительства",
+    "option.one_click_free_building_speedup": "Бесплатно ускорять строительство одним кликом",
+    "option.one_click_free_building_speedup_hint": "Работает на карте города, в окне здания и в очереди строительства. Для платного ускорения всегда остаётся обычное подтверждение.",
     "option.notification_wait_no_interaction": "Скрывать уведомления автоматически",
     "option.notification_building_complete": "Постройка здания завершена",
     "option.notification_building_complete_prevent": "Постройка здания скоро завершится",

@@ -5,6 +5,7 @@ export default {
     "world_search_island": true,
     "city_details": true,
     "city_building_tooltip": true,
+    "one_click_free_building_speedup": true,
     "dummy_resource_prod": true,
     "dummy_transporter": true,
     "units_max": true,

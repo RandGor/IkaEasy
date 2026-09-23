@@ -8,6 +8,7 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 ### Added
 
+- Added one-click free building speedups from the city map, building window, and construction queue, including chained free completion, with a strict zero-Ambrosia check before every activation.
 - Added an Academy payback panel with a research comparison chart, per-city discounts, editable scientist output and experiment exchange rates. The current upgrade uses the live crystal price when available; other comparisons use verified cost and scientist tables.
 
 ### Fixed
