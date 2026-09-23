@@ -31,7 +31,7 @@
    "description": "__MSG_appDesc__",
    "permissions": [ "tabs", "storage", "notifications", "alarms" ],
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "4.0.0.5",
+   "version": "4.0.0.6",
    "web_accessible_resources": [ {
       "matches": [ "http://*.ikariam.gameforge.com/*", "https://*.ikariam.gameforge.com/*", "https://ikalogs.ru/*", "https://*.ikalogs.ru/*" ],
       "resources": [ "js/cinema-player.js", "inner/ikaeasy.js", "images/*", "js/page/*", "js/helper/*", "js/libs/*", "js/data/*", "js/const.js", "js/utils.js", "js/langs.js", "js/templater.js", "js/navigation.js", "js/assignedLangs.js", "js/initModule.js", "lang/*", "css/*", "icon/*", "tpl/*", "whatnews.json", "options.js" ]

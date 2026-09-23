@@ -8,13 +8,26 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 ### Added
 
+- Nothing yet.
+
+## [4.0.0.6] - 2026-09-24
+
+### Added
+
 - Added one-click free building speedups from the city map, building window, and construction queue, including chained free completion, with a strict zero-Ambrosia check before every activation.
 - Added an Academy payback panel with a research comparison chart, per-city discounts, editable scientist output and experiment exchange rates. The current upgrade uses the live crystal price when available; other comparisons use verified cost and scientist tables.
+
+### Changed
+
+- Replaced the sandboxed runtime template compiler with precompiled local templates, reducing interface startup work and removing the obsolete sandbox page and related extension permissions.
 
 ### Fixed
 
 - Prevented pending construction-queue responses from replacing newly opened drag-and-drop resource transports and military deployments.
+- Improved drag-and-drop resource and military actions so they verify the source city and retry an unsuccessful background city switch.
+- Fixed quick building upgrades sometimes requiring a second click after opening the city view.
 - Capped each construction cost-reduction building's discount at 50%, preserving additional research discounts and preventing underestimated costs above building level 50.
+- Prevented the GitHub button at the bottom of IkaEasy settings from shrinking while pressed.
 
 ## [4.0.0.5] - 2026-09-09
 
@@ -133,7 +146,9 @@ IkaEasy V4 is the first major release under RandGor's independently maintained f
 
 Earlier history is available on the [GitHub tags page](https://github.com/RandGor/IkaEasy/tags).
 
-[Unreleased]: https://github.com/RandGor/IkaEasy/compare/4.0.0.4...HEAD
+[Unreleased]: https://github.com/RandGor/IkaEasy/compare/4.0.0.6...HEAD
+[4.0.0.6]: https://github.com/RandGor/IkaEasy/compare/4.0.0.5...4.0.0.6
+[4.0.0.5]: https://github.com/RandGor/IkaEasy/compare/4.0.0.4...4.0.0.5
 [4.0.0.4]: https://github.com/RandGor/IkaEasy/compare/4.0.0.3...4.0.0.4
 [4.0.0.3]: https://github.com/RandGor/IkaEasy/compare/4.0.0.2...4.0.0.3
 [4.0.0.2]: https://github.com/RandGor/IkaEasy/compare/4.0.0.1...4.0.0.2

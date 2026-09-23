@@ -1,35 +1,44 @@
 {
-    "version": "4.0.0.5",
+    "version": "4.0.0.6",
     "enabled": true,
     "text": {
-        "ru": "IkaEasy V4 4.0.0.5 переходит на новую архитектуру интерфейса и исправляет ряд небольших ошибок.",
-        "en": "IkaEasy V4 4.0.0.5 introduces a new interface architecture and fixes several minor issues."
+        "ru": "IkaEasy V4 4.0.0.6 добавляет расчёт окупаемости Академии, бесплатное ускорение строительства одним кликом и повышает надёжность быстрых действий.",
+        "en": "IkaEasy V4 4.0.0.6 adds Academy payback calculations, one-click free building speedups, and more reliable quick actions."
     },
     "new": {
         "ru": [
-            "Расширение перешло на новую архитектуру интерфейса, благодаря которой окна IkaEasy открываются быстрее и работают стабильнее."
+            "В Академии появилась панель окупаемости с графиком улучшений, учётом скидок и сравнением обычных исследований с экспериментами.",
+            "Бесплатное ускорение строительства теперь можно выполнять одним кликом на карте города, в окне здания и в очереди строительства. Перед каждым ускорением расширение проверяет, что амброзия не требуется.",
+            "Интерфейс расширения переведён на заранее собранные шаблоны: удалены устаревшая sandbox-страница и связанные с ней разрешения."
         ],
         "en": [
-            "The extension now uses a new interface architecture, making IkaEasy windows faster and more reliable."
+            "The Academy now includes a payback panel with an upgrade chart, discount calculations, and a comparison of regular research with experiments.",
+            "Free building speedups can now be completed with one click from the city map, building window, and construction queue. The extension verifies that no Ambrosia is required before every speedup.",
+            "The extension interface now uses precompiled templates, removing the obsolete sandbox page and its related permissions."
         ]
     },
     "fixed": {
         "ru": [
-            "Обновлена стоимость улучшения зданий во вкладке империи, включая высокие уровни.",
-            "Исправлена ошибка, которая иногда мешала открытию отправки ресурсов между городами при синхронизации, в том числе при нескольких открытых вкладках игры.",
-            "Исправлен ряд небольших ошибок в быстрых действиях с ресурсами и войсками.",
-            "Исправлен максимум учёных для академий и добавлены значения до 71-го уровня. Полностью заполненные академии теперь отображаются корректно."
+            "Быстрые перевозки ресурсов и развёртывание войск надёжнее определяют город отправления и повторяют неудачную фоновую смену города.",
+            "Устаревший ответ очереди строительства больше не заменяет только что открытое окно перевозки ресурсов или развёртывания войск.",
+            "Быстрое улучшение здания больше не требует повторного нажатия после открытия города.",
+            "Исправлен расчёт скидок от зданий снижения стоимости на уровнях выше 50-го.",
+            "Кнопка GitHub в настройках IkaEasy больше не уменьшается при нажатии."
         ],
         "en": [
-            "Updated building upgrade costs in the Empire overview, including high building levels.",
-            "Fixed intermittent failures when opening resource transfers between cities during synchronization, including with multiple game tabs open.",
-            "Fixed several minor issues in quick resource and military actions.",
-            "Corrected Academy scientist capacities and added values through level 71. Fully staffed academies now display correctly."
+            "Quick resource transfers and military deployments now identify the source city more reliably and retry unsuccessful background city switches.",
+            "A stale construction-queue response no longer replaces a newly opened resource transport or military deployment window.",
+            "Quick building upgrades no longer require a second click after opening the city view.",
+            "Fixed cost-reduction building discounts for levels above 50.",
+            "The GitHub button in IkaEasy settings no longer shrinks while pressed."
         ]
     },
     "hotfix": {
         "ru": [],
         "en": []
     },
-    "options": []
+    "options": [
+        "academy_payback",
+        "one_click_free_building_speedup"
+    ]
 }
