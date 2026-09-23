@@ -1326,7 +1326,7 @@ __p += '\r\n                    </tbody>\r\n                </table>\r\n        
  }) ;
 __p += '\r\n    \r\n\r\n    <div class="ikaeasy-option-hint">' +
 __e( LANGUAGE.getLocalizedString('option._accept_hint') ) +
-'</div>\r\n\r\n    <div class="btn-line">\n        <a class="button" href="https://github.com/RandGor/IkaEasy" target="_blank" rel="noopener noreferrer">\n            ' +
+'</div>\r\n\r\n    <div class="btn-line">\n        <a class="button" style="padding: 10px 25px" href="https://github.com/RandGor/IkaEasy" target="_blank" rel="noopener noreferrer">\n            ' +
 __e( LANGUAGE.getLocalizedString('github.repository') ) +
 '\n        </a>\n    </div>\r\n</div>\r\n';
 return __p
