@@ -1,0 +1,47 @@
+.ikaeasy-city-mascot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 73px;
+    height: 67px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    pointer-events: none;
+    user-select: none;
+    background-repeat: no-repeat;
+    background-size: auto;
+    animation: ikaeasy-mascot-walk 1s steps(12) infinite;
+    will-change: transform;
+}
+.ikaeasy-city-mascot[hidden], .ikaeasy-city-mascot-tooltip[hidden] { display: none !important; }
+.ikaeasy-city-mascot[data-state="paused"] { animation-play-state: paused; }
+.ikaeasy-city-mascot[data-direction="N"] { background-image: url('../images/city-mascot/N.png?v=2'); }
+.ikaeasy-city-mascot[data-direction="NO"] { background-image: url('../images/city-mascot/NO.png?v=2'); }
+.ikaeasy-city-mascot[data-direction="O"] { background-image: url('../images/city-mascot/O.png?v=2'); }
+.ikaeasy-city-mascot[data-direction="SO"] { background-image: url('../images/city-mascot/SO.png?v=2'); }
+.ikaeasy-city-mascot[data-direction="S"] { background-image: url('../images/city-mascot/S.png?v=2'); }
+.ikaeasy-city-mascot[data-direction="SW"] { background-image: url('../images/city-mascot/SW.png?v=2'); }
+.ikaeasy-city-mascot[data-direction="W"] { background-image: url('../images/city-mascot/W.png?v=2'); }
+.ikaeasy-city-mascot[data-direction="NW"] { background-image: url('../images/city-mascot/NW.png?v=2'); }
+@keyframes ikaeasy-mascot-walk {
+    from { background-position: 0 0; }
+    to { background-position: -876px 0; }
+}
+/* A body-level fixed tooltip stays readable when the city is zoomed. */
+.ikaeasy-city-mascot-tooltip {
+    position: fixed;
+    z-index: 100000;
+    box-sizing: border-box;
+    max-width: min(280px, calc(100vw - 16px));
+    padding: 8px 11px;
+    border: 1px solid #927239;
+    border-radius: 6px;
+    background: #fff4d9;
+    color: #413218;
+    box-shadow: 0 2px 7px #0004;
+    font: 13px/1.4 Arial, sans-serif;
+    text-align: center;
+    pointer-events: none;
+    user-select: none;
+}

@@ -1,0 +1,284 @@
+{
+  "source": "../static-directions-v1.png",
+  "approvedSource": true,
+  "animationApproved": true,
+  "frame": [
+    73,
+    67
+  ],
+  "frames": 12,
+  "periodMs": 1000,
+  "scale": 0.07142857142857142,
+  "supersampling": 4,
+  "ground": [
+    36,
+    52
+  ],
+  "method": "Shared continuous 2D mesh rig; no per-frame scale or generative poses",
+  "models": [
+    {
+      "view": {
+        "name": "N",
+        "crop": [
+          0,
+          0,
+          328,
+          546
+        ],
+        "heading": [
+          0,
+          -1
+        ],
+        "side": 1
+      },
+      "center": 36,
+      "halfWidth": 8.75,
+      "footRestDepth": [
+        0,
+        0
+      ],
+      "bounds": [
+        51,
+        64,
+        296,
+        534
+      ],
+      "groundSource": [
+        170.9010755939129,
+        533
+      ],
+      "scale": 0.07142857142857142
+    },
+    {
+      "view": {
+        "name": "NO",
+        "crop": [
+          328,
+          0,
+          327,
+          546
+        ],
+        "heading": [
+          0.5,
+          -0.8660254
+        ],
+        "side": 1
+      },
+      "center": 36,
+      "halfWidth": 8.25,
+      "footRestDepth": [
+        -0.14285714285714285,
+        0
+      ],
+      "bounds": [
+        380,
+        64,
+        611,
+        536
+      ],
+      "groundSource": [
+        506.4084632845019,
+        535
+      ],
+      "scale": 0.07142857142857142
+    },
+    {
+      "view": {
+        "name": "O",
+        "crop": [
+          655,
+          0,
+          327,
+          546
+        ],
+        "heading": [
+          1,
+          0
+        ],
+        "side": 1
+      },
+      "center": 36,
+      "halfWidth": 6.607142857142857,
+      "footRestDepth": [
+        -0.14285714285714285,
+        0
+      ],
+      "bounds": [
+        722,
+        65,
+        907,
+        541
+      ],
+      "groundSource": [
+        815.8771702684338,
+        540
+      ],
+      "scale": 0.07142857142857142
+    },
+    {
+      "view": {
+        "name": "SO",
+        "crop": [
+          982,
+          0,
+          328,
+          546
+        ],
+        "heading": [
+          0.5,
+          0.8660254
+        ],
+        "side": -1
+      },
+      "center": 36,
+      "halfWidth": 8.214285714285714,
+      "footRestDepth": [
+        0,
+        -1.5
+      ],
+      "bounds": [
+        1039,
+        70,
+        1269,
+        541
+      ],
+      "groundSource": [
+        1158.4214406169194,
+        540
+      ],
+      "scale": 0.07142857142857142
+    },
+    {
+      "view": {
+        "name": "S",
+        "crop": [
+          0,
+          610,
+          328,
+          500
+        ],
+        "heading": [
+          0,
+          1
+        ],
+        "side": -1
+      },
+      "center": 36,
+      "halfWidth": 9.5,
+      "footRestDepth": [
+        0,
+        0
+      ],
+      "bounds": [
+        38,
+        633,
+        304,
+        1105
+      ],
+      "groundSource": [
+        170.9372358412353,
+        1104
+      ],
+      "scale": 0.07142857142857142
+    },
+    {
+      "view": {
+        "name": "SW",
+        "crop": [
+          328,
+          610,
+          327,
+          500
+        ],
+        "heading": [
+          -0.5,
+          0.8660254
+        ],
+        "side": -1
+      },
+      "center": 36,
+      "halfWidth": 8.428571428571429,
+      "footRestDepth": [
+        -1.7142857142857142,
+        0
+      ],
+      "bounds": [
+        378,
+        633,
+        614,
+        1107
+      ],
+      "groundSource": [
+        490.8226693321259,
+        1106
+      ],
+      "scale": 0.07142857142857142
+    },
+    {
+      "view": {
+        "name": "W",
+        "crop": [
+          655,
+          610,
+          327,
+          500
+        ],
+        "heading": [
+          -1,
+          0
+        ],
+        "side": -1
+      },
+      "center": 36,
+      "halfWidth": 6.785714285714286,
+      "footRestDepth": [
+        0,
+        -0.14285714285714285
+      ],
+      "bounds": [
+        721,
+        633,
+        911,
+        1106
+      ],
+      "groundSource": [
+        809.7723299934433,
+        1105
+      ],
+      "scale": 0.07142857142857142
+    },
+    {
+      "view": {
+        "name": "NW",
+        "crop": [
+          982,
+          610,
+          328,
+          500
+        ],
+        "heading": [
+          -0.5,
+          -0.8660254
+        ],
+        "side": 1
+      },
+      "center": 36,
+      "halfWidth": 8.607142857142856,
+      "footRestDepth": [
+        0,
+        -0.07142857142857142
+      ],
+      "bounds": [
+        1018,
+        632,
+        1259,
+        1104
+      ],
+      "groundSource": [
+        1124.710339590529,
+        1103
+      ],
+      "scale": 0.07142857142857142
+    }
+  ]
+}

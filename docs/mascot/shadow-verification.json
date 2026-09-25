@@ -1,0 +1,16 @@
+{
+  "date": "2026-09-25",
+  "browser": "Opera",
+  "city": "Серводный",
+  "spriteRevision": "v=2",
+  "spriteAuditPassed": true,
+  "directions": 8,
+  "frames": 96,
+  "originalOpaqueBodyPixelsPreserved": true,
+  "quotesPerLanguage": 7,
+  "liveState": "walking",
+  "liveShadowVisuallyVerified": true,
+  "liveNewQuote": "Мы с IkaEasy нашли константу: мрамора всегда мало!",
+  "tooltipVisible": true,
+  "note": "After page reload the mascot learned a new connected road before appearing; route code was unchanged."
+}

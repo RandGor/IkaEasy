@@ -1,6 +1,7 @@
 import Db from '../../helper/db.js';
 import BuildingUpgrade from '../../helper/buildingUpgrade.js';
 import Parent from './dummy.js';
+import CityMascot from '../../helper/cityMascot.js';
 import { executePageCommand, setItem } from '../../utils.js';
 
 class City extends Parent {
@@ -13,6 +14,25 @@ class City extends Parent {
         this.updateBuilds();
         this.watcher();
         this.freeBuildingSpeedup();
+        this.syncMascot();
+    }
+
+    syncMascot() {
+        const host = document.getElementById('locations');
+        const cityId = this.getCityId();
+        if (this._mascot && (!this.options.get('city_mascot') || this._mascot.destroyed ||
+            this._mascot.host !== host || this._mascot.cityId !== cityId)) {
+            this._mascot.destroy();
+            this._mascot = null;
+        }
+        if (!this._mascot && host && this.options.get('city_mascot')) {
+            const phrases = Array.from({ length: 10 }, (_, i) => LANGUAGE[`city_mascot.quote_${i + 1}`]).filter(Boolean);
+            this._mascot = new CityMascot(host, cityId, { phrases });
+        }
+    }
+
+    optionChanged(name) {
+        if (name === 'city_mascot') this.syncMascot();
     }
 
     freeBuildingSpeedup() {
@@ -427,6 +447,8 @@ class City extends Parent {
     }
 
     destroy() {
+        this._mascot?.destroy();
+        this._mascot = null;
         document.removeEventListener('click', this._freeSpeedupClickHandler, true);
         this._freeSpeedupClickHandler = null;
         this._freeSpeedupObserver?.disconnect();

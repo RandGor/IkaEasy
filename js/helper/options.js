@@ -25,6 +25,7 @@ class Options {
     set(name, value) {
         Front.ikaeasyData.options[name] = value;
         Front.ikaeasyData.save();
+        Front.page_bg?.optionChanged?.(name, value);
     }
 
     getList() {
@@ -35,6 +36,7 @@ class Options {
                 'island_details',
                 'world_search_island',
                 'city_details',
+                'city_mascot',
                 'city_building_tooltip',
                 'one_click_free_building_speedup',
                 'dummy_resource_prod',

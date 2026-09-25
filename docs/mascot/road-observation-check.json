@@ -1,0 +1,9 @@
+{
+  "source": "Live Opera observations, Olympia, 2026-09-24; 21.183 seconds",
+  "nodes": 317,
+  "edges": 324,
+  "speed": 15.017476789932676,
+  "walkerReady": true,
+  "simulationSeconds": 60,
+  "maxFrameDistance": 0.2502912798323373
+}

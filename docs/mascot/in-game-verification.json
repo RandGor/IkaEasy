@@ -1,0 +1,89 @@
+{
+  "date": "2026-09-24",
+  "browser": "Opera",
+  "gameVersion": "17.5.0",
+  "cities": [
+    "Олимпия",
+    "Винодельня"
+  ],
+  "series": [
+    {
+      "city": "Олимпия",
+      "durationMs": 23748,
+      "samples": 90,
+      "directions": [
+        "NW",
+        "W",
+        "SO",
+        "O"
+      ],
+      "speedRange": [
+        14.44,
+        15.05
+      ],
+      "nodesBefore": 924,
+      "nodesAfter": 1041
+    },
+    {
+      "city": "Винодельня",
+      "durationMs": 18453,
+      "samples": 80,
+      "directions": [
+        "NW",
+        "NO"
+      ],
+      "speedRange": [
+        14.07,
+        14.93
+      ],
+      "nodesBefore": 148,
+      "nodesAfter": 509
+    }
+  ],
+  "smoothUpdates": {
+    "durationMs": 618,
+    "reads": 60,
+    "changed": 59,
+    "medianReadIntervalMs": 10,
+    "moving": 60
+  },
+  "disable": {
+    "checked": false,
+    "mascots": 0,
+    "native": 4,
+    "styles": 0,
+    "tooltips": 0
+  },
+  "islandCleanup": {
+    "mascots": 0,
+    "styles": 0,
+    "tooltips": 0
+  },
+  "hoverVerified": true,
+  "originalCityRestored": true,
+  "lifecycle": [
+    "PASS assets load and verify before mounting",
+    "PASS one learner interval and four passive/lifecycle listeners",
+    "PASS learned road starts independent walker",
+    "PASS native sprite grid and cadence",
+    "PASS rendered coordinates advance continuously",
+    "PASS native count, nodes and classes preserved",
+    "PASS sprite does not capture city hit testing",
+    "PASS hover phrase is visible without a sprite mouse target",
+    "PASS tooltip outside scaled city, no click interception",
+    "PASS underlying city click remains functional",
+    "PASS hidden tab cancels rendering and road sampling",
+    "PASS visibility resumes exactly one road sampler",
+    "PASS disable removes all owned listeners, timers, observer and pending loads",
+    "PASS disable removes sprite, tooltip and stylesheet",
+    "PASS toggle re-enable 0",
+    "PASS toggle re-enable 1",
+    "PASS toggle re-enable 2",
+    "PASS repeated toggles do not leak",
+    "PASS disable during asset loading cancels mount",
+    "PASS mount for navigation check",
+    "PASS screen removal destroys the mascot without polling",
+    "ALL CHECKS PASSED"
+  ],
+  "consoleObservation": "Existing navigation.js optional controller import logs a missing options.controller.js when opening settings. This file is absent in the repository; settings and the immediate mascot toggle worked. No mascot module errors observed."
+}

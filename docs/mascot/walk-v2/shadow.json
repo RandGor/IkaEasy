@@ -1,0 +1,18 @@
+{
+  "source": "../shadow-source.png",
+  "bodySource": "../walk-v1",
+  "frame": [
+    73,
+    67
+  ],
+  "frames": 12,
+  "placement": {
+    "left": 32,
+    "top": 48,
+    "width": 25,
+    "height": 14
+  },
+  "opacityMultiplier": 0.5,
+  "lightDirection": "bottom-right",
+  "method": "One ground-fixed ImageGen shadow composited behind unchanged approved body frames"
+}

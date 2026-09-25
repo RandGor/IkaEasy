@@ -8,7 +8,9 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 ### Added
 
-- Nothing yet.
+- Added an optional autonomous IkaEasy scientist with eight walking directions, roads learned from native citizens, hover quotes, and an immediate on/off setting with complete lifecycle cleanup.
+- Expanded the scientist's quotes to ten and added a translucent ground shadow baked into all 96 mascot frames.
+- Expanded the scientist's hover area to the full sprite cell, with a minimum screen size when the city is zoomed out.
 
 ## [4.0.0.6] - 2026-09-24
 

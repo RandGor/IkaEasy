@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IkaEasy — проверка походки</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#141b23;color:#e9edf2;font:15px/1.5 system-ui,sans-serif}main{max-width:1240px;margin:auto;padding:32px}h1{margin:0;font-size:28px}p{color:#b2bdca}header{display:flex;align-items:center;justify-content:space-between;gap:24px}.badge{color:#f2d39b;border:1px solid #63583d;padding:6px 12px;border-radius:20px;font-size:12px}button,input,select{font:inherit}button,select{border:1px solid #536476;color:#e9edf2;background:#253340;border-radius:7px;padding:7px 12px}button{cursor:pointer}.controls{display:flex;align-items:center;flex-wrap:wrap;gap:16px;margin:22px 0}input{accent-color:#e7ba63}#frame{width:210px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card{background:#202a35;border:1px solid #354252;border-radius:10px;overflow:hidden}.title{display:flex;justify-content:space-between;padding:10px 14px;color:#e7ba63}.title small{color:#a5b3c3}.stage{height:214px;display:flex;align-items:center;justify-content:center;background:repeating-conic-gradient(#354340 0% 25%,#3c4a47 0% 50%) 0 0/20px 20px}.stage canvas{width:219px;height:201px;image-rendering:pixelated}.native{display:flex;align-items:center;justify-content:center;gap:16px;height:78px;color:#a5b3c3;font-size:12px}.native canvas{width:73px;height:67px}.check{margin:28px 0;padding:16px;background:#202a35;border-left:3px solid #e7ba63}.film{overflow:auto;border:1px solid #354252;border-radius:8px;background:#3c4a47}#film{display:block;image-rendering:pixelated;width:1752px;height:134px}a{color:#e7ba63}#status{white-space:pre-wrap}.note{font-size:13px}label{display:flex;align-items:center;gap:8px}h2{font-size:20px;margin:26px 0 12px}@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:18px}header{align-items:flex-start}.stage canvas{width:182.5px;height:167.5px}.stage{height:180px}}
+</style>
+<style>
+.native-sprite{display:block;width:73px;height:67px;flex-shrink:0;background-repeat:no-repeat;animation:walk 1s steps(12) infinite}
+@keyframes walk{from{background-position:0 0}to{background-position:-876px 0}}
+@media(max-width:800px){.stage canvas{width:219px;height:201px}.stage{height:210px}}
+</style>
+<main>
+<header><div><h1>Походка IkaEasy</h1><p>Утверждённый образ · 8 направлений · 12 кадров · цикл 1 секунда</p></div><span class="badge">Проверка вне игры</span></header>
+<div class="controls"><button id="pause">Пауза</button><label>Кадр <input id="frame" type="range" min="0" max="11" value="0"><output id="number">01 / 12</output></label><label><input id="guides" type="checkbox" checked>Сетка и опора стоп</label><label>Фон <select id="background"><option value="grid">Прозрачность</option><option value="sand">Дорожка</option><option value="dark">Тёмный</option><option value="light">Светлый</option></select></label></div>
+<div class="grid" id="grid"></div>
+<div class="check">Верхний просмотр — увеличение ×3 для проверки деталей. Под ним — реальный размер кадра 73×67 px. Голова и корпус должны оставаться стабильными; шаг — замыкаться без рывка. Пунктир отмечает постоянную опору (36, 52).</div>
+<h2>Раскадровка</h2><p><select id="direction" aria-label="Направление раскадровки"></select> Все 12 кадров слева направо, увеличение ×2.</p><div class="film"><canvas id="film" width="876" height="67"></canvas></div>
+<h2>Проверка геометрии</h2><p id="status">Загрузка отчёта…</p>
+<p class="note">Утверждённая анимация городского персонажа IkaEasy. Кнопки управляют только этим просмотром; в игре персонаж ходит самостоятельно.</p>
+</main>
+<script>
+const directions=['N','NO','O','SO','S','SW','W','NW'];
+const names=['Север','Северо-восток','Восток','Юго-восток','Юг','Юго-запад','Запад','Северо-запад'];
+const images=new Map(), canvases=new Map();
+const grid=document.querySelector('#grid'), slider=document.querySelector('#frame'), pause=document.querySelector('#pause');
+let playing=true, phase=0, start=performance.now(), request=0;
+for(let i=0;i<directions.length;i++){
+  const d=directions[i], card=document.createElement('section');card.className='card';
+  card.innerHTML=`<div class="title"><strong>${d}</strong><small>${names[i]}</small></div><div class="stage"><canvas width="73" height="67" aria-label="${names[i]}, увеличенная походка"></canvas></div><div class="native"><span class="native-sprite" role="img" aria-label="${names[i]}, реальный размер" style="background-image:url(walk-v2/${d}.png)"></span><span>×1</span></div>`;
+  grid.append(card);canvases.set(d,[...card.querySelectorAll('canvas')]);
+  const option=document.createElement('option');option.value=d;option.textContent=`${d} — ${names[i]}`;document.querySelector('#direction').append(option);
+}
+function guides(ctx,offset=0){ctx.strokeStyle='rgba(242,204,123,.7)';ctx.lineWidth=.5;ctx.setLineDash([2,2]);ctx.beginPath();ctx.moveTo(offset,52.5);ctx.lineTo(offset+73,52.5);ctx.moveTo(offset+36.5,0);ctx.lineTo(offset+36.5,67);ctx.stroke();ctx.setLineDash([]);}
+function draw(){
+  const show=document.querySelector('#guides').checked;
+  for(const d of directions) for(const canvas of canvases.get(d)){
+    const ctx=canvas.getContext('2d');ctx.clearRect(0,0,73,67);const im=images.get(d);
+    if(im)ctx.drawImage(im,phase*73,0,73,67,0,0,73,67);
+    if(show&&canvas.parentElement.className==='stage')guides(ctx);
+  }
+  slider.value=phase;document.querySelector('#number').textContent=`${String(phase+1).padStart(2,'0')} / 12`;
+}
+function drawFilm(){const ctx=document.querySelector('#film').getContext('2d');ctx.clearRect(0,0,876,67);const im=images.get(document.querySelector('#direction').value);if(im)ctx.drawImage(im,0,0);if(document.querySelector('#guides').checked)for(let i=0;i<12;i++)guides(ctx,i*73);}
+function syncNative(){for(const el of document.querySelectorAll('.native-sprite')){el.style.animation=playing?`walk 1s steps(12) -${phase/12}s infinite`:'none';el.style.backgroundPosition=playing?'':`${-phase*73}px 0`;}}
+function tick(now){if(playing){const next=Math.floor((now-start)%1000/1000*12);if(next!==phase){phase=next;draw();}}request=requestAnimationFrame(tick);}
+pause.onclick=()=>{playing=!playing;if(playing)start=performance.now()-phase/12*1000;pause.textContent=playing?'Пауза':'Продолжить';syncNative();};
+slider.oninput=()=>{playing=false;pause.textContent='Продолжить';phase=Number(slider.value);draw();syncNative();};
+document.querySelector('#guides').onchange=()=>{draw();drawFilm();};
+document.querySelector('#direction').onchange=drawFilm;
+document.querySelector('#background').onchange=e=>{const colors={grid:'',sand:'#cbb883',dark:'#131922',light:'#f6f4ec'};for(const stage of document.querySelectorAll('.stage'))stage.style.background=colors[e.target.value];};
+Promise.all(directions.map(d=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{if(im.naturalWidth!==876||im.naturalHeight!==67){reject(new Error(d+': неверный размер'));return;}images.set(d,im);resolve();};im.onerror=()=>reject(new Error(d+': не удалось загрузить полосу'));im.src=`walk-v2/${d}.png`;}))).then(()=>{start=performance.now();syncNative();draw();drawFilm();request=requestAnimationFrame(tick);}).catch(e=>document.querySelector('#status').textContent=e.message);
+fetch('walk-v2/audit.json').then(r=>{if(!r.ok)throw Error('Отчёт ещё не создан');return r.json();}).then(r=>{document.querySelector('#status').textContent=r.passed?'Автоматические проверки размеров, прозрачности, границ и числа кадров пройдены. Качество походки требует визуальной оценки.':`Найдены отклонения:\n${r.errors.join('\n')}`;}).catch(e=>document.querySelector('#status').textContent=e.message);
+window.addEventListener('pagehide',()=>cancelAnimationFrame(request),{once:true});
+</script>
+</html>

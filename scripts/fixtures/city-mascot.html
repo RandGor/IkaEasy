@@ -1,0 +1,56 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>City mascot lifecycle checks</title>
+<style>body{font:15px system-ui;background:#18232b;color:#fff;padding:24px}button{padding:10px}#worldmap{position:relative;width:680px;height:300px;background:#c8b884;margin:20px 0}#locations{position:absolute;inset:0}#walkers .citizen1{position:absolute;width:73px;height:67px;pointer-events:none}#floor{position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0}pre{white-space:pre-wrap}</style>
+<button id="run">Run lifecycle checks</button><div id="worldmap"><button id="floor" aria-label="City click target"></button><div id="locations"><a id="js_CityPosition0Link" href="?view=townHall&cityId=1" hidden></a><div id="walkers"></div></div></div><pre id="result">Ready</pre>
+<script type="module">
+import CityMascot from '../../js/helper/cityMascot.js';
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const lines=[],report=document.querySelector('#result');
+function assert(value,label){if(!value)throw Error(label);lines.push('PASS '+label);report.textContent=lines.join('\n');}
+const active=new Map(),add=EventTarget.prototype.addEventListener,remove=EventTarget.prototype.removeEventListener;
+const tracked=new Set(['pointermove','pointerleave','visibilitychange','pagehide']);
+EventTarget.prototype.addEventListener=function(type,fn,options){if(tracked.has(type))active.set(fn,type);return add.call(this,type,fn,options);};
+EventTarget.prototype.removeEventListener=function(type,fn,options){if(tracked.has(type))active.delete(fn);return remove.call(this,type,fn,options);};
+const intervalSet=new Set(),nativeSetInterval=window.setInterval,nativeClearInterval=window.clearInterval;
+window.setInterval=(fn,ms)=>{const id=nativeSetInterval(fn,ms);intervalSet.add(id);return id;};
+window.clearInterval=id=>{intervalSet.delete(id);nativeClearInterval(id);};
+let nativeFrame=null,mascot=null,clicks=0;
+document.querySelector('#floor').onclick=()=>clicks++;
+document.querySelector('#run').onclick=async()=>{
+ document.querySelector('#run').disabled=true;lines.length=0;
+ try {
+  const host=document.querySelector('#locations'),walkers=document.querySelector('#walkers');
+  for(let i=0;i<3;i++){const e=document.createElement('div');e.id='walkerAmbienceTest'+i;e.className='citizen1 citizen1O';e.style.zIndex='310';walkers.append(e);}
+  const citizens=[...walkers.children],classes=citizens.map(e=>e.className),began=performance.now();
+  const animate=now=>{citizens.forEach((e,i)=>{e.style.left=`${40+i*90+((now-began)/1000*15)%300}px`;e.style.top=`${90+i*30}px`;});nativeFrame=requestAnimationFrame(animate);};
+  nativeFrame=requestAnimationFrame(animate);
+  const phrases=['IkaEasy science one','IkaEasy science two','IkaEasy science three'];
+  mascot=new CityMascot(host,1,{phrases,random:()=>.6});assert(await mascot.ready,'assets load and verify before mounting');
+  assert(intervalSet.size===1&&active.size===4,'one learner interval and four passive/lifecycle listeners');
+  await sleep(7200);assert(mascot.walker.ready&&!mascot.element.hidden,'learned road starts independent walker');
+  const css=getComputedStyle(mascot.element);
+  assert(css.width==='73px'&&css.height==='67px'&&css.backgroundSize==='auto'&&css.animationDuration==='1s'&&css.animationTimingFunction==='steps(12)','native sprite grid and cadence');
+  const x=mascot.walker.x;await sleep(1000);assert(Math.abs(mascot.walker.x-x)>10,'rendered coordinates advance continuously');
+  assert(citizens.length===walkers.children.length&&citizens.every((e,i)=>e.isConnected&&e.className===classes[i]),'native count, nodes and classes preserved');
+  const r=mascot.element.getBoundingClientRect(),cx=r.left+36,cy=r.top+35;
+  const target=document.elementFromPoint(cx,cy);assert(target!==mascot.element,'sprite does not capture city hit testing');
+  target.dispatchEvent(new PointerEvent('pointermove',{bubbles:true,clientX:cx,clientY:cy,buttons:0}));
+  assert(!mascot.tooltip.hidden&&mascot.tooltip.textContent.includes('IkaEasy'),'hover phrase is visible without a sprite mouse target');
+  const tcss=getComputedStyle(mascot.tooltip);assert(mascot.tooltip.parentElement===document.body&&tcss.position==='fixed'&&tcss.pointerEvents==='none','tooltip outside scaled city, no click interception');
+  document.querySelector('#floor').click();assert(clicks===1,'underlying city click remains functional');
+  Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));
+  assert(mascot.frame===null&&intervalSet.size===0&&mascot.graph.tracks.size===0,'hidden tab cancels rendering and road sampling');
+  delete document.hidden;document.dispatchEvent(new Event('visibilitychange'));
+  assert(intervalSet.size===1,'visibility resumes exactly one road sampler');
+  mascot.destroy();mascot.destroy();
+  assert(active.size===0&&intervalSet.size===0&&mascot.frame===null&&mascot.observer===null&&mascot.loads.size===0,'disable removes all owned listeners, timers, observer and pending loads');
+  assert(!document.querySelector('.ikaeasy-city-mascot,.ikaeasy-city-mascot-tooltip,link[data-ikaeasy-city-mascot]'),'disable removes sprite, tooltip and stylesheet');
+  for(let i=0;i<3;i++){mascot=new CityMascot(host,1);assert(await mascot.ready,'toggle re-enable '+i);mascot.destroy();}
+  assert(active.size===0&&intervalSet.size===0,'repeated toggles do not leak');
+  mascot=new CityMascot(host,1);mascot.destroy();assert(!(await mascot.ready),'disable during asset loading cancels mount');
+  mascot=new CityMascot(host,1);assert(await mascot.ready,'mount for navigation check');host.remove();await sleep(0);
+  assert(mascot.destroyed&&active.size===0&&intervalSet.size===0,'screen removal destroys the mascot without polling');
+  lines.push('ALL CHECKS PASSED');report.textContent=lines.join('\n');report.dataset.passed='true';
+ } catch(error){lines.push('FAIL '+error.stack);report.textContent=lines.join('\n');report.dataset.passed='false';}
+ finally{mascot?.destroy();if(nativeFrame!==null)cancelAnimationFrame(nativeFrame);}
+};
+</script></html>

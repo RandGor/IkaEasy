@@ -4,6 +4,7 @@ export default {
     "island_details": true,
     "world_search_island": true,
     "city_details": true,
+    "city_mascot": true,
     "city_building_tooltip": true,
     "one_click_free_building_speedup": true,
     "dummy_resource_prod": true,
