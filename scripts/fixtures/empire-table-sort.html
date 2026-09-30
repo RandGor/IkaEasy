@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<title>Empire resource and military sort regression</title>
+<link rel="stylesheet" href="/css/ikaeasy.css">
+<link rel="stylesheet" href="/css/empire-resources.css">
+<link rel="stylesheet" href="/css/empire-military.css">
+<link rel="stylesheet" href="/css/empire-table-sort.css">
+<style>
+    body { margin: 20px; font: 12px Arial; background: #fff8df; color: #542c0f; }
+    .ikaeasy-empire-wrapper { position: relative; width: 1000px; }
+    #military { width: 580px; }
+    th, td { padding: 4px; }
+    #results { white-space: pre-wrap; font: 13px monospace; }
+    .army, .fleet { width: 40px; height: 40px; background: #e4bc7d; }
+</style>
+<h1>Resource and military sort regression</h1>
+<pre id="results">Running…</pre>
+<div class="ikaeasy-empire-wrapper"><div id="resources"></div><div id="military"></div></div>
+<script src="/js/libs/jquery.js"></script>
+<script src="/js/libs/lodash.js"></script>
+<script type="module" src="./empire-table-sort.js"></script>
+</html>

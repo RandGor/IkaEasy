@@ -17,20 +17,18 @@
     </div>
 
 
-    <table class="table01 dotted empire-resource-table">
+    <table class="table01 dotted empire-resource-table" data-empire-sort-table="resources">
         <thead>
         <tr>
             <th class="center empire_city"><a id="empire_sync" href="#"></a><%- LANGUAGE.getLocalizedString('empire.city') %></th>
             <th class="empire_transport"><div></div></th>
-            <th class="empire-resources empire-resources-corruption empire-border-right-dotted"><div></div></th>
-            <th class="empire-resources empire-resources-population empire-border-right-dotted" colspan="2"><div></div></th>
-            <th class="empire-resources empire-resources-research empire-border-right-dotted"><div></div></th>
+            <th class="empire-resources empire-resources-corruption empire-border-right-dotted" data-sort-key="corruption" title="<%- lget('empire.corruption') %>"><div><button type="button" class="empire-table-sort"></button></div></th>
+            <th class="empire-resources empire-resources-population empire-border-right-dotted" colspan="2" data-sort-key="population" title="<%- lget('empire.sort_population') %>"><div><button type="button" class="empire-table-sort"></button></div></th>
+            <th class="empire-resources empire-resources-research empire-border-right-dotted" data-sort-key="scientists" title="<%- lget('empire.research_scientist') %>"><div><button type="button" class="empire-table-sort"></button></div></th>
 
-            <th class="empire-resources empire-resource empire-resource-wood"><div></div></th>
-            <th class="empire-resources empire-resource empire-resource-wine"><div></div></th>
-            <th class="empire-resources empire-resource empire-resource-marble"><div></div></th>
-            <th class="empire-resources empire-resource empire-resource-glass"><div></div></th>
-            <th class="empire-resources empire-resource empire-resource-sulfur"><div></div></th>
+            <% [Const.Resources.WOOD, Const.Resources.WINE, Const.Resources.MARBLE, Const.Resources.GLASS, Const.Resources.SULFUR].forEach(function(resource) { %>
+                <th class="empire-resources empire-resource empire-resource-<%= resource %>" data-sort-key="<%= resource %>" title="<%- lget('empire.sort_' + resource) %>"><div><button type="button" class="empire-table-sort"></button></div></th>
+            <% }); %>
         </tr>
         </thead>
 
@@ -59,7 +57,7 @@
                 </td>
                 <%
                 if ((mcity) && (mcity.buildings)) { %>
-                    <td class="center empire-border-right-dotted empire-corruption <%= (mcity._corruption === 0) ? 'green' : 'red' %>">
+                    <td class="center empire-border-right-dotted empire-corruption <%= (mcity._corruption === 0) ? 'green' : 'red' %>" data-sort-key="corruption" data-sort-value="<%= mcity._corruption %>">
                         <%= Math.floor(mcity._corruption * 100) %>%
                     </td>
                     <td class="empire-happiness-wrapper empire-happiness">
@@ -67,7 +65,7 @@
                             <div class="happiness happiness_<%= popData.happinessClass %>"></div>
                         <% } %>
                     </td>
-                    <td class="empire-border-right-dotted">
+                    <td class="empire-border-right-dotted" data-sort-key="population" data-sort-value="<%= popData ? Math.floor(popData.population) : '' %>">
                         <% if (popData) { %>
                             <div class="empire-row">
                                 <div class="empire-row-left">
@@ -91,7 +89,7 @@
                             &mdash;
                         <% } %>
                     </td>
-                    <td class="center empire-border-right-dotted empire-research">
+                    <td class="center empire-border-right-dotted empire-research" data-sort-key="scientists" data-sort-value="<%= Math.floor(mcity._scientists) %>">
                         <%= num(Math.floor(mcity._scientists), 0, false) %> / <%= num(Math.floor(mcity._maxScientists), 0, false) %>
                         <div class="ikaeasy-progressbar mt-5px">
                             <span style="width: <%= mcity._scientistsPercent %>%"></span>

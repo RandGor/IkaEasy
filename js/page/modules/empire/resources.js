@@ -2,6 +2,7 @@ import Parent from './dummy.js';
 import Tooltip from '../../../helper/tooltip.js';
 import Storage from '../../../helper/storage.js';
 import SyncLock from '../../../helper/syncLock.js';
+import { applyEmpireTableSort, toggleEmpireTableSort } from '../../../helper/empireTableSort.js';
 import { executePageCommand, executePageCommandAsync } from '../../../utils.js';
 
 const RESOURCE_SYNC_STORAGE_KEY = 'empire';
@@ -29,6 +30,7 @@ class Module extends Parent {
     }
 
     afterRender() {
+        applyEmpireTableSort(this);
         this.getLoader();
         this.syncAll();
     }
@@ -107,6 +109,10 @@ class Module extends Parent {
     }
 
     onRegisterClickHandlers($el){
+        this.onClick('.empire-table-sort', (event) => {
+            Tooltip.hide();
+            toggleEmpireTableSort(this, event.currentTarget.closest('th'));
+        });
         this.onClick(this.loaderEl, (e) => {
             e.preventDefault();
             this.startLoader();

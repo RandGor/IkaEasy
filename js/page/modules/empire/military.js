@@ -5,6 +5,7 @@ import { Military, UnitIds } from '../../../const.js';
 import HttpClient from '../../../helper/httpClient.js';
 import Storage from '../../../helper/storage.js';
 import SyncLock from '../../../helper/syncLock.js';
+import { applyEmpireTableSort, toggleEmpireTableSort } from '../../../helper/empireTableSort.js';
 import { executePageCommand, executePageCommandAsync, getInt } from '../../../utils.js';
 
 const UNIT_IDS = Object.fromEntries(
@@ -84,10 +85,14 @@ class Module extends Parent {
     }
 
     afterRender() {
+        applyEmpireTableSort(this);
         this.autoSync();
     }
 
     onRegisterClickHandlers() {
+        this.onClick('.empire-table-sort', (event) => {
+            toggleEmpireTableSort(this, event.currentTarget.closest('th'));
+        });
         this.onClick('#empire_military_sync', (event) => {
             event.preventDefault();
             this.syncAll(true);

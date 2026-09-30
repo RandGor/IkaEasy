@@ -21,7 +21,7 @@
         wineLeftTime = Utils.transformHours(Math.abs(data.city.resources[ Const.Resources.WINE ] / data.city.production[Const.Resources.WINE_SPENDING]));
     }
 %>
-<td class="empire-resource <%= isFull ? 'empire-resource-full' : '' %> <%= (wineLeftTime === 0) ? 'bg-light-red' : '' %>" data-resource="<%= data.type %>" data-amount="<%= amount %>" data-has-production="<%= typeof data.city.production[data.type] !== 'undefined' %>" data-safe="<%= data.resInfo.safe %>" data-capacity="<%= maxAmount %>" data-percent="<%= percent %>" data-production="<%- JSON.stringify(data.city.production) %>">
+<td class="empire-resource <%= isFull ? 'empire-resource-full' : '' %> <%= (wineLeftTime === 0) ? 'bg-light-red' : '' %>" data-resource="<%= data.type %>" data-amount="<%= amount %>" data-sort-key="<%= data.type %>" data-sort-value="<%= amount %>" data-has-production="<%= typeof data.city.production[data.type] !== 'undefined' %>" data-safe="<%= data.resInfo.safe %>" data-capacity="<%= maxAmount %>" data-percent="<%= percent %>" data-production="<%- JSON.stringify(data.city.production) %>">
 
     <div class="empire-resource-production">
         <div class="empire-resource-amount empire-resource-production--left">

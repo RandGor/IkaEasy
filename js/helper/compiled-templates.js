@@ -392,6 +392,10 @@ __p += '\n<td class="empire-resource ' +
 ((__t = ( data.type )) == null ? '' : __t) +
 '" data-amount="' +
 ((__t = ( amount )) == null ? '' : __t) +
+'" data-sort-key="' +
+((__t = ( data.type )) == null ? '' : __t) +
+'" data-sort-value="' +
+((__t = ( amount )) == null ? '' : __t) +
 '" data-has-production="' +
 ((__t = ( typeof data.city.production[data.type] !== 'undefined' )) == null ? '' : __t) +
 '" data-safe="' +
@@ -633,19 +637,21 @@ __p += '\n                <div class="empire-military-empty">' +
 ((__t = ( LANGUAGE.getLocalizedString('empire.military_no_data') )) == null ? '' : __t) +
 '</div>\n            ';
  } else { ;
-__p += '\n                <div class="empire-military-scroll">\n                    <table class="table01 center militaryList fixed dotted empire-military-table">\n                        <thead>\n                            <tr class="title_img_row">\n                                <th class="empire-military-city">\n                                    ' +
+__p += '\n                <div class="empire-military-scroll">\n                    <table class="table01 center militaryList fixed dotted empire-military-table" data-empire-sort-table="military-' +
+((__t = ( section.type )) == null ? '' : __t) +
+'">\n                        <thead>\n                            <tr class="title_img_row">\n                                <th class="empire-military-city">\n                                    ' +
 ((__t = ( LANGUAGE.getLocalizedString('empire.city') )) == null ? '' : __t) +
 '\n                                </th>\n                                ';
  section.units.forEach(function(unit) { ;
-__p += '\n                                    <th class="empire-military-unit" title="' +
+__p += '\n                                    <th class="empire-military-unit" data-sort-key="' +
+((__t = ( unit.type )) == null ? '' : __t) +
+'" title="' +
 __e( unit.label ) +
 '">\n                                        <div class="' +
 ((__t = ( section.iconClass )) == null ? '' : __t) +
 ' s' +
 ((__t = ( unit.id )) == null ? '' : __t) +
-'">\n                                            <div class="tooltip">' +
-__e( unit.label ) +
-'</div>\n                                        </div>\n                                    </th>\n                                ';
+'">\n                                            <button type="button" class="empire-table-sort"></button>\n                                        </div>\n                                    </th>\n                                ';
  }); ;
 __p += '\n                            </tr>\n                        </thead>\n                        <tbody>\n                            ';
  data.rows.forEach(function(city) { ;
@@ -671,6 +677,10 @@ __e( city.name ) +
  section.units.forEach(function(unit) { let count = parseInt(city.units[unit.type]) || 0; ;
 __p += '\n                                        <td class="center ' +
 ((__t = ( count ? 'empire-military-has-units' : '' )) == null ? '' : __t) +
+'" data-sort-key="' +
+((__t = ( unit.type )) == null ? '' : __t) +
+'" data-sort-value="' +
+((__t = ( city.hasData[section.type] ? count : '' )) == null ? '' : __t) +
 '">\n                                            ';
  if (city.hasData[section.type]) { ;
 __p += '\n                                                ' +
@@ -718,9 +728,25 @@ __p += '\n\n    <div class="empire-tab-overlay" id="empire-sync-resource">\n    
 ((__t = ( url('/images/loading.gif') )) == null ? '' : __t) +
 '" />\n        <div>' +
 ((__t = ( lget('empire.refreshing') )) == null ? '' : __t) +
-'</div>\n    </div>\n\n\n    <table class="table01 dotted empire-resource-table">\n        <thead>\n        <tr>\n            <th class="center empire_city"><a id="empire_sync" href="#"></a>' +
+'</div>\n    </div>\n\n\n    <table class="table01 dotted empire-resource-table" data-empire-sort-table="resources">\n        <thead>\n        <tr>\n            <th class="center empire_city"><a id="empire_sync" href="#"></a>' +
 __e( LANGUAGE.getLocalizedString('empire.city') ) +
-'</th>\n            <th class="empire_transport"><div></div></th>\n            <th class="empire-resources empire-resources-corruption empire-border-right-dotted"><div></div></th>\n            <th class="empire-resources empire-resources-population empire-border-right-dotted" colspan="2"><div></div></th>\n            <th class="empire-resources empire-resources-research empire-border-right-dotted"><div></div></th>\n\n            <th class="empire-resources empire-resource empire-resource-wood"><div></div></th>\n            <th class="empire-resources empire-resource empire-resource-wine"><div></div></th>\n            <th class="empire-resources empire-resource empire-resource-marble"><div></div></th>\n            <th class="empire-resources empire-resource empire-resource-glass"><div></div></th>\n            <th class="empire-resources empire-resource empire-resource-sulfur"><div></div></th>\n        </tr>\n        </thead>\n\n        <tbody>\n        ';
+'</th>\n            <th class="empire_transport"><div></div></th>\n            <th class="empire-resources empire-resources-corruption empire-border-right-dotted" data-sort-key="corruption" title="' +
+__e( lget('empire.corruption') ) +
+'"><div><button type="button" class="empire-table-sort"></button></div></th>\n            <th class="empire-resources empire-resources-population empire-border-right-dotted" colspan="2" data-sort-key="population" title="' +
+__e( lget('empire.sort_population') ) +
+'"><div><button type="button" class="empire-table-sort"></button></div></th>\n            <th class="empire-resources empire-resources-research empire-border-right-dotted" data-sort-key="scientists" title="' +
+__e( lget('empire.research_scientist') ) +
+'"><div><button type="button" class="empire-table-sort"></button></div></th>\n\n            ';
+ [Const.Resources.WOOD, Const.Resources.WINE, Const.Resources.MARBLE, Const.Resources.GLASS, Const.Resources.SULFUR].forEach(function(resource) { ;
+__p += '\n                <th class="empire-resources empire-resource empire-resource-' +
+((__t = ( resource )) == null ? '' : __t) +
+'" data-sort-key="' +
+((__t = ( resource )) == null ? '' : __t) +
+'" title="' +
+__e( lget('empire.sort_' + resource) ) +
+'"><div><button type="button" class="empire-table-sort"></button></div></th>\n            ';
+ }); ;
+__p += '\n        </tr>\n        </thead>\n\n        <tbody>\n        ';
  let total = data._total;
         // data.cities = [...data.cities, ...data.cities]; // for tests
             _.each(data.cities, function(city) {
@@ -751,6 +777,8 @@ __e( city.name ) +
                 if ((mcity) && (mcity.buildings)) { ;
 __p += '\n                    <td class="center empire-border-right-dotted empire-corruption ' +
 ((__t = ( (mcity._corruption === 0) ? 'green' : 'red' )) == null ? '' : __t) +
+'" data-sort-key="corruption" data-sort-value="' +
+((__t = ( mcity._corruption )) == null ? '' : __t) +
 '">\n                        ' +
 ((__t = ( Math.floor(mcity._corruption * 100) )) == null ? '' : __t) +
 '%\n                    </td>\n                    <td class="empire-happiness-wrapper empire-happiness">\n                        ';
@@ -759,7 +787,9 @@ __p += '\n                            <div class="happiness happiness_' +
 ((__t = ( popData.happinessClass )) == null ? '' : __t) +
 '"></div>\n                        ';
  } ;
-__p += '\n                    </td>\n                    <td class="empire-border-right-dotted">\n                        ';
+__p += '\n                    </td>\n                    <td class="empire-border-right-dotted" data-sort-key="population" data-sort-value="' +
+((__t = ( popData ? Math.floor(popData.population) : '' )) == null ? '' : __t) +
+'">\n                        ';
  if (popData) { ;
 __p += '\n                            <div class="empire-row">\n                                <div class="empire-row-left">\n                                    ';
 
@@ -788,7 +818,9 @@ __p += '" style="width: ' +
  } else { ;
 __p += '\n                            &mdash;\n                        ';
  } ;
-__p += '\n                    </td>\n                    <td class="center empire-border-right-dotted empire-research">\n                        ' +
+__p += '\n                    </td>\n                    <td class="center empire-border-right-dotted empire-research" data-sort-key="scientists" data-sort-value="' +
+((__t = ( Math.floor(mcity._scientists) )) == null ? '' : __t) +
+'">\n                        ' +
 ((__t = ( num(Math.floor(mcity._scientists), 0, false) )) == null ? '' : __t) +
 ' / ' +
 ((__t = ( num(Math.floor(mcity._maxScientists), 0, false) )) == null ? '' : __t) +

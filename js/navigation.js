@@ -66,6 +66,7 @@ class Navigation extends Event {
         $('head').append(`<link href="${chrome.runtime.getURL('css/ikaeasy.css')}?${VERSION}"  rel="stylesheet" type="text/css" />`);
         $('head').append(`<link href="${chrome.runtime.getURL('css/empire-resources.css')}?${VERSION}" rel="stylesheet" type="text/css" />`);
         $('head').append(`<link href="${chrome.runtime.getURL('css/empire-buildings.css')}?${VERSION}" rel="stylesheet" type="text/css" />`);
+        $('head').append(`<link href="${chrome.runtime.getURL('css/empire-table-sort.css')}?${VERSION}" rel="stylesheet" type="text/css" />`);
         $('head').append(`<link href="${chrome.runtime.getURL('css/empire-military.css')}?${VERSION}" rel="stylesheet" type="text/css" />`);
         $('head').append(`<link href="${chrome.runtime.getURL('css/empire-espionage.css')}?${VERSION}" rel="stylesheet" type="text/css" />`);
         $('head').append(`<link href="${chrome.runtime.getURL('css/academy-payback.css')}?${VERSION}" rel="stylesheet" type="text/css" />`);

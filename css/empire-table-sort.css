@@ -1,0 +1,37 @@
+.ikaeasy-empire-wrapper .empire-table-sort {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    color: #542c0f;
+    cursor: pointer;
+}
+
+.ikaeasy-empire-wrapper .empire-table-sort:hover,
+.ikaeasy-empire-wrapper .empire-table-sort:focus-visible,
+.ikaeasy-empire-wrapper th[aria-sort="ascending"] .empire-table-sort,
+.ikaeasy-empire-wrapper th[aria-sort="descending"] .empire-table-sort {
+    outline: 2px solid #a36b27;
+    outline-offset: -2px;
+}
+
+.ikaeasy-empire-wrapper th[aria-sort="ascending"] .empire-table-sort::after,
+.ikaeasy-empire-wrapper th[aria-sort="descending"] .empire-table-sort::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 0 2px;
+    border-radius: 2px;
+    background: #fff4ce;
+    font: bold 12px/14px Arial, sans-serif;
+    content: '▲';
+}
+
+.ikaeasy-empire-wrapper th[aria-sort="descending"] .empire-table-sort::after {
+    content: '▼';
+}
