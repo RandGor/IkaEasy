@@ -6,8 +6,8 @@
                 <th class="empire_transport"><div></div></th>
                 <% let ok = false; _.each(data.buildings, function(b, building) { %>
                     <% for(let i = 0; i < b.cnt; i++) { ok = true;  %>
-                        <th class="empire-building empire-building-<%= building %>" data-building="<%= building %>" title="<%- b.name %>">
-                            <div></div>
+                        <th class="empire-building empire-building-<%= building %>" data-building="<%= building %>" data-building-index="<%= i %>" title="<%- b.name %>">
+                            <div><button type="button" class="empire-building-sort"></button></div>
                         </th>
                     <% } %>
                 <% }) %>

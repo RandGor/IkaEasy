@@ -36,6 +36,75 @@ class Module extends Parent {
 
     afterRender() {
         this.updateTableWidth();
+        this.applySort();
+    }
+
+    toggleSort($header) {
+        const building = $header.attr('data-building');
+        const index = Number($header.attr('data-building-index'));
+        const previous = this.parent.buildingsSort;
+        const sameColumn = previous && previous.building === building && previous.index === index;
+        this.parent.buildingsSort = sameColumn && previous.direction === 'descending' ? null : {
+            building,
+            index,
+            direction: sameColumn ? 'descending' : 'ascending'
+        };
+        Tooltip.hide();
+        this.applySort();
+    }
+
+    applySort() {
+        const headers = this.$el.find('th[data-building-index]').toArray();
+        let sort = this.parent.buildingsSort;
+        const selected = sort && headers.find(header =>
+            header.getAttribute('data-building') === sort.building &&
+            Number(header.getAttribute('data-building-index')) === sort.index
+        );
+        if (!selected) {
+            sort = this.parent.buildingsSort = null;
+        }
+
+        headers.forEach(header => {
+            const direction = header === selected ? sort.direction : null;
+            const action = direction === 'ascending' ? 'descending' : direction === 'descending' ? 'reset' : 'ascending';
+            const index = Number(header.getAttribute('data-building-index'));
+            const name = header.title + (index ? ` (${index + 1})` : '');
+            const label = `${name}: ${LANGUAGE.getLocalizedString(`empire.buildings_sort_${action}`)}`;
+            $(header).attr('aria-sort', direction || 'none').find('.empire-building-sort')
+                .attr({ title: label, 'aria-label': label });
+        });
+
+        const tbody = this.$el.find('tbody')[0];
+        if (!tbody || !this._cities) {
+            return;
+        }
+        const originalOrder = new Map(this._cities.map((city, index) => [Number(city.id), index]));
+        const rows = Array.from(tbody.rows).map(row => {
+            const cell = selected && row.cells[selected.cellIndex];
+            // Missing buildings count as level zero; missing city data stays last.
+            const info = cell && $(cell).data('data');
+            const level = info ? Number(info.level) : cell && cell.classList.contains('empire-no-building') ? 0 : null;
+            return { row, level, order: originalOrder.get(Number(row.dataset.id)) ?? Number.MAX_SAFE_INTEGER };
+        });
+        rows.sort((a, b) => {
+            if (sort) {
+                if (a.level === null && b.level !== null) return 1;
+                if (b.level === null && a.level !== null) return -1;
+                const difference = (a.level - b.level) * (sort.direction === 'ascending' ? 1 : -1);
+                if (difference) return difference;
+            }
+            return a.order - b.order;
+        });
+        const scrollLeft = this.$el.scrollLeft();
+        // Keep template whitespace in place so the incremental DOM patcher
+        // still sees the same sequence of text nodes and table rows.
+        let rowIndex = 0;
+        const nodes = Array.from(tbody.childNodes);
+        const sortedNodes = nodes.map(node => node.nodeName === 'TR' ? rows[rowIndex++].row : node);
+        if (sortedNodes.some((node, index) => node !== nodes[index])) {
+            tbody.append(...sortedNodes);
+        }
+        this.$el.scrollLeft(scrollLeft);
     }
 
     _getBuildingInfo(city, building, discount) {
@@ -109,6 +178,10 @@ class Module extends Parent {
     }
 
     onRegisterClickHandlers($el){
+        this.onClick('.empire-building-sort', (e) => {
+            this.toggleSort($(e.currentTarget).closest('th'));
+        });
+
         this.onHover('.empire-building', (e) => {
             let $td = $(e.currentTarget);
             this.$el.find('.empire-building-hover').removeClass('empire-building-hover');

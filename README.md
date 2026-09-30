@@ -116,6 +116,11 @@ node scripts/test-academy-browser.cjs
 
 The browser checks require Playwright and use a local fixture with the real page controller, templates, and calculation code. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to an installed Chromium browser when Playwright has no bundled browser. `IKAEASY_TEST_OUTPUT` optionally selects the screenshot output directory. The extension's template message transport is stubbed; live game verification is still recommended after an Ikariam markup change.
 
+Empire browser regression checks: run `node scripts/serve-empire-scroll.cjs`, then open
+[the scroll lifecycle fixture](http://127.0.0.1:8766/scripts/fixtures/empire-scroll.html) and
+[the building sort fixture](http://127.0.0.1:8766/scripts/fixtures/empire-building-sort.html).
+Both pages report PASS/FAIL using production modules and local game-data fixtures.
+
 ### Refreshing building costs
 
 The building cost database can be regenerated from the current in-game Help tables:

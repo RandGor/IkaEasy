@@ -8,6 +8,7 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 ### Added
 
+- Added sorting by building level in the Empire Buildings overview: click a building header to cycle through ascending, descending, and the original city order. Sorting persists across refreshes and tab switches within the current game page.
 - Added an optional autonomous IkaEasy scientist with eight walking directions, roads learned from native citizens, hover quotes, and an immediate on/off setting with complete lifecycle cleanup.
 - Expanded the scientist's quotes to ten and added a translucent ground shadow baked into all 96 mascot frames.
 - Expanded the scientist's hover area to the full sprite cell, with a minimum screen size when the city is zoomed out.

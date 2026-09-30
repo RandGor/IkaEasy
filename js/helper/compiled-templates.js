@@ -489,9 +489,11 @@ __p += '\n                        <th class="empire-building empire-building-' +
 ((__t = ( building )) == null ? '' : __t) +
 '" data-building="' +
 ((__t = ( building )) == null ? '' : __t) +
+'" data-building-index="' +
+((__t = ( i )) == null ? '' : __t) +
 '" title="' +
 __e( b.name ) +
-'">\n                            <div></div>\n                        </th>\n                    ';
+'">\n                            <div><button type="button" class="empire-building-sort"></button></div>\n                        </th>\n                    ';
  } ;
 __p += '\n                ';
  }) ;
