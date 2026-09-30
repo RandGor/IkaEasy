@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>IkaEasy empire scroll regression</title>
+<link rel="stylesheet" href="/css/ikaeasy.css">
+<style>
+    body { margin: 20px; font: 12px Arial; background: #fff8df; }
+    .ikaeasy-empire-wrapper { position: relative; width: 1500px; }
+    th, td { padding: 8px 4px; }
+    .empire-building { min-width: 40px; }
+    .empire_transport div { width: 80px; }
+    #results { white-space: pre-wrap; font: 14px monospace; }
+</style>
+<h1>Empire scroll regression</h1>
+<pre id="results">Running…</pre>
+<div class="ikaeasy-empire-wrapper"><div id="tabReport"></div></div>
+<script src="/js/libs/jquery.js"></script>
+<script src="/js/libs/lodash.js"></script>
+<script type="module" src="./empire-scroll.js"></script>
+</html>

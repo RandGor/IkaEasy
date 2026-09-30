@@ -4,6 +4,7 @@ import { CityType } from '../../../const.js';
 
 class Dummy extends Parent {
     drawTimer;
+    destroyed = false;
     firstRender = true;
     drawUpdateFreq = 5000;
 
@@ -16,6 +17,9 @@ class Dummy extends Parent {
         this.init();
 
         setTimeout(() => {
+            if (this.destroyed) {
+                return;
+            }
             this.draw();
             this.registerClickHandlers();
             this.afterFirstRender();
@@ -30,7 +34,7 @@ class Dummy extends Parent {
     }
 
     async draw() {
-        if (this.drawing) {
+        if (this.destroyed || this.drawing) {
             return false;
         }
 
@@ -38,6 +42,10 @@ class Dummy extends Parent {
         return this.getRenderData(async (data, helpers) => {
             try {
                 const tpl = await this.render(this.tpl, data, helpers);
+                // A tab can be closed while its data/template is loading.
+                if (this.destroyed) {
+                    return false;
+                }
                 const $nextEl = $(tpl);
 
                 if (this.$el && this.$el.length && $.contains(this.$parent[0], this.$el[0])) {
@@ -103,6 +111,10 @@ class Dummy extends Parent {
 
     startDrawTimer(){
         this.stopDrawTimer();
+        // An in-flight sync may finish after destroy() and try to restart it.
+        if (this.destroyed) {
+            return;
+        }
         this.drawTimer = setInterval(() => {
             this.draw();
         }, this.drawUpdateFreq);
@@ -182,6 +194,7 @@ class Dummy extends Parent {
     }
 
     destroy() {//shouldnt be overriden - use onDestroy() instead
+        this.destroyed = true;
         this.stopDrawTimer();
         this.onDestroy();
     }
