@@ -14,7 +14,6 @@
 
 .ikaeasy-empire-wrapper .empire-building-sort:hover,
 .ikaeasy-empire-wrapper .empire-building-sort:focus-visible {
-    background-color: rgba(250, 234, 198, .25);
     outline: 2px solid #a36b27;
     outline-offset: -2px;
 }

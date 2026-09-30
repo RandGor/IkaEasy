@@ -4,13 +4,13 @@
         <%= LANGUAGE.getLocalizedString('empire.espionage_notice') %>
     </div>
 
-    <table class="table01 dotted empire-espionage-table">
+    <table class="table01 dotted empire-espionage-table" data-empire-sort-table="espionage">
         <thead><tr>
             <th class="empire_city"><%= LANGUAGE.getLocalizedString('empire.city') %></th>
-            <th><%= LANGUAGE.getLocalizedString('empire.espionage_level') %></th>
-            <th><%= LANGUAGE.getLocalizedString('empire.espionage_defending') %></th>
-            <th><%= LANGUAGE.getLocalizedString('empire.espionage_assigned') %></th>
-            <th class="empire-espionage-targets"><%= LANGUAGE.getLocalizedString('empire.espionage_targets') %></th>
+            <th data-sort-key="level" title="<%- lget('empire.espionage_level') %>"><button type="button" class="empire-table-sort"><%= lget('empire.espionage_level') %></button></th>
+            <th data-sort-key="defending" title="<%- lget('empire.espionage_defending') %>"><button type="button" class="empire-table-sort"><%= lget('empire.espionage_defending') %></button></th>
+            <th data-sort-key="assigned" title="<%- lget('empire.espionage_assigned') %>"><button type="button" class="empire-table-sort"><%= lget('empire.espionage_assigned') %></button></th>
+            <th class="empire-espionage-targets" data-sort-key="targets" title="<%- lget('empire.espionage_target_count') %>"><button type="button" class="empire-table-sort"><%= lget('empire.espionage_targets') %></button></th>
         </tr></thead>
         <tbody>
         <% data.rows.forEach(function(city) { %>
@@ -18,15 +18,17 @@
                 <td class="empire_city ikaeasy_tradegood ikaeasy_tradegood_<%= city.tradegood %>">
                     <span><%- city.coords %> <%- city.name %></span>
                 </td>
-                <td class="center"><%= city.hasSafehouse ? city.level : '&mdash;' %></td>
+                <td class="center" data-sort-key="level" data-sort-value="<%= city.hasSafehouse === null ? '' : city.level %>"><%= city.hasSafehouse ? city.level : '&mdash;' %></td>
                 <% if (city.hasSafehouse === false) { %>
-                    <td class="center" colspan="3"><%= LANGUAGE.getLocalizedString('empire.espionage_no_safehouse') %></td>
+                    <td class="center" data-sort-key="defending" data-sort-value="0">0</td>
+                    <td class="center" data-sort-key="assigned" data-sort-value="0">0</td>
+                    <td class="empire-espionage-targets" data-sort-key="targets" data-sort-value="0"><%= LANGUAGE.getLocalizedString('empire.espionage_no_safehouse') %></td>
                 <% } else if (!city.data) { %>
                     <td class="center" colspan="3">&mdash;</td>
                 <% } else { %>
-                    <td class="center empire-espionage-available"><strong><%= num(city.data.defending, 0, false) %></strong> / <%= num(city.data.capacity, 0, false) %></td>
-                    <td class="center"><%= num(city.data.assigned, 0, false) %></td>
-                    <td class="empire-espionage-targets">
+                    <td class="center empire-espionage-available" data-sort-key="defending" data-sort-value="<%= city.data.defending %>"><strong><%= num(city.data.defending, 0, false) %></strong> / <%= num(city.data.capacity, 0, false) %></td>
+                    <td class="center" data-sort-key="assigned" data-sort-value="<%= city.data.assigned %>"><%= num(city.data.assigned, 0, false) %></td>
+                    <td class="empire-espionage-targets" data-sort-key="targets" data-sort-value="<%= city.data.missions.length %>">
                     <% if (!city.data.missions.length) { %>
                         &mdash;
                     <% } else { city.data.missions.forEach(function(mission) { %>

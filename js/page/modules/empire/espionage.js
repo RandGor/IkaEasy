@@ -5,6 +5,7 @@ import { Buildings } from '../../../const.js';
 import HttpClient from '../../../helper/httpClient.js';
 import Storage from '../../../helper/storage.js';
 import SyncLock from '../../../helper/syncLock.js';
+import { applyEmpireTableSort, toggleEmpireTableSort } from '../../../helper/empireTableSort.js';
 import { executePageCommand, getInt } from '../../../utils.js';
 
 const ESPIONAGE_STORAGE_KEY = 'empire_espionage';
@@ -16,10 +17,14 @@ class Module extends Parent {
     }
 
     afterRender() {
+        applyEmpireTableSort(this);
         this.autoSync();
     }
 
     onRegisterClickHandlers() {
+        this.onClick('.empire-table-sort', (event) => {
+            toggleEmpireTableSort(this, event.currentTarget.closest('th'));
+        });
         this.onClick('#empire_espionage_sync', (event) => {
             event.preventDefault();
             this.syncAll(true);

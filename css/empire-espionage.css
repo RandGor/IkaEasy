@@ -5,6 +5,7 @@
 #empire_espionage_sync.rotate { animation: spin 1.5s linear infinite; opacity: .9; }
 .empire-espionage-table { width: 100%; margin: 0 !important; }
 .empire-espionage-table th, .empire-espionage-table td { height: 36px; padding: 4px 8px !important; box-sizing: border-box; }
+.empire-espionage-table .empire-table-sort { min-height: 28px; padding: 0 18px 0 6px; font: inherit; text-align: inherit; }
 .empire-espionage-table .empire_city { width: 1%; padding-left: 38px !important; text-align: left !important; white-space: nowrap; }
 .empire-espionage-table tbody tr.current_city td { background-color: #fffae8 !important; }
 .empire-espionage-available { color: #355c13; }

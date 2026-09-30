@@ -251,6 +251,7 @@ export default {
     "empire.espionage_defending": "Available",
     "empire.espionage_assigned": "Assigned",
     "empire.espionage_targets": "Targets",
+    "empire.espionage_target_count": "Number of targets",
     "empire.espionage_no_safehouse": "No Hideout",
     "empire.coming_soon": "This tab is under construction",
     "empire.military_units": "Army",

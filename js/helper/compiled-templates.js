@@ -548,17 +548,25 @@ __p += '<div class="empire-espionage">\n    <div class="ikaeasy-option-hint empi
 ((__t = ( LANGUAGE.getLocalizedString('empire.espionage_refresh') )) == null ? '' : __t) +
 '"></a>\n        ' +
 ((__t = ( LANGUAGE.getLocalizedString('empire.espionage_notice') )) == null ? '' : __t) +
-'\n    </div>\n\n    <table class="table01 dotted empire-espionage-table">\n        <thead><tr>\n            <th class="empire_city">' +
+'\n    </div>\n\n    <table class="table01 dotted empire-espionage-table" data-empire-sort-table="espionage">\n        <thead><tr>\n            <th class="empire_city">' +
 ((__t = ( LANGUAGE.getLocalizedString('empire.city') )) == null ? '' : __t) +
-'</th>\n            <th>' +
-((__t = ( LANGUAGE.getLocalizedString('empire.espionage_level') )) == null ? '' : __t) +
-'</th>\n            <th>' +
-((__t = ( LANGUAGE.getLocalizedString('empire.espionage_defending') )) == null ? '' : __t) +
-'</th>\n            <th>' +
-((__t = ( LANGUAGE.getLocalizedString('empire.espionage_assigned') )) == null ? '' : __t) +
-'</th>\n            <th class="empire-espionage-targets">' +
-((__t = ( LANGUAGE.getLocalizedString('empire.espionage_targets') )) == null ? '' : __t) +
-'</th>\n        </tr></thead>\n        <tbody>\n        ';
+'</th>\n            <th data-sort-key="level" title="' +
+__e( lget('empire.espionage_level') ) +
+'"><button type="button" class="empire-table-sort">' +
+((__t = ( lget('empire.espionage_level') )) == null ? '' : __t) +
+'</button></th>\n            <th data-sort-key="defending" title="' +
+__e( lget('empire.espionage_defending') ) +
+'"><button type="button" class="empire-table-sort">' +
+((__t = ( lget('empire.espionage_defending') )) == null ? '' : __t) +
+'</button></th>\n            <th data-sort-key="assigned" title="' +
+__e( lget('empire.espionage_assigned') ) +
+'"><button type="button" class="empire-table-sort">' +
+((__t = ( lget('empire.espionage_assigned') )) == null ? '' : __t) +
+'</button></th>\n            <th class="empire-espionage-targets" data-sort-key="targets" title="' +
+__e( lget('empire.espionage_target_count') ) +
+'"><button type="button" class="empire-table-sort">' +
+((__t = ( lget('empire.espionage_targets') )) == null ? '' : __t) +
+'</button></th>\n        </tr></thead>\n        <tbody>\n        ';
  data.rows.forEach(function(city) { ;
 __p += '\n            <tr data-id="' +
 ((__t = ( city.id )) == null ? '' : __t) +
@@ -570,23 +578,31 @@ __p += '\n            <tr data-id="' +
 __e( city.coords ) +
 ' ' +
 __e( city.name ) +
-'</span>\n                </td>\n                <td class="center">' +
+'</span>\n                </td>\n                <td class="center" data-sort-key="level" data-sort-value="' +
+((__t = ( city.hasSafehouse === null ? '' : city.level )) == null ? '' : __t) +
+'">' +
 ((__t = ( city.hasSafehouse ? city.level : '&mdash;' )) == null ? '' : __t) +
 '</td>\n                ';
  if (city.hasSafehouse === false) { ;
-__p += '\n                    <td class="center" colspan="3">' +
+__p += '\n                    <td class="center" data-sort-key="defending" data-sort-value="0">0</td>\n                    <td class="center" data-sort-key="assigned" data-sort-value="0">0</td>\n                    <td class="empire-espionage-targets" data-sort-key="targets" data-sort-value="0">' +
 ((__t = ( LANGUAGE.getLocalizedString('empire.espionage_no_safehouse') )) == null ? '' : __t) +
 '</td>\n                ';
  } else if (!city.data) { ;
 __p += '\n                    <td class="center" colspan="3">&mdash;</td>\n                ';
  } else { ;
-__p += '\n                    <td class="center empire-espionage-available"><strong>' +
+__p += '\n                    <td class="center empire-espionage-available" data-sort-key="defending" data-sort-value="' +
+((__t = ( city.data.defending )) == null ? '' : __t) +
+'"><strong>' +
 ((__t = ( num(city.data.defending, 0, false) )) == null ? '' : __t) +
 '</strong> / ' +
 ((__t = ( num(city.data.capacity, 0, false) )) == null ? '' : __t) +
-'</td>\n                    <td class="center">' +
+'</td>\n                    <td class="center" data-sort-key="assigned" data-sort-value="' +
+((__t = ( city.data.assigned )) == null ? '' : __t) +
+'">' +
 ((__t = ( num(city.data.assigned, 0, false) )) == null ? '' : __t) +
-'</td>\n                    <td class="empire-espionage-targets">\n                    ';
+'</td>\n                    <td class="empire-espionage-targets" data-sort-key="targets" data-sort-value="' +
+((__t = ( city.data.missions.length )) == null ? '' : __t) +
+'">\n                    ';
  if (!city.data.missions.length) { ;
 __p += '\n                        &mdash;\n                    ';
  } else { city.data.missions.forEach(function(mission) { ;

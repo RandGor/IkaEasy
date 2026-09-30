@@ -118,8 +118,9 @@ The browser checks require Playwright and use a local fixture with the real page
 
 Empire browser regression checks: run `node scripts/serve-empire-scroll.cjs`, then open
 [the scroll lifecycle fixture](http://127.0.0.1:8766/scripts/fixtures/empire-scroll.html),
-[the building sort fixture](http://127.0.0.1:8766/scripts/fixtures/empire-building-sort.html), and
-[the resource/military sort fixture](http://127.0.0.1:8766/scripts/fixtures/empire-table-sort.html).
+[the building sort fixture](http://127.0.0.1:8766/scripts/fixtures/empire-building-sort.html),
+[the resource/military sort fixture](http://127.0.0.1:8766/scripts/fixtures/empire-table-sort.html), and
+[the espionage sort fixture](http://127.0.0.1:8766/scripts/fixtures/empire-espionage-sort.html).
 These pages report PASS/FAIL using production modules and local game-data fixtures.
 
 ### Refreshing building costs

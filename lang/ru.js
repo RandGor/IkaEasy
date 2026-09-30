@@ -251,6 +251,7 @@ export default {
     "empire.espionage_defending": "Свободны",
     "empire.espionage_assigned": "Заняты",
     "empire.espionage_targets": "Цели",
+    "empire.espionage_target_count": "Количество целей",
     "empire.espionage_no_safehouse": "Нет укрытия",
     "empire.coming_soon": "Раздел находится в разработке",
     "empire.military_units": "Армия",

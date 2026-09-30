@@ -182,7 +182,7 @@ class Module extends Parent {
             this.toggleSort($(e.currentTarget).closest('th'));
         });
 
-        this.onHover('.empire-building', (e) => {
+        this.$parent.on('mouseenter mouseleave', '.empire-building', (e) => {
             let $td = $(e.currentTarget);
             this.$el.find('.empire-building-hover').removeClass('empire-building-hover');
 
