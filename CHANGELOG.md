@@ -12,6 +12,10 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 - Expanded the scientist's quotes to ten and added a translucent ground shadow baked into all 96 mascot frames.
 - Expanded the scientist's hover area to the full sprite cell, with a minimum screen size when the city is zoomed out.
 
+### Fixed
+
+- Fixed the Empire Buildings list jumping back to the start after quickly switching tabs while resources were synchronizing. Closed Empire tabs can no longer redraw the active view or restart their refresh timers; in-flight synchronization still completes and saves its data.
+
 ## [4.0.0.6] - 2026-09-24
 
 ### Added
