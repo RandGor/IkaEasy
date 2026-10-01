@@ -1,36 +1,30 @@
 {
-    "version": "4.0.0.6",
+    "version": "4.0.0.7",
     "enabled": true,
     "text": {
-        "ru": "IkaEasy V4 4.0.0.6 добавляет расчёт окупаемости Академии, бесплатное ускорение строительства одним кликом и повышает надёжность быстрых действий.",
-        "en": "IkaEasy V4 4.0.0.6 adds Academy payback calculations, one-click free building speedups, and more reliable quick actions."
+        "ru": "IkaEasy V4 4.0.0.7 добавляет сортировки во все вкладки управления империей и гуляющего учёного, а также исправляет сброс прокрутки таблицы.",
+        "en": "IkaEasy V4 4.0.0.7 adds sorting to every Empire overview tab and a wandering scientist, and fixes the table scroll position resetting."
     },
     "new": {
         "ru": [
-            "В Академии появилась панель окупаемости с графиком улучшений, учётом скидок и сравнением обычных исследований с экспериментами.",
-            "Бесплатное ускорение строительства теперь можно выполнять одним кликом на карте города, в окне здания и в очереди строительства. Перед каждым ускорением расширение проверяет, что амброзия не требуется.",
-            "Интерфейс расширения переведён на заранее собранные шаблоны: удалены устаревшая sandbox-страница и связанные с ней разрешения."
+            "Города можно сортировать по уровням зданий, показателям ресурсов, численности войск и флота, уровню укрытия, свободным и назначенным шпионам и количеству целей.",
+            "Нажатия на заголовок столбца переключают порядок: по возрастанию, по убыванию и исходный. Сортировка сохраняется при обновлении данных и переключении вкладок в пределах открытой страницы игры.",
+            "По городу гуляет учёный IkaEasy: восемь направлений движения, дороги обычных жителей, тень и десять реплик при наведении. Его можно включить или выключить в настройках."
         ],
         "en": [
-            "The Academy now includes a payback panel with an upgrade chart, discount calculations, and a comparison of regular research with experiments.",
-            "Free building speedups can now be completed with one click from the city map, building window, and construction queue. The extension verifies that no Ambrosia is required before every speedup.",
-            "The extension interface now uses precompiled templates, removing the obsolete sandbox page and its related permissions."
+            "Sort cities by building levels, resource statistics, troop and fleet counts, safehouse level, free and assigned spies, and target count.",
+            "Click a column header to cycle through ascending, descending, and original order. Sorting is retained across data refreshes and tab switches within the current game page.",
+            "An IkaEasy scientist walks around the city with eight movement directions, routes learned from native citizens, a shadow, and ten hover quotes. You can turn the scientist on or off in settings."
         ]
     },
     "fixed": {
         "ru": [
-            "Быстрые перевозки ресурсов и развёртывание войск надёжнее определяют город отправления и повторяют неудачную фоновую смену города.",
-            "Устаревший ответ очереди строительства больше не заменяет только что открытое окно перевозки ресурсов или развёртывания войск.",
-            "Быстрое улучшение здания больше не требует повторного нажатия после открытия города.",
-            "Исправлен расчёт скидок от зданий снижения стоимости на уровнях выше 50-го.",
-            "Кнопка GitHub в настройках IkaEasy больше не уменьшается при нажатии."
+            "Таблица зданий больше не возвращается к началу при быстром переключении вкладок во время синхронизации ресурсов. Сама синхронизация завершается и сохраняет данные.",
+            "Иконки зданий при наведении на столбец переключаются на другой ряд спрайта; убрана бледная подсветка кнопки сортировки."
         ],
         "en": [
-            "Quick resource transfers and military deployments now identify the source city more reliably and retry unsuccessful background city switches.",
-            "A stale construction-queue response no longer replaces a newly opened resource transport or military deployment window.",
-            "Quick building upgrades no longer require a second click after opening the city view.",
-            "Fixed cost-reduction building discounts for levels above 50.",
-            "The GitHub button in IkaEasy settings no longer shrinks while pressed."
+            "The Buildings table no longer jumps back to the start when switching tabs quickly during resource synchronization. Synchronization still completes and saves its data.",
+            "Building icons now switch to the alternate sprite row when hovering over a column, and the sorting button's pale hover overlay has been removed."
         ]
     },
     "hotfix": {
@@ -38,7 +32,6 @@
         "en": []
     },
     "options": [
-        "academy_payback",
-        "one_click_free_building_speedup"
+        "city_mascot"
     ]
 }

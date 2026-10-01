@@ -6,6 +6,8 @@ The project follows its existing four-part version format. Dates use `YYYY-MM-DD
 
 ## [Unreleased]
 
+## [4.0.0.7] - 2026-10-01
+
 ### Added
 
 - Added sorting by safehouse level, free and assigned spies, and target count in the Empire Espionage overview, retaining the selected order across refreshes and tab switches.
