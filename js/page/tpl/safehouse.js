@@ -6,50 +6,166 @@ class Page extends Parent {
     async init() {
         this.ikariamPremiumToggle(['#tabReports .archiveButton .ambrosia']);
 
-        const list = $('table.reportTable.resourcesTable');
-        for(let i = 0; i < list.length; i++) {
-            const $table = $(list[i]);
-            await this.appendTable($table, i);
+        // Ikariam replaces the visual representation of checkboxes with a
+        // sibling div.checkbox.image. Clicking that div updates input.checked,
+        // but it does not reliably fire a change event on the hidden input.
+        // Listen during capture so Ikariam cannot stop event propagation before
+        // our listener sees it. Install only once across controller lifecycles.
+        document.__ikaEasySafehouseController = this;
+        if (!document.__ikaEasySafehouseIdleCapture) {
+            document.__ikaEasySafehouseIdleCapture = (event) => {
+                const visual = event.target instanceof Element
+                    ? event.target.closest('div.checkbox.image') : null;
+                if (!visual) return;
+                const input = visual.previousElementSibling;
+                if (!input?.matches('input.js-idle')) return;
+                const table = input.closest('table.reportTable.resourcesTable');
+                if (!table) return;
+
+                // Read the checkbox state after Ikariam handles the click.
+                // No DOM reconstruction or synthetic clicks/change events.
+                setTimeout(() => {
+                    if (!table.isConnected || !input.isConnected) return;
+                    const controller = document.__ikaEasySafehouseController;
+                    if (controller) controller.refreshResourcesReports($(table));
+                }, 0);
+            };
+            document.addEventListener('click', document.__ikaEasySafehouseIdleCapture, true);
+        }
+        this.scanReports();
+
+        // Ikariam updates its report contents asynchronously, including when a
+        // building finishes, a message arrives, or a pirate mission ends.
+        // Calling init() alone can be too early for the newly inserted report.
+        if (!this._safehouseObserver) {
+            this._safehouseObserver = new MutationObserver((mutations) => {
+                // Only react to newly added/removed DOM nodes; mere text edits
+                // to the calculator must not create an update loop.
+                if (!mutations.some(m => m.type === 'childList')) return;
+                clearTimeout(this._safehouseScanTimer);
+                this._safehouseScanTimer = setTimeout(() => this.scanReports(), 100);
+            });
+            this._safehouseObserver.observe(document.getElementById('tabReports') || document.body, {
+                childList: true,
+                subtree: true
+            });
         }
     }
 
+    scanReports() {
+        $('table.reportTable.resourcesTable').each((i, el) => {
+            const $table = $(el);
+            // Already-initialized reports must never be rebuilt in response
+            // to calculator updates (including checkbox changes).
+            if ($table.find('input.js-warehouse').length === 1 &&
+                $table.find('input.js-idle').length === 1 &&
+                $table.find('tr:first > th').filter((_, th) =>
+                    $(th).text().trim() === LANGUAGE.getLocalizedString('safehouse_available_steal')
+                ).length === 1) return;
+            // Do not patch a half-rendered report; the observer will retry.
+            const $info = $table.closest('tr.report').prev();
+            const href = $info.find('.targetCity a').attr('href') || '';
+            if (!/selectCity=([0-9]+)/.test(href) ||
+                !$table.find('.unitname img').length ||
+                !$table.find('tr:first th').length) return;
+            void this.appendTable($table, i).catch(err =>
+                console.warn('IkaEasy: cannot initialize espionage report', err)
+            );
+        });
+    }
+
+    destroy() {
+        if (document.__ikaEasySafehouseController === this) {
+            document.__ikaEasySafehouseController = null;
+        }
+        clearTimeout(this._safehouseScanTimer);
+        this._safehouseObserver?.disconnect();
+        this._safehouseObserver = null;
+    }
+
     async appendTable($table, index) {
-        if ($table.data('updated')) {
+        // The game can trigger several update callbacks while a template is loading.
+        // Mark the table synchronously, before the first await, to avoid races.
+        if ($table.data('ikaeasy-safehouse-initializing')) {
             return;
         }
+        $table.data('ikaeasy-safehouse-initializing', true);
 
-        _.each($table.find('tr'), (el, i) => {
-            let $el = $(el);
-            if (i === 0) {
-                $el.append(`<th class="count">${LANGUAGE.getLocalizedString('safehouse_available_steal')}</th>`);
+        try {
+            // DOM-based detection survives jQuery data resets on partial refreshes.
+            // Recover older duplicates (including those injected by previous runs).
+            const headerCount = $table.find('tr:first > th').filter((_, el) =>
+                $(el).text().trim() === LANGUAGE.getLocalizedString('safehouse_available_steal')
+            ).length;
+            const inputCount = $table.find('input.js-warehouse').length;
+            const idleCount = $table.find('input.js-idle').length;
+
+            // Only our own header and controls determine whether we have
+            // installed the calculator. The old code counted generated result
+            // cells against resource rows, but also added cells to non-resource
+            // rows, so it wrongly rebuilt an already complete calculator.
+            if (headerCount === 1 && inputCount === 1 && idleCount === 1) {
+                $table.data('updated', true);
                 return;
             }
 
-            $el.addClass('js-resource-row').append(`<td class="count js-resource">0</td>`);
-        });
+            // If the DOM is partially injected or duplicated, clean only IkaEasy's
+            // additions before rebuilding the calculator once.
+            const savedLevel = $table.find('input.js-warehouse').first().val();
+            const savedIdle = $table.find('input.js-idle').first().prop('checked');
+            $table.find('tr').filter((_, el) =>
+                $(el).find('input.js-warehouse, input.js-idle').length > 0
+            ).remove();
+            $table.find('tr:first > th').filter((_, el) =>
+                $(el).text().trim() === LANGUAGE.getLocalizedString('safehouse_available_steal')
+            ).remove();
+            $table.find('td.js-resource').remove();
+            $table.find('tr.js-resource-row').removeClass('js-resource-row');
 
-        const tpl = await this.render('safehouse');
-        let $tr = $(tpl);
-        $table.append($tr);
+            _.each($table.find('tr'), (el, i) => {
+                let $el = $(el);
+                if (i === 0) {
+                    $el.append(`<th class="count">${LANGUAGE.getLocalizedString('safehouse_available_steal')}</th>`);
+                    return;
+                }
+                $el.addClass('js-resource-row').append(`<td class="count js-resource">0</td>`);
+            });
 
-        let $info = $table.closest('tr.report').prev();
-        let targetCityId = $info.find('.targetCity a').attr('href').match(/selectCity=([0-9]+)/)[1];
-        let levels = getItem('warehouse-level');
-        if ((levels) && (levels[targetCityId] !== undefined)) {
-            $tr.find('.js-warehouse').val(levels[targetCityId]);
+            const tpl = await this.render('safehouse');
+            // The report might have been replaced while the template was loading.
+            if (!$table[0].isConnected) return;
+            const $tr = $(tpl);
+            $table.append($tr);
+
+            const $info = $table.closest('tr.report').prev();
+            const href = $info.find('.targetCity a').attr('href') || '';
+            const match = href.match(/selectCity=([0-9]+)/);
+            if (!match) {
+                console.warn('IkaEasy: missing target city for espionage report');
+                return;
+            }
+            const targetCityId = match[1];
+            const levels = getItem('warehouse-level');
+            if (savedLevel !== undefined) {
+                $tr.find('.js-warehouse').val(savedLevel);
+            } else if (levels && levels[targetCityId] !== undefined) {
+                $tr.find('.js-warehouse').val(levels[targetCityId]);
+            }
+            if (savedIdle !== undefined) {
+                $tr.find('.js-idle').prop('checked', savedIdle);
+            }
+
+            $tr.find('.js-warehouse').on('input', () => this.refreshResourcesReports($table));
+            $tr.find('.js-idle').on('change', () => this.refreshResourcesReports($table));
+            this.refreshResourcesReports($table);
+            // Report metadata extraction is not necessary for the calculator.
+            // It can fail on certain reports whose owner link has no onclick.
+            try { this.getReportInfo($table); }
+            catch (err) { console.warn('IkaEasy: report metadata unavailable', err); }
+            $table.data('updated', true);
+        } finally {
+            $table.removeData('ikaeasy-safehouse-initializing');
         }
-
-        $tr.find('.js-warehouse').on('input', () => {
-            this.refreshResourcesReports($table);
-        });
-
-        $tr.find('.js-idle').on('change', () => {
-            this.refreshResourcesReports($table);
-        });
-
-        this.refreshResourcesReports($table);
-        this.getReportInfo($table);
-        $table.data('updated', true);
     }
 
     getReportInfo($table) {
@@ -59,7 +175,9 @@ class Page extends Parent {
         let m = $info.find('.targetCity a').attr('href').match(/xcoord=([0-9]+)&ycoord=([0-9]+)&selectCity=([0-9]+)/);
         if (m && m.length) {
             //onclick="toggleElement('tbl_mail97634'); toggleArrow($('#button97634')[0]);"
-            storage.ownerId = parseInt($info.find('.targetOwner').attr('onclick').match(/tbl_mail([0-9]+)/)[1]);
+            const ownerClick = $info.find('.targetOwner').attr('onclick') || '';
+            const ownerMatch = ownerClick.match(/tbl_mail([0-9]+)/);
+            storage.ownerId = ownerMatch ? parseInt(ownerMatch[1], 10) : null;
             storage.ownerName = $info.find('.targetOwner').text().trim();
             storage.date = $info.find('.date').text().trim();
             storage.coordX = parseInt(m[1]);
@@ -70,8 +188,9 @@ class Page extends Parent {
 
             _.each($table.find('tr.js-resource-row'), (el) => {
                 let $el = $(el);
-                let res = $el.find('.unitname img').attr('src').match(/icon_([a-z]+)\.png/)[1];
-                storage.resources[res] = getInt($el.find('.count:eq(0)').text());
+                const src = $el.find('.unitname img').attr('src') || '';
+                const resourceMatch = src.match(/icon_([a-z]+)\.png/);
+                if (resourceMatch) storage.resources[resourceMatch[1]] = getInt($el.find('.count:eq(0)').text());
             });
         } else {
             console.error('Cannot parse url', $info.find('.targetCity a').attr('href'))
@@ -83,7 +202,7 @@ class Page extends Parent {
         let targetCityId = $info.find('.targetCity a').attr('href').match(/selectCity=([0-9]+)/)[1];
 
         let warehouseLevel = getInt($table.find('.js-warehouse').val());
-        updateObjectItem('warehouse-level', {targetCityId: warehouseLevel});
+        updateObjectItem('warehouse-level', {[targetCityId]: warehouseLevel});
 
         let isIdle = $table.find('.js-idle').prop('checked');
 

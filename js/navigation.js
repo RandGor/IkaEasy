@@ -188,6 +188,17 @@ class Navigation extends Event {
         const fileName = dataArr[0];
         const rawHtml = dataArr[1];
 
+        // Only a few views have an IkaEasy AJAX controller. Other views
+        // (e.g. options, safehouse, tradeAdvisor) are valid Ikariam views,
+        // but no corresponding *.controller.js file exists in this extension.
+        // Trying to import these non-existent files logs a TypeError on every
+        // automatic game refresh. Skip them; normal page/template handling
+        // continues independently through _update().
+        const supportedControllers = new Set(["museum", "palace", "townHall"]);
+        if (!supportedControllers.has(fileName)) {
+            return false;
+        }
+
         try {
             let {default: controller} = await import(`../js/page/tpl/controllers/${fileName}.controller.js`);
 
