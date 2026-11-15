@@ -5,6 +5,33 @@ class Page extends Parent {
 
     async init() {
         this.ikariamPremiumToggle(['#tabReports .archiveButton .ambrosia']);
+
+        // Ikariam replaces the visual representation of checkboxes with a
+        // sibling div.checkbox.image. Clicking that div updates input.checked,
+        // but it does not reliably fire a change event on the hidden input.
+        // Listen during capture so Ikariam cannot stop event propagation before
+        // our listener sees it. Install only once across controller lifecycles.
+        document.__ikaEasySafehouseController = this;
+        if (!document.__ikaEasySafehouseIdleCapture) {
+            document.__ikaEasySafehouseIdleCapture = (event) => {
+                const visual = event.target instanceof Element
+                    ? event.target.closest('div.checkbox.image') : null;
+                if (!visual) return;
+                const input = visual.previousElementSibling;
+                if (!input?.matches('input.js-idle')) return;
+                const table = input.closest('table.reportTable.resourcesTable');
+                if (!table) return;
+
+                // Read the checkbox state after Ikariam handles the click.
+                // No DOM reconstruction or synthetic clicks/change events.
+                setTimeout(() => {
+                    if (!table.isConnected || !input.isConnected) return;
+                    const controller = document.__ikaEasySafehouseController;
+                    if (controller) controller.refreshResourcesReports($(table));
+                }, 0);
+            };
+            document.addEventListener('click', document.__ikaEasySafehouseIdleCapture, true);
+        }
         this.scanReports();
 
         // Ikariam updates its report contents asynchronously, including when a
@@ -48,6 +75,9 @@ class Page extends Parent {
     }
 
     destroy() {
+        if (document.__ikaEasySafehouseController === this) {
+            document.__ikaEasySafehouseController = null;
+        }
         clearTimeout(this._safehouseScanTimer);
         this._safehouseObserver?.disconnect();
         this._safehouseObserver = null;
