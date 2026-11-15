@@ -49,6 +49,12 @@ class IkalogsRu extends Event {
         const server = getServerDomain();
         const world = getServerWorld().substring(1);
 
+        // getServerWorld() falls back to "s?" outside an Ikariam game world.
+        // Do not send "world=?" to IkaLogs: its API expects a numeric WorldId.
+        if (!/^\d+$/.test(world)) {
+            return Promise.resolve(null);
+        }
+
         return new Promise(resolve => {
             chrome.runtime.sendMessage({ cmd: 'ajax', url: `common/world/mines?server=${server}&world=${world}` }, (result) => {
                 resolve(result);
