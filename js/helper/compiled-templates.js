@@ -1425,7 +1425,7 @@ __p += '<tr>\n    <td>\n        ' +
 __e( LANGUAGE.getLocalizedString('safehouse_warehouse_level') ) +
 '\n    </td>\n    <td>\n        <input type="number" min="0" class="js-warehouse textfield" value="0" style="width:30px;"/>\n    </td>\n    <td class="js-result-1"></td>\n</tr>\n<tr>\n    <td>\n        ' +
 __e( LANGUAGE.getLocalizedString('safehouse_is_idle') ) +
-'\n    </td>\n    <td>\n        <input type="checkbox" class="js-idle checkbox  radio image floatleft" />\n    </td>\n    <td class="js-result-2"></td>\n</tr>';
+'\n    </td>\n    <td>\n        <label class="ikaeasy-form" title="Is idle?">\n            <input type="checkbox" class="js-idle" />\n            <i aria-hidden="true"></i>\n        </label>\n    </td>\n    <td class="js-result-2"></td>\n</tr>';
 return __p
 },
   "transport-buttons": function(context) {
