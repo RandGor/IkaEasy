@@ -32,7 +32,14 @@ class Page extends Parent {
                         return;
                     }
 
-                    let icon = $ctr.find('td:eq(0) img').attr('src').match(/icon_(.*?)\.png/)[1];
+                    const src = $ctr.find('td:eq(0) img').attr('src');
+                    const iconMatch = src && src.match(/icon_(.*?)\.png/);
+                    if (!iconMatch) {
+                        // Ignore rows without a recognizable resource icon.
+                        return;
+                    }
+
+                    const icon = iconMatch[1];
                     resources[icon] = getInt($ctr.find('td:eq(1)').text());
                 });
             }

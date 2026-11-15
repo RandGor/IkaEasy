@@ -10,31 +10,44 @@ class Page extends Parent {
     }
 
     addIkalogIcons() {
-        if ($('#combatList').data('updated')) {
+        const $combatList = $('#combatList');
+        if ($combatList.data('updated')) {
             return;
         }
-        $('#combatList').data('updated', true);
-        let battles = getItem('battles') || {};
 
-        _.each($('#combatList tbody tr'), ($tr) => {
-            $tr = $($tr);
+        const battles = getItem('battles') || {};
 
-            let rep_date = $tr.find('.date').text().trim();
-            let $tdr = $tr.find('.subject');
-            let rep_id = $tdr.attr('onclick').match(/combatId=([0-9]+)/)[1];
-            $tdr.after(`<td class="subject">${$tr.find('.subject').html()}</td>`);
-            $tdr.remove();
-            let $td = $tr.find('.subject');
+        _.each($combatList.find('tbody tr'), (row) => {
+            const $tr = $(row);
+            const $td = $tr.find('.subject').first();
+            const onclick = $td.attr('onclick');
+            const match = onclick && onclick.match(/combatId=([0-9]+)/);
 
-            if (battles[rep_id]) {
-                let $a = $(`<a href="${battles[rep_id].ikalogs}" target="_blank" class="ikaeasy_icon_ikalogs"></a>`);
-                if (rep_date !== battles[rep_id].date) {
-                    $a.addClass('ikaeasy_icon_ikalogs_old');
-                }
-
-                $td.prepend($a);
+            // Some rows do not represent combat reports.
+            if (!match) {
+                return;
             }
+
+            const repId = match[1];
+            const battle = battles[repId];
+            if (!battle || !battle.ikalogs || $td.find('.ikaeasy_icon_ikalogs').length) {
+                return;
+            }
+
+            const repDate = $tr.find('.date').text().trim();
+            const $link = $('<a>', {
+                href: battle.ikalogs,
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                class: 'ikaeasy_icon_ikalogs'
+            });
+            if (repDate !== battle.date) {
+                $link.addClass('ikaeasy_icon_ikalogs_old');
+            }
+            $td.prepend($link);
         });
+
+        $combatList.data('updated', true);
     }
 }
 
