@@ -72,8 +72,12 @@ class Navigation extends Event {
         $('head').append(`<link href="${chrome.runtime.getURL('css/academy-payback.css')}?${VERSION}" rel="stylesheet" type="text/css" />`);
         $('head').append(`<script type="text/javascript" src="${chrome.runtime.getURL('inner/ikaeasy.js')}"></script>`);
 
-        IkalogsRu.getMines().then(data => {
-            window.islandsInfo = data;
+        // The content script also runs on the Ikariam lobby, where no game
+        // world is available. Only request mine data on a recognized world.
+        const worldHost = /^(s\d+)-[a-z]+\.ikariam\.gameforge\.com$/i.test(window.location.hostname);
+        if (worldHost) {
+            IkalogsRu.getMines().then(data => {
+                window.islandsInfo = data;
 
             // этот код использовался для первичной отрисовки
             // $('#map1 .islandTile').toArray().forEach(island => {
@@ -95,7 +99,8 @@ class Navigation extends Event {
             //     $island
             //         .append(`<div class="ikaeasy-resource ikaeasy-b-70 ikaeasy-l-55"><div class="ikaeasy-resource-icon ikaeasy-w-24 ikaeasy-h-20" style="background-image: url(skin/resources/icon_wood.png);"></div><span>${wood}</span></div>`)
             // });
-        });
+            });
+        }
     }
 
     async _update(bg, tpl) {
